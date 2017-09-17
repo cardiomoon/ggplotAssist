@@ -1,0 +1,35 @@
+Package: ggplotAssist
+Type: Package
+Title: RStudio Addin for Teaching and Learning 'gplot2'
+Version: 0.1.0
+Imports:
+    shiny (>= 0.13),
+    miniUI (>= 0.1.1),
+    rstudioapi (>= 0.5),
+    shinyWidgets,
+    shinyAce,
+    stringr,
+    tidyverse,
+    ggplot2,
+    dplyr,
+    magrittr,
+    tibble,
+    ggthemes,
+    gcookbook,
+    moonBook
+Suggests:
+    knitr,
+    rmarkdown
+Authors@R: person("Keon-Woong", "Moon", email = "cardiomoon@gmail.com",
+    role = c("aut", "cre"))
+URL: https://github.com/cardiomoon/ggplotAssist
+BugReports: https://github.com/cardiomoon/ggplotAssist/issues
+Description: An RStudio addin for teaching and learning making plot using the 'ggplot2' package.
+    You can learn each steps of making plot by clicking your mouse without coding.
+    You can get resultant R code for the plot.
+Depends: R (>= 2.10)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr

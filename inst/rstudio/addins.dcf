@@ -1,0 +1,4 @@
+Name: ggplotAssist
+Description: A Shiny App for Teaching and Learning 'ggplot2'
+Binding: ggplotAssist
+Interactive: true
