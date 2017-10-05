@@ -15,9 +15,10 @@
 #' @importFrom rstudioapi getActiveDocumentContext insertText
 #' @importFrom miniUI miniPage gadgetTitleBar miniContentPanel
 #' @importFrom tibble as_tibble
-#' @importFrom stringr str_detect str_trim
+#' @importFrom stringr str_detect str_trim str_length str_locate
 #' @importFrom dplyr filter select 
 #' @importFrom magrittr "%>%"
+#' @importFrom editData checkboxInput3 numericInput3 selectInput3 textInput3
 #' @importFrom ggplot2 map_data
 #' @export
 #'
@@ -30,6 +31,7 @@
 #' library(ggthemes)
 #' library(shiny)
 #' library(stringr)
+#' library(editData)
 #' library(shinyWidgets)
 #' library(gcookbook)
 #'
@@ -50,14 +52,18 @@ ggplotAssist=function(df=NULL,viewer="browser"){
           attachNamespace("tidyverse")
      }
     
+    if(!isNamespaceLoaded("ggplot2")){
+        attachNamespace("ggplot2")
+    }
+    
     if(!isNamespaceLoaded("ggthemes")){
         attachNamespace("ggthemes")
     }
 
-     selectInput3<-function(...,width=100){
-        mywidth=paste(width,"px",sep="")
-        div(style="display:inline-block;",selectInput(...,width=mywidth))
-    }
+    #  selectInput3<-function(...,width=100){
+    #     mywidth=paste(width,"px",sep="")
+    #     div(style="display:inline-block;",selectInput(...,width=mywidth))
+    # }
 
     context <- rstudioapi::getActiveDocumentContext()
 
@@ -83,15 +89,19 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     
 
     geoms<-sort(geomData$geom)
-    aeses<-c("x","y","group","colour","fill","label","alpha","linetype","size","shape","xmin","xmax","ymin","ymax")
+    aeses<-c("x","y","z","group","colour","fill","label","alpha","linetype","size","shape","xmin","xmax","ymin","ymax")
     types<-c("mapping","setting")
     data<-get(df)
     colno=length(colnames(data))
     
     dfj<-data.frame(grp=c('A','B'),fit=4:5,se=1:2)
     datak<-data.frame(murder=datasets::USArrests$Murder,state=tolower(rownames(datasets::USArrests)))
-    nmap<-map_data('state')
+    nmap<-ggplot2::map_data('state')
     seals$z=with(seals,sqrt(delta_long^2+delta_lat^2))
+    
+    geomchoices=c("",sort(unique(defaultVar[defaultVar$var=="geom",]$default)))
+    statchoices=c("",sort(unique(defaultVar[defaultVar$var=="stat",]$default)))
+    
     
     getDefault=function(data,geoms,vars){
         result <- data %>% 
@@ -121,6 +131,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 #                    selectize=FALSE,selected="ggplot",size=10)
                 # ),
                 column(6,
+                       checkboxInput("doPreprocessing","do preprocessing",value=FALSE),
+                       textAreaInput("preprocessing","preprocessing",value="",rows=5),
                        textInput("mydata","Enter data name",value=df),
                        materialSwitch("showDataStr","show str",status="primary"),
                        h3("Mapping"),
@@ -153,16 +165,21 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        selectInput("geoms",NA,choices=geoms,selectize=FALSE,size=15,selected=""),
                        actionButton("showEx","Show Example")
                 ),
-                column(3,
+                column(2,
+                       textInput("geomdata","data",value=""),
                        h4("Select"),
                        radioButtons("type",NA,choices=types,selected="setting"),
                        h4("Aesthetics"),
-                       selectInput("aes","aes",choices=aeses,selectize=FALSE,size=5),
+                       selectInput("aes","aes",choices=aeses,selectize=FALSE,size=10),
+                       conditionalPanel(condition="input.selectedLayer=='geom'|input.selectedLayer=='stat'",
                        selectInput("position","position",
-                                   choices=c("","stack","fill","dodge","jitter","nudge","identity")),
-                       selectInput("stat","stat",choices=c("","identity","count","smooth"))
+                                   choices=c("","stack","fill","dodge","jitter","nudge","identity"))),
+                       conditionalPanel(condition="input.selectedLayer=='geom'",
+                                        selectInput("stat","stat",choices=statchoices)),
+                       conditionalPanel(condition="input.selectedLayer=='stat'",
+                                        selectInput("geom","geom",choices=geomchoices))
                 ),
-                column(2,
+                column(3,
                        
                        conditionalPanel(condition="input.type=='mapping'", 
                                         h4("mapping"),
@@ -171,7 +188,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                                     selectize=FALSE,size=min(8,colno),selected="")),
                        conditionalPanel(condition="input.type=='setting'", 
                                         h4("setting")),
-                       textInput("varset","varset"),
+                       textInput("varset","varset",width="200px"),
                        checkboxInput("addquote","addquote",value=FALSE),
                        conditionalPanel(condition="input.type=='setting'", 
                                         uiOutput("varsetUI")
@@ -327,8 +344,26 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 refreshMaincode<<-TRUE
             })
             
+            test=function(e){
+                showModal(modalDialog(
+                    title = "Error in preprocessing",
+                    "There is an error in preprocessing. Press 'Esc' or Press 'OK' button",
+                    easyClose = TRUE,
+                    footer=modalButton("OK")
+                ))
+                updateMaterialSwitch(session,'doPreprocessing',value=FALSE)
+                
+            }
+            
+            observeEvent(input$doPreprocessing,{
+                tryCatch(eval(parse(text=input$preprocessing)),error=function(e){test(e)})
+            })
+            
             observeEvent(input$mydata,{
                 
+                if(input$doPreprocessing){
+                    eval(parse(text=input$preprocessing))
+                }
                 validate(
                     need(any(class(try(eval(parse(text=input$mydata)))) %in% c("tbl_df","tibble","data.frame")),
                          "Please enter the name of data")
@@ -345,6 +380,27 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(refreshMaincode) {
                     temp=makeMain()
                     updateAceEditor(session,"maincode",value=temp)
+                }
+            })
+            
+            observeEvent(input$geomdata,{
+                if(input$doPreprocessing) {
+                    eval(parse(text=input$preprocessing))
+                }
+                
+                if(input$geomdata=="") {
+                    data1<-eval(parse(text=input$mydata))
+                } else {
+                    validate(
+                        need(any(class(try(eval(parse(text=input$geomdata)))) %in% c("tbl_df","tibble","data.frame")),
+                             "Please enter the name of data")
+                    )
+                    data1<-eval(parse(text=input$geomdata))
+                }
+                
+                if(!is.null(data1)) {
+                    updateSelectInput(session,"var",choices=colnames(data1),selected="")
+                    
                 }
             })
             
@@ -591,8 +647,13 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             }
                         } else if(selected$input[i]=="text"){
                             if(!is.null(input[[tempvar]])){
-                            if(input[[tempvar]]!=value) 
-                            temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                                if(input[[tempvar]]!=value) {
+                                    if(selected$quoted[i]==TRUE){
+                                        temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                                    } else{
+                                        temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                                    }
+                                }
                             }
                         } else if(selected$input[i]=="checkbox"){
                             if(!is.null(input[[tempvar]])){
@@ -601,6 +662,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             }
                         }
                     }
+                }
+                if(input$geomdata!="") {
+                    if(str_locate(temp,"\\(")[1,1]!=str_length(temp)) temp=paste0(temp,",")
+                    temp=paste0(temp,"data=",input$geomdata)
                 }
                 temp=paste0(temp,")")
                 }
@@ -768,6 +833,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 input$addlayer
                 input$dellayer
                 
+                if(input$doPreprocessing){
+                    eval(parse(text=input$preprocessing))
+                }
                 p<-eval(parse(text=input$code))
                 p
                 
@@ -779,6 +847,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 input$addlayer
                 input$dellayer
                 
+                if(input$doPreprocessing){
+                    eval(parse(text=input$preprocessing))
+                }
                 (code=code2ggplot(input$code))
                 (codes=separateCode(code))
                 p<-eval(parse(text=codes[input$no]))
@@ -790,6 +861,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 input$layer
                 input$maincode
                 
+                if(input$doPreprocessing){
+                    eval(parse(text=input$preprocessing))
+                }
                 p<-eval(parse(text=input$CodeUC))
                 p
                 
@@ -826,15 +900,15 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     mylist=list()
                     no=1
                     if(input$geoms=="facet_grid") {
-                        mylist[[no]]=selectInput("facetrow","by rows",
+                        mylist[[no]]=selectInput3("facetrow","by rows",
                                                  choices=c("",colnames(df)),multiple=TRUE)
                         no=no+1
-                        mylist[[no]]=selectInput("facetcol","by columns",
+                        mylist[[no]]=selectInput3("facetcol","by columns",
                                                  choices=c(".",colnames(df)),multiple=TRUE)
                         no=no+1
                     }
                     if(input$geoms=="facet_wrap") {
-                        mylist[[no]]=selectInput("facetwrap","wrap by",
+                        mylist[[no]]=selectInput3("facetwrap","wrap by",
                                                  choices=c("",colnames(df)),multiple=TRUE)
                         no=no+1
                     }
@@ -845,14 +919,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             temp=selected$setting[i]
                             value=selected$value[i]
                         if(selected$input[i]=="select") {
-                            mylist[[no]]= selectInput(temp,label=temp,
+                            mylist[[no]]= selectInput3(temp,label=temp,
                                                  choices=unlist(strsplit(value,",",fixed=TRUE)))
                         } else if(selected$input[i]=="numeric"){
-                            mylist[[no]]= numericInput(temp,label=temp,value=as.numeric(value))
+                            mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
                         } else if(selected$input[i]=="text"){
-                            mylist[[no]]=textInput(temp,label=temp,value=value)
+                            mylist[[no]]=textInput3(temp,label=temp,value=value)
                         } else if(selected$input[i]=="checkbox"){
-                            mylist[[no]]= checkboxInput(temp,label=temp,value=as.logical(value))
+                            mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
                         }
                             no=no+1
                         }

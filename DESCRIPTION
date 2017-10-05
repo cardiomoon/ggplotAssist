@@ -16,7 +16,8 @@ Imports:
     tibble,
     ggthemes,
     gcookbook,
-    moonBook
+    moonBook,
+    editData
 Suggests:
     knitr,
     rmarkdown

@@ -26,6 +26,7 @@ library(shinyAce)
 library(ggthemes)
 library(shiny)
 library(stringr)
+library(editData)
 library(shinyWidgets)
 library(gcookbook)
 
