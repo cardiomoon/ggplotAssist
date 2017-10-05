@@ -715,6 +715,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 #input$addmain
                 input$resetmain
                 
+                if(input$doPreprocessing){
+                    eval(parse(text=input$preprocessing))
+                }
                 p<-eval(parse(text=input$maincode))
                 p
             })
@@ -772,6 +775,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"layers",choices=layers$layer)
                 updateSelectInput(session,"geoms",selected="")
                 updateSelectInput(session,"var",selected="")
+                updateSelectInput(session,"aes",selected="")
                 updateTextInput(session,"varset",value="")
                 resetLayer()
                 updateTextAreaInput(session,"layer",value="")
@@ -896,7 +900,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             output$varsetUI=renderUI({
                 
                 if(!(is.null(input$geoms))){
-                    df=get(input$mydata)
+                    if(input$doPreprocessing){
+                        eval(parse(text=input$preprocessing))
+                    }
+                    df=eval(parse(text=input$mydata))
                     mylist=list()
                     no=1
                     if(input$geoms=="facet_grid") {
