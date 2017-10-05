@@ -5,21 +5,21 @@
 #'
 #' @return A manipulated tibble or NULL
 #' @importFrom shiny div selectInput runApp fluidPage tags HTML titlePanel hr fluidRow column
-#' @importFrom shiny textInput checkboxInput numericInput conditionalPanel verbatimTextOutput uiOutput h3 actionButton
+#' @importFrom shiny textInput checkboxInput numericInput conditionalPanel verbatimTextOutput uiOutput h3 actionButton showModal modalDialog modalButton
 #' @importFrom shiny validate need renderPrint updateTextInput updateCheckboxInput reactive renderPlot 
 #' @importFrom shiny updateSelectizeInput renderUI htmlOutput tagList updateNumericInput updateSelectInput imageOutput textAreaInput updateTextAreaInput
 #' @importFrom shiny observe br observeEvent renderImage stopApp plotOutput runGadget dialogViewer paneViewer h4 radioButtons sliderInput reactiveValues updateSliderInput browserViewer
-#' @importFrom shinyWidgets radioGroupButtons materialSwitch pickerInput
+#' @importFrom shinyWidgets radioGroupButtons materialSwitch pickerInput updateMaterialSwitch
 #' @importFrom shinyAce aceEditor updateAceEditor
 #' @importFrom utils capture.output
 #' @importFrom rstudioapi getActiveDocumentContext insertText
 #' @importFrom miniUI miniPage gadgetTitleBar miniContentPanel
 #' @importFrom tibble as_tibble
-#' @importFrom stringr str_detect str_trim str_length str_locate
 #' @importFrom dplyr filter select 
 #' @importFrom magrittr "%>%"
 #' @importFrom editData checkboxInput3 numericInput3 selectInput3 textInput3
 #' @importFrom ggplot2 map_data
+#' @importFrom stringr str_detect str_trim str_length str_locate str_c
 #' @export
 #'
 #' @examples
@@ -89,7 +89,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     
 
     geoms<-sort(geomData$geom)
-    aeses<-c("x","y","z","group","colour","fill","label","alpha","linetype","size","shape","xmin","xmax","ymin","ymax")
+    aeses<-c("x","y","z","group","colour","fill","label","alpha","linetype","size","shape","xmin","xmax","ymin","ymax","sample")
     types<-c("mapping","setting")
     data<-get(df)
     colno=length(colnames(data))
@@ -100,7 +100,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     seals$z=with(seals,sqrt(delta_long^2+delta_lat^2))
     
     geomchoices=c("",sort(unique(defaultVar[defaultVar$var=="geom",]$default)))
-    statchoices=c("",sort(unique(defaultVar[defaultVar$var=="stat",]$default)))
+    statchoices=c("",sort(c(unique(defaultVar[defaultVar$var=="stat",]$default),"qq")))
     
     
     getDefault=function(data,geoms,vars){
@@ -130,39 +130,43 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 #                    choices=mains,
                 #                    selectize=FALSE,selected="ggplot",size=10)
                 # ),
-                column(6,
-                       checkboxInput("doPreprocessing","do preprocessing",value=FALSE),
-                       textAreaInput("preprocessing","preprocessing",value="",rows=5),
+                column(3,
+                       h3("Data / Preprocessing"),
+                       materialSwitch("doPreprocessing","Preprocessing",value=FALSE,status="success",right=TRUE),
+                       textAreaInput("preprocessing",NULL,value="",rows=3,placeholder="Enter R codes for preprocessing here !"),
                        textInput("mydata","Enter data name",value=df),
-                       materialSwitch("showDataStr","show str",status="primary"),
-                       h3("Mapping"),
-              
-                column(6,
-                       h4("Aesthetics"),
-                       selectInput("aesmain",NA,choices=aeses,selectize=FALSE,size=5)
+                       materialSwitch("showDataStr","show str",status="success",right=TRUE)),
+                column(2,
+                       
+                       h3("Aesthetics"),
+                       selectInput("aesmain",NA,choices=aeses,selectize=FALSE,size=12)
                 ),
-                column(6,
-                       h4("mapping"),
+                column(3,
+                      
+                       h3("mapping"),
                        checkboxInput("asFactor","as factor",value=FALSE),
                        selectInput("varmain",NA,choices=colnames(data),
-                                                    selectize=FALSE,size=min(8,colno),selected="")
+                                                    selectize=FALSE,size=min(10,colno),selected="")
                        
-                )),
-                column(6,
-                       h4("R code for main function"),
-                       actionButton("resetmain","reset"),
-                       aceEditor("maincode",value="",height="30px",showLineNumbers=FALSE),
-                       plotOutput("mainPlot",width="400px",height="300px")
-                       )
-            ),
+                ),
+                column(4,
+                       h3("R code for ggplot"),
+                       textAreaInput("maincode",NULL,value="",rows=3),
+                       actionButton("resetmain","reset"))
+                ),
             conditionalPanel(condition="input.showDataStr==true",
                              verbatimTextOutput("text")),
+                
+                #plotOutput("mainPlot",width="400px",height="300px"),
+                
+            
+            
             h3("Add Layer(s)"),
             fluidRow(
                 
                 column(3,
                        radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet"),status="success"),
-                       selectInput("geoms",NA,choices=geoms,selectize=FALSE,size=15,selected=""),
+                       selectInput("geoms",NA,choices=geoms,selectize=FALSE,size=23,selected=""),
                        actionButton("showEx","Show Example")
                 ),
                 column(2,
@@ -199,7 +203,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 ),
                 column(4,
                        h4("Layer under construction"),
-                       textAreaInput("layer",NULL,value="",height="30px"),
+                       textAreaInput("layer",NULL,value="",rows=2),
                        actionButton("addlayer","Add Layer"),
                        actionButton("resetmap","reset"),
                        conditionalPanel(condition="true==false",
@@ -276,6 +280,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(str_detect(input$geoms,"geom")){
                     updateSelectInput(session,"stat",selected=getDefault(defaultVar,input$geoms,"stat"))
                 }
+                if(str_detect(input$geoms,"stat")){
+                    updateSelectInput(session,"geom",selected=getDefault(defaultVar,input$geoms,"geom"))
+                }
                 temp=makeLayer()
                 updateTextAreaInput(session,"layer",value=temp)
                 }
@@ -323,7 +330,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observeEvent(input$showEx,{
                 refreshMaincode<<-FALSE
                 updateTextInput(session,"mydata",value=geomData[geomData$geom==input$geoms,"data"])
-                updateAceEditor(session,"maincode",value=geomData[geomData$geom==input$geoms,"code"])
+                updateTextAreaInput(session,"maincode",value=geomData[geomData$geom==input$geoms,"code"])
                
                 temp<-geomData[geomData$geom==input$geoms,"ex2"]
                 temp=str_trim(temp,side="both")
@@ -345,6 +352,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             })
             
             test=function(e){
+                
                 showModal(modalDialog(
                     title = "Error in preprocessing",
                     "There is an error in preprocessing. Press 'Esc' or Press 'OK' button",
@@ -352,7 +360,6 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     footer=modalButton("OK")
                 ))
                 updateMaterialSwitch(session,'doPreprocessing',value=FALSE)
-                
             }
             
             observeEvent(input$doPreprocessing,{
@@ -379,7 +386,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 
                 if(refreshMaincode) {
                     temp=makeMain()
-                    updateAceEditor(session,"maincode",value=temp)
+                    updateTextAreaInput(session,"maincode",value=temp)
                 }
             })
             
@@ -521,6 +528,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             
             observeEvent(input$aes,{
                 if(input$type=="mapping") updateSelectInput(session,"var",selected="")
+                updateTextInput(session,"varset",label=input$aes)
             })
 
             observe({
@@ -541,7 +549,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 main$var=addValue(main$var,input$varmain)
                 
                 temp=makeMain()
-                if(refreshMaincode) updateAceEditor(session,"maincode",value=temp)
+                if(refreshMaincode) updateTextAreaInput(session,"maincode",value=temp)
                 updateSelectInput(session,"varmain",selected="")
                 updateSelectInput(session,"aesmain",selected="")
                 } else{
@@ -554,6 +562,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observeEvent(input$resetmap,{
                 
                 resetLayer()
+                updateTextInput(session,"varset",label="varset")
                 # updateSelectInput(session,"geoms",selected="")
                 # updateSelectInput(session,"var",selected="")
                 # updateAceEditor(session,"layer",value="")
@@ -706,21 +715,21 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 
                 temp=makeMain()
                 
-                updateAceEditor(session,"maincode",value=temp)
+                updateTextAreaInput(session,"maincode",value=temp)
             })
             
            
             
-            output$mainPlot=renderPlot({
-                #input$addmain
-                input$resetmain
-                
-                if(input$doPreprocessing){
-                    eval(parse(text=input$preprocessing))
-                }
-                p<-eval(parse(text=input$maincode))
-                p
-            })
+            # output$mainPlot=renderPlot({
+            #     #input$addmain
+            #     input$resetmain
+            #     
+            #     if(input$doPreprocessing){
+            #         eval(parse(text=input$preprocessing))
+            #     }
+            #     p<-eval(parse(text=input$maincode))
+            #     p
+            # })
             
             # observe({
             #     
@@ -776,7 +785,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"geoms",selected="")
                 updateSelectInput(session,"var",selected="")
                 updateSelectInput(session,"aes",selected="")
-                updateTextInput(session,"varset",value="")
+                updateTextInput(session,"varset",label="varset",value="")
                 resetLayer()
                 updateTextAreaInput(session,"layer",value="")
                 
@@ -838,7 +847,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 input$dellayer
                 
                 if(input$doPreprocessing){
-                    eval(parse(text=input$preprocessing))
+                    try(eval(parse(text=input$preprocessing)))
                 }
                 p<-eval(parse(text=input$code))
                 p
@@ -866,7 +875,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 input$maincode
                 
                 if(input$doPreprocessing){
-                    eval(parse(text=input$preprocessing))
+                    try(eval(parse(text=input$preprocessing)))
                 }
                 p<-eval(parse(text=input$CodeUC))
                 p
@@ -882,12 +891,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             
             observeEvent(input$done, {
                 
+                result=""
+                if(input$doPreprocessing) result=paste0(input$preprocessing,"\n")
+                result=paste0(result,input$code)
                 if(nzchar(defaultData)) {
-                    insertText(text=input$code)
+                    insertText(text=result)
                     stopApp()
                 } else{
-                    result <- eval(parse(text=input$code))
-                    attr(result,"code") <- input$code
+                
                     stopApp(result)
                 }
                 
@@ -943,6 +954,61 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                
                 }
             })
+           
+            
+            separateCode=function(code){
+                result=""
+                if(!is.null(code)){
+                    (temp=unlist(strsplit(code,"+",fixed=TRUE)))
+                    temp=temp[nchar(temp)>0]
+                    count=length(temp)
+                    result=c()
+                    if(count>0) {
+                        for(i in 1:count){
+                            result=c(result,str_c(temp[1:i],collapse="+\n"))
+                        }
+                    }
+                }
+                result
+            } 
+            
+         
+            splitCode<-function(code){
+                (codes=stringr::str_replace_all(code,"\n",""))
+                (temp=unlist(strsplit(codes,"+",fixed=TRUE)))
+                temp=temp[nchar(temp)>0]
+                temp
+            }
+            
+           
+            code2ggplot=function(code){
+                codes=splitCode(code)
+                if(length(codes)>0) selectMaxValid(codes)
+            }
+            
+           
+            selectMaxValid=function(codes){
+                
+                if(input$doPreprocessing){
+                    try(eval(parse(text=input$preprocessing)))
+                }
+                
+                count=length(codes)
+                i=count
+                for(i in count:1){
+                    codes=codes[1:i]
+                    temp=str_c(codes,collapse="+")
+                    result<-c()
+                    result<-tryCatch(eval(parse(text=temp)),
+                                     error=function(e) return("error"),
+                                     warning=function(w) return("warning"))
+                    class(result)
+                    if("ggplot" %in% class(result)){
+                        return(temp)
+                    }
+                }
+                return(NULL)
+            }
         }
                #))
         if(viewer=="dialog") myviewer <- dialogViewer("ggplotAssist", width = 1000, height = 800)

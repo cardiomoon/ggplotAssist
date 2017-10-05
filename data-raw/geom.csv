@@ -62,7 +62,7 @@
 "stat_ellipse","x,y,color,size","e","stat_ellipse(level=0.95,segments=51,type=""t"")","ggplot(mpg,aes(cty,hwy))","","mpg"
 "stat_function","x","m","stat_function(aes(x=-3:3),n=99,fun=dmorm,args(list(sd=0.5))","ggplot()","",""
 "stat_identity","x","e","stat_identity(na.rm=TRUE)","ggplot(mpg,aes(cty,hwy))","","mpg"
-"stat_qq","sample,x,y","m","stat_qq(aes(sample=1:100),dist=qt,dparam=list(df=5))","ggplot()","",""
+"stat_qq","sample,group,x,y","m","stat_qq(aes(sample=1:100),dist=qt,dparam=list(df=5))","ggplot()","",""
 "stat_quantile","x,y","e","stat_quantile(quantiles=c(0.1,0.9),formula=y~log(x),method=""rq"")","ggplot(mpg,aes(cty,hwy))","","mpg"
 "stat_smooth","x,y","e","stat_smoooth(method='lm',formula=y~x,se=T,level=0.95)","ggplot(mpg,aes(cty,hwy))","","mpg"
 "stat_sum","x,y,size","e","stat_sum()","ggplot(mpg,aes(cty,hwy))","","mpg"
