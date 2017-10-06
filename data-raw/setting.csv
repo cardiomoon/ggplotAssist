@@ -83,3 +83,10 @@
 "geom_violin,stat_ydensity","draw_quantiles","text","",FALSE
 "geom_violin,stat_ydensity","trim","checkbox","TRUE",FALSE
 "geom_violin,stat_ydensity","scale","select","area,count,width",FALSE
+"guide_legend","title","text","waiver()",FALSE
+"guide_legend","title.position","select","top,bottom,left,right",TRUE
+"guide_legend","title.theme","text","",FALSE
+"guide_legend","title.hjust","text","",FALSE
+"guide_legend","title.vjust","text","",FALSE
+"guide_legend","label","checkbox","TRUE",FALSE
+"guide_legend","label.position","select","top,bottom,left,right",TRUE

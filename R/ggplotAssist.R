@@ -9,7 +9,7 @@
 #' @importFrom shiny validate need renderPrint updateTextInput updateCheckboxInput reactive renderPlot 
 #' @importFrom shiny updateSelectizeInput renderUI htmlOutput tagList updateNumericInput updateSelectInput imageOutput textAreaInput updateTextAreaInput
 #' @importFrom shiny observe br observeEvent renderImage stopApp plotOutput runGadget dialogViewer paneViewer h4 radioButtons sliderInput reactiveValues updateSliderInput browserViewer
-#' @importFrom shinyWidgets radioGroupButtons materialSwitch pickerInput updateMaterialSwitch
+#' @importFrom shinyWidgets radioGroupButtons materialSwitch pickerInput updateMaterialSwitch updateRadioGroupButtons
 #' @importFrom shinyAce aceEditor updateAceEditor
 #' @importFrom utils capture.output
 #' @importFrom rstudioapi getActiveDocumentContext insertText
@@ -152,7 +152,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 column(4,
                        h3("R code for ggplot"),
                        textAreaInput("maincode",NULL,value="",rows=3),
-                       actionButton("resetmain","reset"))
+                       actionButton("resetmain","reset"),
+                       conditionalPanel(condition="true==false",
+                       verbatimTextOutput("mainText"))
+                       )
                 ),
             conditionalPanel(condition="input.showDataStr==true",
                              verbatimTextOutput("text")),
@@ -192,11 +195,17 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                                     selectize=FALSE,size=min(8,colno),selected="")),
                        conditionalPanel(condition="input.type=='setting'", 
                                         h4("setting")),
+                       conditionalPanel(condition="input.geoms!='guides'", 
                        textInput("varset","varset",width="200px"),
-                       checkboxInput("addquote","addquote",value=FALSE),
+                       checkboxInput("addquote","addquote",value=FALSE)),
+                       conditionalPanel(condition="input.geoms=='guides'",
+                                        selectInput("guideaes","guideaes",choices="")
+                       ),
                        conditionalPanel(condition="input.type=='setting'", 
                                         uiOutput("varsetUI")
-                                        )
+                                        ),
+                       conditionalPanel(condition="true==false",
+                       textInput("guideLegend","guideLegend",value=""))
                        # ,actionButton("addmap","add")
                        
                         
@@ -227,13 +236,13 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                         choices = c("Preview"=1, "Layer by layer"=2),
                                         status="success"),
                       conditionalPanel(condition="input.Option==2",
-                   h4("Show ggplot Layer by Layer"),
+                  
                    sliderInput("no","layer",min=1,max=1,value=1,step=1,animate=TRUE),
                    plotOutput("plot2",width="400px",height="300px"),
                    verbatimTextOutput("codes")),
                    conditionalPanel(condition="input.Option==1",
-                                    h4("Show ggplot Layer by Layer"),
-                                    textAreaInput("CodeUC",NULL,value="",height="100px"),
+                                   
+                                    textAreaInput("CodeUC",NULL,value="",height="100px",width="500px"),
                                     plotOutput("plot3",width="400px",height="300px")
                    )
                )
@@ -253,6 +262,13 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 X
             }
             
+            # output$mainText=renderPrint({
+            #     temp=makeGuideLegend()
+            #     temp
+            # })
+            
+            observe(makeGuideLegend())
+            
             output$text=renderPrint({
                 df=get(input$mydata)
                 if(!("tibble" %in% class(df))) df=as_tibble(df)
@@ -262,15 +278,23 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observeEvent(input$selectedLayer,{
                 #geomData=read.csv("geom.csv",stringsAsFactors = FALSE)
                 geoms<-sort(geomData$geom)
-                mychoices=geoms[str_detect(geoms,input$selectedLayer)]
+                if(input$selectedLayer=="guides"){
+                   mychoices="guides" 
+                } else{
+                   mychoices=geoms[str_detect(geoms,paste0(input$selectedLayer,"_"))]
+                }
                 updateSelectInput(session,"geoms",choices=mychoices)
             })
             
             observeEvent(input$geoms,{
           
                 if(!is.null(input$geoms)){
-                temp=geomData[geomData$geom==input$geoms,"aes"]
-                choices<-unlist(strsplit(temp,","))
+                if(input$geoms=="guides"){
+                    choices<-setdiff(main$aes,c("x","y"))
+                } else{
+                    temp=geomData[geomData$geom==input$geoms,"aes"]
+                    choices<-unlist(strsplit(temp,","))
+                }
                 updateSelectInput(session,"aes",choices=choices,selected="")
                 updateSelectInput(session,"var",selected="")
                 
@@ -504,6 +528,100 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
             })
             
+            observeEvent(input$guideaes,{
+                # if(!is.null(input$aes)){
+                # pos=grep(input$aes,layer$aes)
+                # if(length(pos)>0){
+                #     layer$type=layer$type[-pos]
+                #     layer$aes=layer$aes[-pos]
+                #     layer$var=layer$var[-pos]
+                # }
+                # }
+               
+                    # layer$type=addValue(layer$type,"setting")
+                    # layer$aes=addValue(layer$aes,input$aes)
+                    # layer$var=addValue(layer$var,"guide_legend()")
+                   
+                if(input$guideaes %in% c("legend","colorbar","none")){
+                    updateTextInput(session,"guideLegend",value=paste0("'",input$guideaes,"'"))
+                 # layer$type=addValue(layer$type,"setting")
+                 # layer$aes=addValue(layer$aes,input$aes)
+                 # layer$var=addValue(layer$var,paste0("'",input$guideaes,"'"))
+             } 
+            })
+            
+            observeEvent(input$guideLegend,{
+                if(!is.null(input$geoms)){
+                if(input$geoms=="guides"){
+                    if(!is.null(input$aes)){
+                    pos=grep(input$aes,layer$aes)
+                    if(length(pos)>0){
+                        layer$type=layer$type[-pos]
+                        layer$aes=layer$aes[-pos]
+                        layer$var=layer$var[-pos]
+                    }
+                    layer$type=addValue(layer$type,"setting")
+                    layer$aes=addValue(layer$aes,input$aes)
+                    layer$var=addValue(layer$var,input$guideLegend)
+                    }
+                }
+                }
+            })
+            makeGuideLegend=reactive({
+                
+                    if(input$guideaes %in% c("none","colorbar","legend")){
+                        temp=paste0("'",input$guideaes,"'")
+                    } else{
+               
+                        temp="guide_legend("
+                        # layer<-NULL
+                        # if(file.exists("layer.csv")) layer=read.csv("layer.csv")
+                        
+                        selected=settingData[str_detect(settingData$geom,input$guideaes),]
+                        count=nrow(selected)
+                        
+                        if(count>0){
+                            for(i in 1:count){
+                                tempvar=selected$setting[i]
+                                value=selected$value[i]
+                                valuechoice=unlist(strsplit(value,","))
+                                valuechoice=str_trim(valuechoice)
+                                if(selected$input[i]=="select") {
+                                    if(!is.null(input[[tempvar]])){
+                                        if(input[[tempvar]]!=valuechoice[1]) {
+                                            temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                                        }
+                                    }
+                                } else if(selected$input[i]=="numeric"){
+                                    if(!is.null(input[[tempvar]])){
+                                        if(input[[tempvar]]!=value) 
+                                            temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                                    }
+                                } else if(selected$input[i]=="text"){
+                                    if(!is.null(input[[tempvar]])){
+                                        if(input[[tempvar]]!=value) {
+                                            if(selected$quoted[i]==TRUE){
+                                                temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                                            } else{
+                                                temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                                            }
+                                        }
+                                    }
+                                } else if(selected$input[i]=="checkbox"){
+                                    if(!is.null(input[[tempvar]])){
+                                        if(input[[tempvar]]!=value) 
+                                            temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                                    }
+                                }
+                            }
+                        }
+                        
+                        temp=paste0(temp,")")
+                    }
+                    updateTextInput(session,"guideLegend",value=temp)
+                    temp
+            })
+            
             # observeEvent(input$addmap,{
             # 
             #   
@@ -529,6 +647,12 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observeEvent(input$aes,{
                 if(input$type=="mapping") updateSelectInput(session,"var",selected="")
                 updateTextInput(session,"varset",label=input$aes)
+                if(!is.null(input$geoms)){
+                if(input$geoms=="guides"){
+        
+                        updateSelectInput(session,"guideaes",label=input$aes,
+                                    choices=c("legend","guide_legend","colorbar","guide_colorbar","none"))
+                 }}
             })
 
             observe({
@@ -557,6 +681,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                               message = list("Please select aes first",
                                                              controller = input$controller))
                 }
+                if(length(setdiff(main$aes,c("x","y")))>0){
+                    updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","guides"),status="success")
+                }
                 
             })
             observeEvent(input$resetmap,{
@@ -571,6 +698,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             
             observeEvent(input$resetmain,{
                 resetMain()
+                updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet"),status="success")
             })
             
             
@@ -787,6 +915,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"aes",selected="")
                 updateTextInput(session,"varset",label="varset",value="")
                 resetLayer()
+                layer$type<-layer$aes<-layer$var<-c()
                 updateTextAreaInput(session,"layer",value="")
                 
             })
@@ -930,7 +1059,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                                  choices=c("",colnames(df)),multiple=TRUE)
                         no=no+1
                     }
-                    selected=settingData[str_detect(settingData$geom,input$geoms),]
+                   
+                    findob="!@#$%"
+                    if(input$guideaes==""){
+                        findob<-input$geoms
+                    } else if(input$guideaes %in% c("guide_legend","guide_colorbar")) {
+                        findob<-input$guideaes
+                    } 
+                    selected=settingData[str_detect(settingData$geom,findob),]
                     count=nrow(selected)
                     if(count>0){
                         for(i in 1:count){
