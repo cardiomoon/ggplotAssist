@@ -168,7 +168,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             fluidRow(
                 
                 column(3,
-                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet"),status="success"),
+                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs"),status="success"),
                        selectInput("geoms",NA,choices=geoms,selectize=FALSE,size=23,selected=""),
                        actionButton("showEx","Show Example")
                 ),
@@ -254,6 +254,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             main <- reactiveValues(type=c(),aes=c(),var=c())
             layer <- reactiveValues(type=c(),aes=c(),var=c())
             layers <-reactiveValues(layer=c())
+           
             refreshMaincode=TRUE
            
             addValue=function(X,A){
@@ -277,10 +278,13 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             
             observeEvent(input$selectedLayer,{
                 #geomData=read.csv("geom.csv",stringsAsFactors = FALSE)
-                geoms<-sort(geomData$geom)
+                
                 if(input$selectedLayer=="guides"){
                    mychoices="guides" 
+                } else if(input$selectedLayer=="labs"){
+                    mychoices="labs" 
                 } else{
+                    geoms<-sort(geomData$geom)
                    mychoices=geoms[str_detect(geoms,paste0(input$selectedLayer,"_"))]
                 }
                 updateSelectInput(session,"geoms",choices=mychoices)
@@ -291,6 +295,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(!is.null(input$geoms)){
                 if(input$geoms=="guides"){
                     choices<-setdiff(main$aes,c("x","y"))
+                } else if(input$geoms=="labs"){
+                    choices<-c(main$aes,"title","subtitle","caption")
                 } else{
                     temp=geomData[geomData$geom==input$geoms,"aes"]
                     choices<-unlist(strsplit(temp,","))
@@ -567,13 +573,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
                 }
             })
+            
             makeGuideLegend=reactive({
                 
                     if(input$guideaes %in% c("none","colorbar","legend")){
                         temp=paste0("'",input$guideaes,"'")
                     } else{
                
-                        temp="guide_legend("
+                        temp=paste0(input$guideaes,"(")
                         # layer<-NULL
                         # if(file.exists("layer.csv")) layer=read.csv("layer.csv")
                         
@@ -619,6 +626,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         temp=paste0(temp,")")
                     }
                     updateTextInput(session,"guideLegend",value=temp)
+                    
                     temp
             })
             
@@ -646,7 +654,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             
             observeEvent(input$aes,{
                 if(input$type=="mapping") updateSelectInput(session,"var",selected="")
-                updateTextInput(session,"varset",label=input$aes)
+                updateTextInput(session,"varset",label=input$aes,value="")
                 if(!is.null(input$geoms)){
                 if(input$geoms=="guides"){
         
@@ -682,7 +690,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                                              controller = input$controller))
                 }
                 if(length(setdiff(main$aes,c("x","y")))>0){
-                    updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","guides"),status="success")
+                    updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides"),status="success")
                 }
                 
             })
@@ -758,7 +766,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             if(!is.null(input$geoms)){
                             
                                 if(i>1) temp=paste0(temp,",")
-                                temp=paste0(temp,set$aes[i],"=",set$var[i])
+                                if(input$geoms=="labs") {
+                                    temp=paste0(temp,set$aes[i],"='",set$var[i],"'")
+                                } else{
+                                    temp=paste0(temp,set$aes[i],"=",set$var[i])
+                                }
                             
                             }
                         }
@@ -1060,12 +1072,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         no=no+1
                     }
                    
-                    findob="!@#$%"
-                    if(input$guideaes==""){
-                        findob<-input$geoms
-                    } else if(input$guideaes %in% c("guide_legend","guide_colorbar")) {
+                    findob<-input$geoms
+                    if(input$selectedLayer=="guides"){
+                    if(input$guideaes %in% c("guide_legend","guide_colorbar")) {
                         findob<-input$guideaes
+                    } else{
+                        findob<-"!@#$%"
                     } 
+                    }
                     selected=settingData[str_detect(settingData$geom,findob),]
                     count=nrow(selected)
                     if(count>0){
