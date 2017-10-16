@@ -112,6 +112,31 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         }
         result   
     }
+    
+    splitData=function(df,colname){
+        
+        if(nrow(df)==0){
+            result=df
+        } else{
+            result=c()
+            for(i in 1:nrow(df)){
+                
+                if(str_detect(df[[colname]][i],",")){
+                    valuechoice=unlist(strsplit(df[[colname]][i],","))
+                    valuechoice=str_trim(valuechoice)
+                    for(j in 1:length(valuechoice)){
+                        result=rbind(result,df[i,])
+                        result[nrow(result),colname]=valuechoice[j] 
+                    }
+                } else{
+                    result=rbind(result,df[i,])
+                }
+            } 
+        }
+        result
+    }
+    
+    settingData=splitData(settingData,"setting")
 
       # retValue=runApp(list(
         ui=miniPage(
@@ -168,7 +193,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             fluidRow(
                 
                 column(3,
-                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs"),status="success"),
+                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","scale"),status="success"),
                        selectInput("geoms",NA,choices=geoms,selectize=FALSE,size=23,selected=""),
                        actionButton("showEx","Show Example")
                 ),
@@ -442,6 +467,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             })
             
             observeEvent(input$position,{
+                if(input$selectedLayer!="scale"){
                 if(input$position!=""){
                     if("position" %in% layer$aes){
                         pos=str_detect(layer$aes,"position")
@@ -457,7 +483,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     }
                 }
                 temp=makeLayer()
+            
                 updateTextAreaInput(session,"layer",value=temp)
+                }
+               
             })
             observeEvent(input$stat,{
                 if(input$stat!=""){
@@ -690,7 +719,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                                              controller = input$controller))
                 }
                 if(length(setdiff(main$aes,c("x","y")))>0){
-                    updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides"),status="success")
+                    updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale"),status="success")
                 }
                 
             })
@@ -706,7 +735,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             
             observeEvent(input$resetmain,{
                 resetMain()
-                updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet"),status="success")
+                updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","scale"),status="success")
             })
             
             
@@ -781,13 +810,19 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(count>0){
                     for(i in 1:count){
                         tempvar=selected$setting[i]
+                        if(tempvar=="position") tempvar="position2"
                         value=selected$value[i]
                         valuechoice=unlist(strsplit(value,","))
                         valuechoice=str_trim(valuechoice)
                         if(selected$input[i]=="select") {
                             if(!is.null(input[[tempvar]])){
-                                if(input[[tempvar]]!=valuechoice[1]) 
-                                temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                                if(input[[tempvar]]!=valuechoice[1]) {
+                                    if(tempvar=="position2"){
+                                        temp=mypaste0(temp,"position='",input[[tempvar]],"'")
+                                    } else{
+                                      temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                                    }
+                                }
                             }
                         } else if(selected$input[i]=="numeric"){
                             if(!is.null(input[[tempvar]])){
@@ -1087,7 +1122,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             temp=selected$setting[i]
                             value=selected$value[i]
                         if(selected$input[i]=="select") {
-                            mylist[[no]]= selectInput3(temp,label=temp,
+                            tempid<-temp
+                            if(temp=="position") tempid<-"position2"
+                            mylist[[no]]= selectInput3(tempid,label=temp,
                                                  choices=unlist(strsplit(value,",",fixed=TRUE)))
                         } else if(selected$input[i]=="numeric"){
                             mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
