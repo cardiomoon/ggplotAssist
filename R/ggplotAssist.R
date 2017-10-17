@@ -16,6 +16,7 @@
 #' @importFrom miniUI miniPage gadgetTitleBar miniContentPanel
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr filter select 
+#' @importFrom scales muted
 #' @importFrom magrittr "%>%"
 #' @importFrom editData checkboxInput3 numericInput3 selectInput3 textInput3
 #' @importFrom ggplot2 map_data
@@ -774,7 +775,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 # layer<-NULL
                 # if(file.exists("layer.csv")) layer=read.csv("layer.csv")
                 
-                selected=settingData[str_detect(settingData$geom,input$geoms),]
+                findob<-input$geoms
+                #find exact geom(not ...2, or ...n)
+                findob<-paste0(findob,"^2n|",findob,",|",findob,"$")
+                
+                selected=settingData[str_detect(settingData$geom,findob),]
                 count=nrow(selected)
                 
                 if(!is.null(layer)){
@@ -847,7 +852,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             if(!is.null(input[[tempvar]])){
                                 if(input[[tempvar]]!=value) {
                                     if(selected$quoted[i]==TRUE){
-                                        temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                                        if(str_detect(input[[tempvar]],"\\(")) temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                                        else temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
                                     } else{
                                         temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
                                     }
@@ -1122,6 +1128,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     }
                    
                     findob<-input$geoms
+                    #find exact geom(not ...2, or ...n)
+                    findob<-paste0(findob,"^2n|",findob,",|",findob,"$")
                     if(input$selectedLayer=="guides"){
                     if(input$guideaes %in% c("guide_legend","guide_colorbar")) {
                         findob<-input$guideaes

@@ -131,3 +131,12 @@
 "scale_colour_grey,scale_fill_grey","start","text","0.2",FALSE
 "scale_colour_grey,scale_fill_grey","end","text","0.8",FALSE
 "scale_colour_grey,scale_fill_grey","na.value","text","red",TRUE
+"scale_colour_gradient,scale_fill_gradient","low","text","#132B43",TRUE
+"scale_colour_gradient,scale_fill_gradient","high","text","#56B1F7",TRUE
+"scale_colour_gradient,scale_fill_gradient,scale_colour_gradient2,scale_fill_gradient2,scale_colour_gradientn,scale_fill_gradientn","space","select","Lab",FALSE
+"scale_colour_gradient,scale_fill_gradient,scale_colour_gradient2,scale_fill_gradient2,scale_colour_gradientn,scale_fill_gradientn","na.value","text","grey50",TRUE
+"scale_colour_gradient,scale_fill_gradient,scale_colour_gradient2,scale_fill_gradient2,scale_colour_gradientn,scale_fill_gradientn","guide","select","colourbar,legend",TRUE
+"scale_colour_gradient2,scale_fill_gradient2","low","text","muted('red')",TRUE
+"scale_colour_gradient2,scale_fill_gradient2","mid","text","white",TRUE
+"scale_colour_gradient2,scale_fill_gradient2","high","text","muted('blue')",TRUE
+"scale_colour_gradientn,scale_fill_gradientn","colours","text","",FALSE
