@@ -88,7 +88,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     }
     
 
-    geoms<-sort(geomData$geom)
+    #geoms<-sort(geomData$geom)
+    geomsall<-sort(unique(c(geomData$geom,unlist(strsplit(settingData$geom,",")))))
     aeses<-c("x","y","z","group","colour","fill","label","alpha","linetype","size","shape","xmin","xmax","ymin","ymax","sample")
     types<-c("mapping","setting")
     data<-get(df)
@@ -194,7 +195,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 
                 column(3,
                        radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","scale"),status="success"),
-                       selectInput("geoms",NA,choices=geoms,selectize=FALSE,size=23,selected=""),
+                       selectInput("geoms",NA,choices=geomsall,selectize=FALSE,size=23,selected=""),
                        actionButton("showEx","Show Example")
                 ),
                 column(2,
@@ -229,7 +230,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        conditionalPanel(condition="input.type=='setting'", 
                                         uiOutput("varsetUI")
                                         ),
-                       conditionalPanel(condition="true==false",
+                       conditionalPanel(condition="true==true",
                        textInput("guideLegend","guideLegend",value=""))
                        # ,actionButton("addmap","add")
                        
@@ -293,10 +294,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             #     temp
             # })
             
-            observe(makeGuideLegend())
+            #observe(makeGuideLegend())
             
             output$text=renderPrint({
-                df=get(input$mydata)
+                if(input$doPreprocessing) eval(parse(text=input$preprocessing))
+                df=eval(parse(text=input$mydata))
                 if(!("tibble" %in% class(df))) df=as_tibble(df)
                 df
             })
@@ -309,8 +311,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 } else if(input$selectedLayer=="labs"){
                     mychoices="labs" 
                 } else{
-                    geoms<-sort(geomData$geom)
-                   mychoices=geoms[str_detect(geoms,paste0(input$selectedLayer,"_"))]
+                    #geoms<-sort(geomData$geom)
+                   mychoices=geomsall[str_detect(geomsall,paste0(input$selectedLayer,"_"))]
                 }
                 updateSelectInput(session,"geoms",choices=mychoices)
             })
@@ -630,6 +632,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                     }
                                 } else if(selected$input[i]=="numeric"){
                                     if(!is.null(input[[tempvar]])){
+                                        
                                         if(input[[tempvar]]!=value) 
                                             temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
                                     }
@@ -811,23 +814,34 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     for(i in 1:count){
                         tempvar=selected$setting[i]
                         if(tempvar=="position") tempvar="position2"
+                        if(tempvar=="type") tempvar="type2"
                         value=selected$value[i]
                         valuechoice=unlist(strsplit(value,","))
                         valuechoice=str_trim(valuechoice)
                         if(selected$input[i]=="select") {
                             if(!is.null(input[[tempvar]])){
                                 if(input[[tempvar]]!=valuechoice[1]) {
-                                    if(tempvar=="position2"){
-                                        temp=mypaste0(temp,"position='",input[[tempvar]],"'")
+                                    if(selected$quoted[i]==TRUE){
+                                    tempvarvalue=paste0("'",input[[tempvar]],"'")
                                     } else{
-                                      temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                                        if(!is.na(as.numeric(input[[tempvar]]))) tempvarvalue=input[[tempvar]]
+                                        else if(!is.na(as.logical(input[[tempvar]]))) tempvarvalue=input[[tempvar]]
+                                        else tempvarvalue=paste0("'",input[[tempvar]],"'")
+                                    }
+                                    if(tempvar=="position2"){
+                                        temp=mypaste0(temp,"position=",tempvarvalue)
+                                    } else if(tempvar=="type2"){
+                                        temp=mypaste0(temp,"type=",tempvarvalue)
+                                    } else{
+                                      temp=mypaste0(temp,tempvar,"=",tempvarvalue)
                                     }
                                 }
                             }
                         } else if(selected$input[i]=="numeric"){
                             if(!is.null(input[[tempvar]])){
-                            if(input[[tempvar]]!=value) 
-                            temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                                if(input[[tempvar]]!=value) {
+                                    temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                                }
                             }
                         } else if(selected$input[i]=="text"){
                             if(!is.null(input[[tempvar]])){
@@ -1124,6 +1138,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         if(selected$input[i]=="select") {
                             tempid<-temp
                             if(temp=="position") tempid<-"position2"
+                            if(temp=="type") tempid<-"type2"
                             mylist[[no]]= selectInput3(tempid,label=temp,
                                                  choices=unlist(strsplit(value,",",fixed=TRUE)))
                         } else if(selected$input[i]=="numeric"){
