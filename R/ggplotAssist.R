@@ -195,7 +195,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             fluidRow(
                 
                 column(3,
-                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","scale"),status="success"),
+                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale"),status="success"),
                        selectInput("geoms",NA,choices=geomsall,selectize=FALSE,size=23,selected=""),
                        actionButton("showEx","Show Example")
                 ),
@@ -231,7 +231,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        conditionalPanel(condition="input.type=='setting'", 
                                         uiOutput("varsetUI")
                                         ),
-                       conditionalPanel(condition="true==true",
+                       conditionalPanel(condition="true==false",
                        textInput("guideLegend","guideLegend",value=""))
                        # ,actionButton("addmap","add")
                        
@@ -739,7 +739,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             
             observeEvent(input$resetmain,{
                 resetMain()
-                updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","scale"),status="success")
+                updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale"),status="success")
             })
             
             
