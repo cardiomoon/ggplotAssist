@@ -139,6 +139,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     }
     
     settingData=splitData(settingData,"setting")
+    themeData=splitData(themeData,"setting")
 
       # retValue=runApp(list(
         ui=miniPage(
@@ -199,6 +200,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        selectInput("geoms",NA,choices=geomsall,selectize=FALSE,size=23,selected=""),
                        actionButton("showEx","Show Example")
                 ),
+                conditionalPanel(condition='input.geoms!="theme"',
                 column(2,
                        textInput("geomdata","data",value=""),
                        h4("Select"),
@@ -236,6 +238,16 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        # ,actionButton("addmap","add")
                        
                         
+                )),
+                conditionalPanel(condition="input.geoms=='theme'",
+                    column(3,
+                           selectInput("args","arguments",choices=c(),
+                                       selectize=FALSE,size=30,selected="")
+                    ),
+                    column(2,
+                           textInput("arg","arg",value=""),
+                           uiOutput("argsUI")
+                    )
                 ),
                 column(4,
                        h4("Layer under construction"),
@@ -278,9 +290,25 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         ))
         server=function(input,output,session){
 
+           
             main <- reactiveValues(type=c(),aes=c(),var=c())
             layer <- reactiveValues(type=c(),aes=c(),var=c())
             layers <-reactiveValues(layer=c())
+            
+            #themeData
+            (argGroup=unique(themeData$group))
+            argchoice=lapply(1:length(argGroup),function(i) i)
+            for(i in 1:length(argGroup)){
+            
+                argchoice[[i]]=themeData$setting[themeData$group==argGroup[i]]
+                names(argchoice)[i]=argGroup[i]    
+            }
+           #argchoice
+           updateSelectInput(session,"args",choices=argchoice)
+           
+           observeEvent(input$args,{
+               updateTextInput(session,"arg",label=input$args,value=themeData$value[themeData$setting==input$args])
+           })
            
             refreshMaincode=TRUE
            
@@ -314,6 +342,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 } else{
                     #geoms<-sort(geomData$geom)
                    mychoices=geomsall[str_detect(geomsall,paste0(input$selectedLayer,"_"))]
+                }
+                if(input$selectedLayer=="theme"){
+                    mychoices=c("theme",mychoices)
                 }
                 updateSelectInput(session,"geoms",choices=mychoices)
             })
