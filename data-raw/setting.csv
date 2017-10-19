@@ -168,11 +168,10 @@
 "margin","t,r,b,l","Text","0",FALSE
 "margin","unit","text","pt",TRUE
 "element_rect","fill","text","NULL",TRUE
-"element_text","family","select","",FALSE
-"element_text","family","Select","plain,italic,bold,bold.italic",TRUE
+"element_text","family","select","NULL,plain,italic,bold,bold.italic",TRUE
 "element_rect,element_line,element_text","colour","select","NULL",FALSE
 "element_rect,element_line,element_text","size","text","NULL",FALSE
-"element_rect,element_line","linetype","select","blank,solid,dashed,dotted,dotdash,longdash,twodash",TRUE
+"element_rect,element_line","linetype","select","NULL,blank,solid,dashed,dotted,dotdash,longdash,twodash",TRUE
 "element_line","arrow","text","arrow()",FALSE
 "element_text","hjust,vjust,angle,lineheight","text","NULL",FALSE
 "element_text","margin","text","margin()",FALSE
@@ -198,3 +197,4 @@
 "theme_stata","scheme","select","S2color,s2mono,s1color,s1rcolor,s1mono,s2manual,s1manual,sj",FALSE
 "theme_tufte","base_family","text","serif",TRUE
 "theme_tufte","ticks","checkbox","TRUE",FALSE
+"element_line","lineend","select","NULL,round,butt,square",FALSE

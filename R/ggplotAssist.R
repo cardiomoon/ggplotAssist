@@ -115,6 +115,24 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         result   
     }
     
+    extractArgs=function(x){
+        x1=str_replace(x,"\\)$","")
+        x2=str_replace(x1,"[:alpha:]*\\(","")
+        unique(unlist(strsplit(x2,",")))
+    }
+    setdiff2=function(args,x){
+        result=args
+        if(length(args)>0){
+        args2=str_trim(str_replace_all(args,"=.*",""),side="both")    
+        pos=c()
+        for(i in 1:length(args2)){
+            if(args2[i]==x) pos=c(pos,i)
+        }
+        pos
+        if(!is.null(pos)) result=args[-pos]
+        }
+        result
+    }
     splitData=function(df,colname){
         
         if(nrow(df)==0){
@@ -245,8 +263,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                        selectize=FALSE,size=30,selected="")
                     ),
                     column(2,
-                           textInput("arg","arg",value=""),
-                           uiOutput("argsUI")
+                           #textInput("arg","arg",value=""),
+                           uiOutput("argsUI"),
+                           textInput("argresult","argresult",value=""),
+                           textInput("argresult2","argresult2",value="")
                     )
                 ),
                 column(4,
@@ -306,9 +326,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
            #argchoice
            updateSelectInput(session,"args",choices=argchoice)
            
-           observeEvent(input$args,{
-               updateTextInput(session,"arg",label=input$args,value=themeData$value[themeData$setting==input$args])
-           })
+           
            
             refreshMaincode=TRUE
            
@@ -800,8 +818,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"varmain",selected="")
             }
             makeLayer=function(){
+                
                 temp=""
                 if(!is.null(input$geoms)){
+                    if(input$geoms!="theme"){
                 temp=paste0(input$geoms,"(")
                 # layer<-NULL
                 # if(file.exists("layer.csv")) layer=read.csv("layer.csv")
@@ -903,8 +923,13 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     temp=paste0(temp,"data=",input$geomdata)
                 }
                 temp=paste0(temp,")")
-                }
+                    
+                    } else {
+                        temp=makeTheme2()
+                    }
+                
                 temp
+                }
             }
             
             mypaste0=function(temp,...){
@@ -1196,6 +1221,167 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
             })
            
+            # observeEvent(input$args,{
+            #     updateTextInput(session,"arg",label=input$args,value=themeData$value[themeData$setting==input$args])
+            # })
+            # 
+            output$argsUI=renderUI({
+                if(!is.null(input$args)){
+                kind<-themeData$input[themeData$setting==input$args]
+                value<-themeData$value[themeData$setting==input$args]
+                mylist=list()
+                if(kind=="text") {
+                    mylist[[1]]<-textInput("arg",label=input$args,value=value)
+                    if(str_detect(value,"\\(")) {
+                        fname=unlist(strsplit(value,"\\("))[1]
+                        selected=settingData[str_detect(settingData$geom,fname),]
+                        count=nrow(selected)
+                        no=2
+                        if(count>0){
+                            for(i in 1:count){
+                                temp=selected$setting[i]
+                                value=selected$value[i]
+                                if(selected$input[i]=="select") {
+                                    tempid<-temp
+                                    if(temp=="position") tempid<-"position2"
+                                    if(temp=="type") tempid<-"type2"
+                                    mylist[[no]]= selectInput3(tempid,label=temp,
+                                                               choices=unlist(strsplit(value,",",fixed=TRUE)))
+                                } else if(selected$input[i]=="numeric"){
+                                    mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
+                                } else if(selected$input[i]=="text"){
+                                    mylist[[no]]=textInput3(temp,label=temp,value=value)
+                                } else if(selected$input[i]=="checkbox"){
+                                    mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
+                                }
+                                no=no+1
+                            }
+                        }
+                    }
+                }
+                else if(kind=="select") mylist[[1]]<-selectInput("arg",label=input$args,choices=unlist(strsplit(value,",")))
+                else if(kind=="checkbox") mylist[[1]]<-checkboxInput("arg",label=input$args,value=as.logical(value))
+                
+                
+                do.call(tagList,mylist)
+                }
+            })
+             
+            makeTheme=reactive({
+                result=""
+                if(input$geoms=="theme"){
+                    
+                if(!is.null(input$args)){
+                    kind<-themeData$input[themeData$setting==input$args]
+                    value<-themeData$value[themeData$setting==input$args]
+                    mylist=list()
+                    if(kind=="text") {
+                        if(str_detect(value,"\\(")) {
+                            
+                            result=unlist(strsplit(value,"\\)"))[1]
+                            
+                            fname=unlist(strsplit(value,"\\("))[1]
+                            selected=settingData[str_detect(settingData$geom,fname),]
+                            count=nrow(selected)
+                            tempresult=c()
+                            if(count>0){
+                                for(i in 1:count){
+                                    temp=selected$setting[i]
+                                    tvalue=selected$value[i]
+                                    kind2=selected$input[i]
+                                    tempid<-temp
+                                    if(temp=="position") tempid<-"position2"
+                                    if(temp=="type") tempid<-"type2"
+                                    if(!is.null(input[[tempid]])){
+                                    if(input[[tempid]]!=tvalue){
+                                        if(kind2=="select"){
+                                            if(input[[tempid]]!=unlist(strsplit(tvalue,","))[1]){
+                                          tempresult=c(tempresult,paste0(tempid,"='",input[[tempid]],"'"))    
+                                            }
+                                        } else{
+                                            if(selected$quoted[i]){
+                                            tempresult=c(tempresult,paste0(tempid,"='",input[[tempid]],"'"))    
+                                            } else{
+                                            tempresult=c(tempresult,paste0(tempid,"=",input[[tempid]]))
+                                            }
+                                        }
+                                    }
+                                    }
+                                    
+                                }
+                            }
+                            if(length(tempresult)>0) {
+                                tempresult2=str_c(tempresult,collapse=",")
+                            } else {
+                                tempresult2=tempresult
+                            }
+                           
+                            result=paste0(result,tempresult2)
+                            result=paste0(result,")")
+                        } else{
+                            result=paste0(result,input$args,"=",input$arg)
+                        }
+                    }
+                    else if(kind=="select") {
+                        if(!is.null(input$arg)){
+                        if(input$arg!=unlist(strsplit(value,","))[1]){
+                          result=paste0(result,"'",input$arg,"'")
+                        }
+                        }
+                    }
+                    else if(kind=="checkbox") {
+                        if(!is.null(input$arg)){
+                        if(input$arg!=as.logical(value)){
+                          result=paste0(result,input$arg)
+                        }
+                        }
+                    } 
+                    
+                    
+                   
+                }
+                   
+                }
+                
+                result
+            })   
+                
+            observe({
+                if(!is.null(input$geoms)){
+                if(input$geoms=="theme"){
+                    
+                    if(!is.null(input$args)){
+                        updateTextInput(session,"argresult",value=makeTheme())
+                    }
+                }
+                }
+            })
+            
+            observeEvent(input$argresult,{
+                if(input$argresult==""){
+                    updateTextInput(session,"argresult2",value="")
+                } else{
+                updateTextInput(session,"argresult2",value=paste0(input$args,"=",input$argresult))
+                }
+            })
+            
+            makeTheme2=reactive({
+                
+                input$argresult2
+                if(input$layer=="") result="theme()"
+                else result=input$layer
+                #input=list(layer="theme(complete=TRUE)",args="legend.position",argresult="'left'",argresult2="legend.position='left'")
+                if(input$argresult!=""){
+                    args<-extractArgs(result)
+                    args1<-setdiff2(args,input$args)
+                    args2<-c(args1,input$argresult2)
+                    print(args)
+                    print(args1)
+                    print(args2)
+                    result=paste0("theme(",str_c(args2,collapse=","),")")
+                }
+                result
+            })
             
             separateCode=function(code){
                 result=""

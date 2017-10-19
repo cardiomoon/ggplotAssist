@@ -1,5 +1,5 @@
 "group","setting","input","value","quoted"
-"all","line","Text","element_line()",FALSE
+"all","line","text","element_line()",FALSE
 "all","rect","text","element_text()",FALSE
 "all","text,title","text","element_text()",FALSE
 "all","aspect.ratio","text","",FALSE
@@ -16,7 +16,7 @@
 "legend","legend.text.align","text","",FALSE
 "legend","legend.title","text","element_text()",FALSE
 "legend","legend.title.align","text","",FALSE
-"legend","legend.position","select","right,bottom,left,top,none",FALSE
+"legend","legend.position","select",",right,bottom,left,top,none",FALSE
 "legend","legend.direction","select","horizontal,vertical",FALSE
 "legend","legend.justification","text","",FALSE
 "legend","legend.box","select","horizontal,vertical",TRUE
@@ -24,3 +24,17 @@
 "legend","legend.box.margin","text","margin()",FALSE
 "legend","legend.box.background","text","element_rect()",FALSE
 "legend","legend.box.spacing","text","unit()",FALSE
+"panel","panel.background","text","element_rect()",FALSE
+"panel","panel.border","text","element_rect(fill=NA)",FALSE
+"panel","panel.spacing,panel.spacing.x,panel.spacing.y","text","unit()",FALSE
+"panel","panel.grid,panel.grid.major,panel.grid.minor,panel.grid.major.x,panel.grid.major.y,panel.grid.minor.x,panel.grid.minor.y","text","element_line()",FALSE
+"panel","panel.ontop","checkbox","TRUE",FALSE
+"plot","plot.backgroud","text","element_rect()",FALSE
+"plot","plot.title,plot.subtitle,plot.caption","text","element_text()",FALSE
+"plot","plot.margin","text","margin()",FALSE
+"strip","strip.background","text","element_rect()",FALSE
+"strip","strip.placement","select","inside,outside",FALSE
+"strip","strip.text,strip.text.x,strip.text.y","text","element_text()",FALSE
+"strip","strip.switch.pad.grid,strip.switch.pad.wrap","text","unit()",FALSE
+"etc","complete","checkbox","FALSE",FALSE
+"etc","validate","checkbox","TRUE",FALSE
