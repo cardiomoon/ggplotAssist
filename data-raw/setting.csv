@@ -165,7 +165,7 @@
 "scale_x_datetime,scale_y_datetime","timezone","text","NULL",FALSE
 "scale_x_time,scale_y_time","oob","text","censor",FALSE
 "scale_x_time,scale_y_time","na.value","text","NA_real_",FALSE
-"margin","t,r,b,l","Text","0",FALSE
+"margin","t,r,b,l","text","0",FALSE
 "margin","unit","text","pt",TRUE
 "element_rect","fill","text","NULL",TRUE
 "element_text","family","select","NULL,plain,italic,bold,bold.italic",TRUE
@@ -198,3 +198,5 @@
 "theme_tufte","base_family","text","serif",TRUE
 "theme_tufte","ticks","checkbox","TRUE",FALSE
 "element_line","lineend","select","NULL,round,butt,square",FALSE
+"unit","x","text","",FALSE
+"unit","units","text","",TRUE

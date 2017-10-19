@@ -20,7 +20,7 @@
 #' @importFrom magrittr "%>%"
 #' @importFrom editData checkboxInput3 numericInput3 selectInput3 textInput3
 #' @importFrom ggplot2 map_data
-#' @importFrom stringr str_detect str_trim str_length str_locate str_c
+#' @importFrom stringr str_detect str_trim str_length str_locate str_c str_replace str_replace_all str_extract_all
 #' @export
 #'
 #' @examples
@@ -115,15 +115,22 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         result   
     }
     
+    
     extractArgs=function(x){
-        x1=str_replace(x,"\\)$","")
-        x2=str_replace(x1,"[:alpha:]*\\(","")
-        unique(unlist(strsplit(x2,",")))
+        (x1=str_replace(x,"\\)$",""))
+        (x2=str_replace(x1,"[:alpha:]*\\(",""))
+        result=unlist(str_extract_all(x2,"[0-9a-z\\.=_']*\\([0-9a-z\\.=_',]*\\)|[0-9a-z\\.=_']+"))
+        result
+        unique(result)
     }
+    
     setdiff2=function(args,x){
+        # cat("args=",args,"\n")
+        # cat('x=',x,"\n")
         result=args
         if(length(args)>0){
         args2=str_trim(str_replace_all(args,"=.*",""),side="both")    
+        args2
         pos=c()
         for(i in 1:length(args2)){
             if(args2[i]==x) pos=c(pos,i)
@@ -131,6 +138,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         pos
         if(!is.null(pos)) result=args[-pos]
         }
+        # cat("result=",result,"\n")
         result
     }
     splitData=function(df,colname){
@@ -314,6 +322,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             main <- reactiveValues(type=c(),aes=c(),var=c())
             layer <- reactiveValues(type=c(),aes=c(),var=c())
             layers <-reactiveValues(layer=c())
+            rv=reactiveValues(theme="")
             
             #themeData
             (argGroup=unique(themeData$group))
@@ -1274,7 +1283,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(!is.null(input$args)){
                     kind<-themeData$input[themeData$setting==input$args]
                     value<-themeData$value[themeData$setting==input$args]
-                    mylist=list()
+                    
                     if(kind=="text") {
                         if(str_detect(value,"\\(")) {
                             
@@ -1349,38 +1358,45 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observe({
                 if(!is.null(input$geoms)){
                 if(input$geoms=="theme"){
-                    
+                    print("observe1")
                     if(!is.null(input$args)){
                         updateTextInput(session,"argresult",value=makeTheme())
+                     
                     }
+                    
                 }
                 }
             })
             
             observeEvent(input$argresult,{
+                print("observeEvent input$argresult")
                 if(input$argresult==""){
                     updateTextInput(session,"argresult2",value="")
+          
                 } else{
                 updateTextInput(session,"argresult2",value=paste0(input$args,"=",input$argresult))
+                    
                 }
+                
             })
             
             makeTheme2=reactive({
                 
                 input$argresult2
+                
                 if(input$layer=="") result="theme()"
                 else result=input$layer
-                #input=list(layer="theme(complete=TRUE)",args="legend.position",argresult="'left'",argresult2="legend.position='left'")
-                if(input$argresult!=""){
-                    args<-extractArgs(result)
-                    args1<-setdiff2(args,input$args)
-                    args2<-c(args1,input$argresult2)
-                    print(args)
-                    print(args1)
-                    print(args2)
+               
+                    
+                    (args<-extractArgs(result))
+                    (args1<-setdiff2(args,input$args))
+                    if(input$argresult2=="") {
+                        args2<-args1
+                    } else {
+                        args2<-c(args1,input$argresult2)
+                    }
                     result=paste0("theme(",str_c(args2,collapse=","),")")
-                }
-                result
+                    result
             })
             
             separateCode=function(code){
