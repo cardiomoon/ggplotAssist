@@ -128,33 +128,28 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     }
     
     #x="theme(legend.margin=margin(t=0,r=0,b=0,l=0,unit='mm'),legend.background=element_rect(fill='red',size=rel(1.5)),panel.background=element_rect(fill='red'),legend.position='bottom')" 
-    #x="theme(axis.text=element_text(colour='red',size=rel(1.5)))"
-    #x="theme(axis.text=element_text(colour='red',size=rel(1.5)),panel.background=element_rect(fill='white'),plot.background=element_rect(fill='grey50',colour='black',size=2))"
-    #x
-    #x="theme(axis.text=element_text(size=rel(1.))"
     extractArgs=function(x){
-        print(x)
         
         result<-tryCatch(eval(parse(text=x)),error=function(e) return("error"))
         
         if("character" %in% class(result)){
             args=character(0)
         } else {
-        if(length(names(result)>0)){
-        pos=unlist(str_locate_all(x,names(result)))
-        pos=c(sort(pos[seq(1,length(pos),by=2)]),nchar(x)+1)
-        pos
-        args=c()
-        for(i in 1:(length(pos)-1)){
-           args=c(args,substring(x,pos[i],lead(pos)[i]-2))
-        }
-        
-        } else{
-            args=character(0)
-        }
+            if(length(names(result)>0)){
+                pos=unlist(str_locate_all(x,names(result)))
+                pos=c(sort(pos[seq(1,length(pos),by=2)]),nchar(x)+1)
+                
+                args=c()
+                for(i in 1:(length(pos)-1)){
+                    args=c(args,substring(x,pos[i],lead(pos)[i]-2))
+                }
+                
+            } else{
+                args=character(0)
+            }
         }
         args
-     }
+    }
     
     setdiff2=function(args,x){
         # cat("args=",args,"\n")
