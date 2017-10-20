@@ -1,15 +1,3 @@
-#' side-by-side selectizeInput
-#' 
-#' @param ... Further arguments to be passed to selectizeInput 
-#' @param width Input width in pixel
-#' @importFrom shiny selectizeInput
-selectizeInput3=function (..., width = 100) 
-{
-    mywidth = paste(width, "px", sep = "")
-    div(style = "display:inline-block;", selectizeInput(..., width = mywidth))
-}
-
-
 #' A shiny app for learn dplyr
 
 #' @param df A tibble or a tbl_df or a data.frame to manipulate
@@ -30,9 +18,10 @@ selectizeInput3=function (..., width = 100)
 #' @importFrom dplyr filter select lead
 #' @importFrom scales muted
 #' @importFrom magrittr "%>%"
-#' @importFrom editData checkboxInput3 numericInput3 selectInput3 textInput3
+#' @importFrom editData checkboxInput3 numericInput3 selectInput3 textInput3 selectizeInput3
 #' @importFrom ggplot2 map_data
 #' @importFrom stringr str_detect str_trim str_length str_locate str_c str_replace str_replace_all str_extract_all str_locate_all
+#' @importFrom grDevices colors
 #' @export
 #'
 #' @examples
@@ -102,6 +91,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     
 
     #geoms<-sort(geomData$geom)
+    myfonts=c('mono','sans','serif','URWHelvetica','URWTimes','Courier','Helvetica','Times','AvantGarde','Bookman','Helvetica-Narrow','NewCenturySchoolbook','Palatino','URWGothic','URWBookman','NimbusMon','NimbusSan','NimbusSanCond','CenturySch','URWPalladio','NimbusRom')
     geomsall<-sort(unique(c(geomData$geom,unlist(strsplit(settingData$geom,",")))))
     aeses<-c("x","y","z","group","colour","fill","label","alpha","linetype","size","shape","xmin","xmax","ymin","ymax","sample")
     types<-c("mapping","setting")
@@ -1290,13 +1280,15 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                         mychoices=c(unlist(strsplit(value,",",fixed=TRUE)),colors())
                                         
                                     }
+                                    mywidth=(((max(nchar(mychoices))*8)%/%100)+1)*100
                                     mylist[[no]]= selectizeInput3(tempid,label=temp,
-                                                               choices=mychoices,
+                                                               choices=mychoices,width=mywidth,
                                                                options=list(create=TRUE))
                                 } else if(selected$input[i]=="numeric"){
                                     mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
                                 } else if(selected$input[i]=="text"){
-                                    mylist[[no]]=textInput3(temp,label=temp,value=value)
+                                    mywidth=(((nchar(value)*8)%/%100)+1)*100
+                                    mylist[[no]]=textInput3(temp,label=temp,value=value,width=mywidth)
                                 } else if(selected$input[i]=="checkbox"){
                                     mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
                                 }

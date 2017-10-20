@@ -167,8 +167,9 @@
 "scale_x_time,scale_y_time","na.value","text","NA_real_",FALSE
 "margin","t,r,b,l","text","0",FALSE
 "margin","unit","text","pt",TRUE
-"element_rect","fill","text","NULL",TRUE
-"element_text","family","select","NULL,plain,italic,bold,bold.italic",TRUE
+"element_rect","fill","select","NULL",TRUE
+"element_text","family","select","NULL,mono,sans,serif,Courier,Helvetica,Times",FALSE
+"element_text","face","select","NULL,plain,italic,bold,bold.italic",TRUE
 "element_rect,element_line,element_text","colour","select","NULL",FALSE
 "element_rect,element_line,element_text","size","text","NULL",FALSE
 "element_rect,element_line","linetype","select","NULL,blank,solid,dashed,dotted,dotdash,longdash,twodash",TRUE
