@@ -1,3 +1,15 @@
+#' side-by-side selectizeInput
+#' 
+#' @param ... Further arguments to be passed to selectizeInput 
+#' @param width Input width in pixel
+#' @importFrom shiny selectizeInput
+selectizeInput3=function (..., width = 100) 
+{
+    mywidth = paste(width, "px", sep = "")
+    div(style = "display:inline-block;", selectizeInput(..., width = mywidth))
+}
+
+
 #' A shiny app for learn dplyr
 
 #' @param df A tibble or a tbl_df or a data.frame to manipulate
@@ -15,12 +27,12 @@
 #' @importFrom rstudioapi getActiveDocumentContext insertText
 #' @importFrom miniUI miniPage gadgetTitleBar miniContentPanel
 #' @importFrom tibble as_tibble
-#' @importFrom dplyr filter select 
+#' @importFrom dplyr filter select lead
 #' @importFrom scales muted
 #' @importFrom magrittr "%>%"
 #' @importFrom editData checkboxInput3 numericInput3 selectInput3 textInput3
 #' @importFrom ggplot2 map_data
-#' @importFrom stringr str_detect str_trim str_length str_locate str_c str_replace str_replace_all str_extract_all
+#' @importFrom stringr str_detect str_trim str_length str_locate str_c str_replace str_replace_all str_extract_all str_locate_all
 #' @export
 #'
 #' @examples
@@ -115,14 +127,34 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         result   
     }
     
-    
+    #x="theme(legend.margin=margin(t=0,r=0,b=0,l=0,unit='mm'),legend.background=element_rect(fill='red',size=rel(1.5)),panel.background=element_rect(fill='red'),legend.position='bottom')" 
+    #x="theme(axis.text=element_text(colour='red',size=rel(1.5)))"
+    #x="theme(axis.text=element_text(colour='red',size=rel(1.5)),panel.background=element_rect(fill='white'),plot.background=element_rect(fill='grey50',colour='black',size=2))"
+    #x
+    #x="theme(axis.text=element_text(size=rel(1.))"
     extractArgs=function(x){
-        (x1=str_replace(x,"\\)$",""))
-        (x2=str_replace(x1,"[:alpha:]*\\(",""))
-        result=unlist(str_extract_all(x2,"[0-9a-z\\.=_']*\\([0-9a-z\\.=_',]*\\)|[0-9a-z\\.=_']+"))
-        result
-        unique(result)
-    }
+        print(x)
+        
+        result<-tryCatch(eval(parse(text=x)),error=function(e) return("error"))
+        
+        if("character" %in% class(result)){
+            args=character(0)
+        } else {
+        if(length(names(result)>0)){
+        pos=unlist(str_locate_all(x,names(result)))
+        pos=c(sort(pos[seq(1,length(pos),by=2)]),nchar(x)+1)
+        pos
+        args=c()
+        for(i in 1:(length(pos)-1)){
+           args=c(args,substring(x,pos[i],lead(pos)[i]-2))
+        }
+        
+        } else{
+            args=character(0)
+        }
+        }
+        args
+     }
     
     setdiff2=function(args,x){
         # cat("args=",args,"\n")
@@ -274,7 +306,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                            #textInput("arg","arg",value=""),
                            uiOutput("argsUI"),
                            textInput("argresult","argresult",value=""),
-                           textInput("argresult2","argresult2",value="")
+                           textInput("argresult2","argresult2",value=""),
+                           textAreaInput("argresult3","argresult3",value="")
                     )
                 ),
                 column(4,
@@ -399,8 +432,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(str_detect(input$geoms,"stat")){
                     updateSelectInput(session,"geom",selected=getDefault(defaultVar,input$geoms,"geom"))
                 }
-                temp=makeLayer()
-                updateTextAreaInput(session,"layer",value=temp)
+                if(input$geoms!="theme"){
+                    temp=makeLayer()
+                    updateTextAreaInput(session,"layer",value=temp)
+                }
                 }
                 # if(str_detect(input$geoms,"stat")){
                 #     updateSelectInput(session,"geom",selected=getDefault(defaultData,geoms,"stat"))
@@ -791,8 +826,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateTextInput(session,"varset",label="varset")
                 # updateSelectInput(session,"geoms",selected="")
                 # updateSelectInput(session,"var",selected="")
-                # updateAceEditor(session,"layer",value="")
-                # 
+                #updateAceEditor(session,"layer",value="")
+                updateTextInput(session,"argresult",value="") 
+                updateTextInput(session,"argresult2",value="") 
             })
             
             observeEvent(input$resetmain,{
@@ -813,6 +849,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"var",selected="")
                 updateTextInput(session,"varset",value="")
                 updateTextAreaInput(session,"layer",value="")
+                updateTextAreaInput(session,"argresult3",value="")
                
             }
             resetMain=function(){
@@ -933,8 +970,6 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
                 temp=paste0(temp,")")
                     
-                    } else {
-                        temp=makeTheme2()
                     }
                 
                 temp
@@ -1212,8 +1247,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             tempid<-temp
                             if(temp=="position") tempid<-"position2"
                             if(temp=="type") tempid<-"type2"
-                            mylist[[no]]= selectInput3(tempid,label=temp,
-                                                 choices=unlist(strsplit(value,",",fixed=TRUE)))
+                            mylist[[no]]= selectizeInput3(tempid,label=temp,
+                                                 choices=unlist(strsplit(value,",",fixed=TRUE)),
+                                                 options=list(create=TRUE))
                         } else if(selected$input[i]=="numeric"){
                             mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
                         } else if(selected$input[i]=="text"){
@@ -1254,8 +1290,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                     tempid<-temp
                                     if(temp=="position") tempid<-"position2"
                                     if(temp=="type") tempid<-"type2"
-                                    mylist[[no]]= selectInput3(tempid,label=temp,
-                                                               choices=unlist(strsplit(value,",",fixed=TRUE)))
+                                    mychoices=unlist(strsplit(value,",",fixed=TRUE))
+                                    if(tempid %in% c("colour","fill")){
+                                        mychoices=c(unlist(strsplit(value,",",fixed=TRUE)),colors())
+                                        
+                                    }
+                                    mylist[[no]]= selectizeInput3(tempid,label=temp,
+                                                               choices=mychoices,
+                                                               options=list(create=TRUE))
                                 } else if(selected$input[i]=="numeric"){
                                     mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
                                 } else if(selected$input[i]=="text"){
@@ -1328,7 +1370,13 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             result=paste0(result,tempresult2)
                             result=paste0(result,")")
                         } else{
-                            result=paste0(result,input$args,"=",input$arg)
+                            #result=paste0(result,input$args,"=",input$arg)
+                            quoted=themeData$quoted[themeData$setting==input$args]
+                            if(quoted){
+                                result=paste0(result,"'",input$arg,"'")
+                            } else{
+                                result=paste0(result,input$arg)
+                            }
                         }
                     }
                     else if(kind=="select") {
@@ -1336,6 +1384,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         if(input$arg!=unlist(strsplit(value,","))[1]){
                           result=paste0(result,"'",input$arg,"'")
                         }
+                        } else{
+                            result=""
                         }
                     }
                     else if(kind=="checkbox") {
@@ -1358,44 +1408,74 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observe({
                 if(!is.null(input$geoms)){
                 if(input$geoms=="theme"){
-                    print("observe1")
+                    #print("observe1")
                     if(!is.null(input$args)){
+                        #updateTextInput(session,"argresult2",value="")
                         updateTextInput(session,"argresult",value=makeTheme())
-                     
+                        #updateTextInput(session,"arg",value=makeTheme())
+                        
                     }
                     
                 }
                 }
             })
             
+            observeEvent(input$args,{
+                updateTextInput(session,"argresult2",value="")
+            })
             observeEvent(input$argresult,{
-                print("observeEvent input$argresult")
+                #print("observeEvent input$argresult")
+                value<-themeData$value[themeData$setting==input$args]
                 if(input$argresult==""){
                     updateTextInput(session,"argresult2",value="")
           
-                } else{
+                } else if(input$argresult!=value ){
                 updateTextInput(session,"argresult2",value=paste0(input$args,"=",input$argresult))
-                    
+                   
                 }
                 
             })
             
+            observeEvent(input$argresult2,{
+                if(!is.null(input$geoms)){
+                    if(input$geoms=="theme"){
+                        updateTextAreaInput(session,"argresult3",value=makeTheme2())
+                    }
+                }
+            })
+            
+            observeEvent(input$argresult3,{
+                if(!is.null(input$geoms)){
+                    if(input$geoms=="theme"){
+                updateTextAreaInput(session,"layer",value=input$argresult3)
+                    }
+                }
+            })
+            
+            class(eval(parse(text="theme()")))
+            
             makeTheme2=reactive({
                 
-                input$argresult2
                 
-                if(input$layer=="") result="theme()"
-                else result=input$layer
-               
+                if(input$argresult3=="") result="theme()"
+                else result=input$argresult3
+                   # cat("result=",result,"\n")
+                    #result="theme(legend.background=element_rect(fill='red'),legend.position='element_rect()')"
                     
+                    value<-themeData$value[themeData$setting==input$args]
                     (args<-extractArgs(result))
+                    #cat("args=",args,"\n")
                     (args1<-setdiff2(args,input$args))
+                    #cat("args1=",args1,"\n")
+                    args2<-args1    
                     if(input$argresult2=="") {
                         args2<-args1
-                    } else {
+                    } else if(input$argresult!=value) {
                         args2<-c(args1,input$argresult2)
                     }
+                    #cat("args2=",args2,"\n")
                     result=paste0("theme(",str_c(args2,collapse=","),")")
+                    
                     result
             })
             

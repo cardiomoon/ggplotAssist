@@ -2,7 +2,7 @@
 "geom_contour","lineend","select","round,butt,square",TRUE
 "geom_path,geom_contour,geom_density2d,geom_density_2d,geom_quantile,stat_quantile","linejoin","select","round,mitre,bevel",FALSE
 "geom_path,geom_contour,geom_denisty2d,geom_density_2d,geom_quantile","linemitre","numeric","1",FALSE
-"geom_path,geom_segment,geom_curve","arrow","text","arrow()",FALSE
+"geom_path,geom_segment,geom_curve","arrow","text","NULL",FALSE
 "geom_step","direction","select","hv,vh",FALSE
 "geom_smooth,stat_smooth","method","select","auto,lm,glm,gam,loess,rlm",FALSE
 "geom_smooth,stat_smooth","formula","text","y~x",FALSE
@@ -172,7 +172,7 @@
 "element_rect,element_line,element_text","colour","select","NULL",FALSE
 "element_rect,element_line,element_text","size","text","NULL",FALSE
 "element_rect,element_line","linetype","select","NULL,blank,solid,dashed,dotted,dotdash,longdash,twodash",TRUE
-"element_line","arrow","text","arrow()",FALSE
+"element_line","arrow","text","NULL",FALSE
 "element_text","hjust,vjust,angle,lineheight","text","NULL",FALSE
 "element_text","margin","text","margin()",FALSE
 "element_text","debug","checkbox","FALSE",FALSE

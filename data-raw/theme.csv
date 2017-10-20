@@ -29,7 +29,7 @@
 "panel","panel.spacing,panel.spacing.x,panel.spacing.y","text","unit()",FALSE
 "panel","panel.grid,panel.grid.major,panel.grid.minor,panel.grid.major.x,panel.grid.major.y,panel.grid.minor.x,panel.grid.minor.y","text","element_line()",FALSE
 "panel","panel.ontop","checkbox","TRUE",FALSE
-"plot","plot.backgroud","text","element_rect()",FALSE
+"plot","plot.background","text","element_rect()",FALSE
 "plot","plot.title,plot.subtitle,plot.caption","text","element_text()",FALSE
 "plot","plot.margin","text","margin()",FALSE
 "strip","strip.background","text","element_rect()",FALSE
