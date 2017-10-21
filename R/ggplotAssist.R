@@ -1,9 +1,9 @@
-#' A shiny app for learn dplyr
+#' A shiny app for learn ggplot2
 
 #' @param df A tibble or a tbl_df or a data.frame to manipulate
 #' @param viewer Specify where the gadget should be displayed. Possible choices are c("dialog","browser","pane")
 #'
-#' @return A manipulated tibble or NULL
+#' @return An R code for ggplot
 #' @importFrom shiny div selectInput runApp fluidPage tags HTML titlePanel hr fluidRow column
 #' @importFrom shiny textInput checkboxInput numericInput conditionalPanel verbatimTextOutput uiOutput h3 actionButton showModal modalDialog modalButton
 #' @importFrom shiny validate need renderPrint updateTextInput updateCheckboxInput reactive renderPlot 
@@ -298,6 +298,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 column(4,
                        h4("Layer under construction"),
                        textAreaInput("layer",NULL,value="",rows=2),
+                       #actionButton("updatePreview","Update Preview"),
                        actionButton("addlayer","Add Layer"),
                        actionButton("resetmap","reset"),
                        conditionalPanel(condition="true==false",
@@ -390,6 +391,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
                 if(input$selectedLayer=="theme"){
                     mychoices=c("theme",mychoices)
+                } else if(input$selectedLayer=="labs"){
+                    mychoices=c(mychoices,"xlab","ylab","ggtitle")
                 }
                 updateSelectInput(session,"geoms",choices=mychoices)
             })
@@ -400,11 +403,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(input$geoms=="guides"){
                     choices<-setdiff(main$aes,c("x","y"))
                 } else if(input$geoms=="labs"){
-                    choices<-c(main$aes,"title","subtitle","caption")
-                } else{
+                    if(length(main$aes)>0) choices<-c(main$aes)
+                    else choices=c("")
+                } else {
                     temp=geomData[geomData$geom==input$geoms,"aes"]
-                    choices<-unlist(strsplit(temp,","))
+                    if(length(temp)==0) choices=c("")
+                    else choices<-unlist(strsplit(temp,","))
                 }
+                   
                 updateSelectInput(session,"aes",choices=choices,selected="")
                 updateSelectInput(session,"var",selected="")
                 
@@ -597,27 +603,34 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 
             })
             
-            observeEvent(input$facetcol,{
-                if(!is.null(input$facetrow)){
-                if((length(input$facetrow)>0)&(length(input$facetcol)>0)){
-                    layer$type="setting"
-                    layer$aes="facets"
-                    layer$var=paste0(str_c(input$facetrow,collapse="+"),
-                                     "~",str_c(input$facetcol,collapse="+"))
-                }
-                }
-            })
-            observeEvent(input$facetrow,{
-                if(!is.null(input$facetcol)){
-                 if((length(input$facetrow)>0)&(length(input$facetcol)>0)){
-                    layer$type="setting"
-                    layer$aes="facets"
-                    layer$var=paste0(str_c(input$facetrow,collapse="+"),
-                                     "~",str_c(input$facetcol,collapse="+"))
-                }
-                }
+            observe({
+                if(!is.null(input$geoms)){
+                    if(input$geoms=="facet_grid"){
+                if((!is.null(input$facetrow))&(!is.null(input$facetcol))){
                 
+                    layer$type="setting"
+                    layer$aes="facets"
+                    layer$var=paste0(str_c(input$facetrow,collapse="+"),
+                                     "~",str_c(input$facetcol,collapse="+"))
+                
+                } else if(!is.null(input$facetcol)){
+                    layer$type="setting"
+                    layer$aes="facets"
+                    layer$var=paste0("~",str_c(input$facetcol,collapse="+"))
+                } else if(!is.null(input$facetrow)){
+                    layer$type="setting"
+                    layer$aes="facets"
+                    layer$var=paste0(str_c(input$facetrow,collapse="+"),
+                                     "~.")
+                } else{
+                    layer$type=NULL
+                    layer$aes=NULL
+                    layer$var=NULL
+                }
+                    }
+                }
             })
+            
             
             observeEvent(input$var,{
                 layer$type=addValue(layer$type,input$type)
@@ -1027,6 +1040,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 input$code
                 input$layer
                 
+                
                 temp=input$code
                 if(input$layer!="") temp=paste0(input$code," +\n",input$layer)
                 
@@ -1152,12 +1166,15 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             })
             
             output$plot3=renderPlot({
-                input$layer
+                input$layers
                 input$maincode
+                input$resetmap
+                #input$updatePreview
                 
                 if(input$doPreprocessing){
                     try(eval(parse(text=input$preprocessing)))
                 }
+                #p<-eval(parse(text=isolate(input$CodeUC)))
                 p<-eval(parse(text=input$CodeUC))
                 p
                 
@@ -1228,17 +1245,21 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         for(i in 1:count){
                             temp=selected$setting[i]
                             value=selected$value[i]
+                            placeholder=selected$placeholder[i]
+                            mywidth=min((((max(nchar(value),nchar(placeholder))*8)%/%100)+1)*100,200)
                         if(selected$input[i]=="select") {
                             tempid<-temp
                             if(temp=="position") tempid<-"position2"
                             if(temp=="type") tempid<-"type2"
+                            mychoices=unlist(strsplit(value,",",fixed=TRUE))
+                            mywidth=(((max(nchar(mychoices))*8)%/%100)+1)*100
                             mylist[[no]]= selectizeInput3(tempid,label=temp,
-                                                 choices=unlist(strsplit(value,",",fixed=TRUE)),
+                                                 choices=mychoices,width=mywidth,
                                                  options=list(create=TRUE))
                         } else if(selected$input[i]=="numeric"){
                             mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
                         } else if(selected$input[i]=="text"){
-                            mylist[[no]]=textInput3(temp,label=temp,value=value)
+                            mylist[[no]]=textInput3(temp,label=temp,value=value,placeholder=placeholder,width=mywidth)
                         } else if(selected$input[i]=="checkbox"){
                             mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
                         }
@@ -1271,6 +1292,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             for(i in 1:count){
                                 temp=selected$setting[i]
                                 value=selected$value[i]
+                                placeholder=selected$placeholder[i]
                                 if(selected$input[i]=="select") {
                                     tempid<-temp
                                     if(temp=="position") tempid<-"position2"
@@ -1287,8 +1309,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                 } else if(selected$input[i]=="numeric"){
                                     mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
                                 } else if(selected$input[i]=="text"){
-                                    mywidth=(((nchar(value)*8)%/%100)+1)*100
-                                    mylist[[no]]=textInput3(temp,label=temp,value=value,width=mywidth)
+                                    mywidth=min((((max(nchar(value),nchar(placeholder))*8)%/%100)+1)*100,200)
+                                    mylist[[no]]=textInput3(temp,label=temp,value=value,width=mywidth,placeholder=placeholder)
                                 } else if(selected$input[i]=="checkbox"){
                                     mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
                                 }

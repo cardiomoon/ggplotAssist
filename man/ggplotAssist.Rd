@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggplotAssist.R
 \name{ggplotAssist}
 \alias{ggplotAssist}
-\title{A shiny app for learn dplyr}
+\title{A shiny app for learn ggplot2}
 \usage{
 ggplotAssist(df = NULL, viewer = "browser")
 }
@@ -12,10 +12,10 @@ ggplotAssist(df = NULL, viewer = "browser")
 \item{viewer}{Specify where the gadget should be displayed. Possible choices are c("dialog","browser","pane")}
 }
 \value{
-A manipulated tibble or NULL
+An R code for ggplot
 }
 \description{
-A shiny app for learn dplyr
+A shiny app for learn ggplot2
 }
 \examples{
 library(tidyverse)
