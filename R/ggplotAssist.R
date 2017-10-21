@@ -402,9 +402,6 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(!is.null(input$geoms)){
                 if(input$geoms=="guides"){
                     choices<-setdiff(main$aes,c("x","y"))
-                } else if(input$geoms=="labs"){
-                    if(length(main$aes)>0) choices<-c(main$aes)
-                    else choices=c("")
                 } else {
                     temp=geomData[geomData$geom==input$geoms,"aes"]
                     if(length(temp)==0) choices=c("")
@@ -909,7 +906,19 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         
                     }
                 }
-                
+                if(input$geoms=="labs"){
+                    count=length(main$aes)
+                    if(count>0){
+                        for(i in 1:count){
+                            tempvar=main$aes[i]
+                            if(!is.null(input[[tempvar]])){
+                            if(input[[tempvar]]!="") {
+                                temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                            }
+                            }
+                        }
+                    }
+                }
                 if(count>0){
                     for(i in 1:count){
                         tempvar=selected$setting[i]
@@ -1228,7 +1237,18 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                                  choices=c("",colnames(df)),multiple=TRUE)
                         no=no+1
                     }
-                   
+                    if(input$geoms=="labs") {
+                        count=length(main$aes)
+                        if(count>0){
+                            for(i in 1:count){
+                            temp=main$aes[i]
+                           mylist[[no]]=textInput3(temp,temp,value="",
+                                                   placeholder=paste0("label for ",temp),width=200)
+                           no=no+1
+                            }
+                        }
+                    }
+                    
                     findob<-input$geoms
                     #find exact geom(not ...2, or ...n)
                     findob<-paste0(findob,"^2n|",findob,",|",findob,"$")
