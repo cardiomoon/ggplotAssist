@@ -8,7 +8,7 @@
 #' @importFrom shiny textInput checkboxInput numericInput conditionalPanel verbatimTextOutput uiOutput h3 actionButton showModal modalDialog modalButton
 #' @importFrom shiny validate need renderPrint updateTextInput updateCheckboxInput reactive renderPlot 
 #' @importFrom shiny updateSelectizeInput renderUI htmlOutput tagList updateNumericInput updateSelectInput imageOutput textAreaInput updateTextAreaInput
-#' @importFrom shiny observe br observeEvent renderImage stopApp plotOutput runGadget dialogViewer paneViewer h4 radioButtons sliderInput reactiveValues updateSliderInput browserViewer
+#' @importFrom shiny observe br observeEvent renderImage stopApp plotOutput runGadget dialogViewer paneViewer h4 radioButtons sliderInput reactiveValues updateSliderInput browserViewer animationOptions
 #' @importFrom shinyWidgets radioGroupButtons materialSwitch pickerInput updateMaterialSwitch updateRadioGroupButtons
 #' @importFrom shinyAce aceEditor updateAceEditor
 #' @importFrom utils capture.output
@@ -159,13 +159,16 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         result
     }
     splitData=function(df,colname){
-        
+        # df=settingData
+        # colname="setting"
+        # nrow(df)
         if(nrow(df)==0){
             result=df
         } else{
             result=c()
             for(i in 1:nrow(df)){
-                
+                # cat("i=",i,"\n")
+                # cat("df[[colname]][i]=",df[[colname]][i],"\n")     
                 if(str_detect(df[[colname]][i],",")){
                     valuechoice=unlist(strsplit(df[[colname]][i],","))
                     valuechoice=str_trim(valuechoice)
@@ -176,6 +179,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 } else{
                     result=rbind(result,df[i,])
                 }
+                
             } 
         }
         result
@@ -239,7 +243,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             fluidRow(
                 
                 column(3,
-                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale"),status="success"),
+                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale","annotate","others"),status="success"),
                        selectInput("geoms",NA,choices=geomsall,selectize=FALSE,size=23,selected=""),
                        actionButton("showEx","Show Example")
                 ),
@@ -323,7 +327,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                         status="success"),
                       conditionalPanel(condition="input.Option==2",
                   
-                   sliderInput("no","layer",min=1,max=1,value=1,step=1,animate=TRUE),
+                   sliderInput("no","layer",min=1,max=1,value=1,step=1,
+                               animate=animationOptions(interval=1500)),
                    plotOutput("plot2",width="400px",height="300px"),
                    verbatimTextOutput("codes")),
                    conditionalPanel(condition="input.Option==1",
@@ -385,7 +390,13 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                    mychoices="guides" 
                 } else if(input$selectedLayer=="labs"){
                     mychoices="labs" 
-                } else{
+                } else if(input$selectedLayer=="annotate"){
+                    #geoms<-sort(geomData$geom)
+                    mychoices=geomsall[str_detect(geomsall,"annota")]
+                } else if(input$selectedLayer=="others"){
+                    mychoices=c("borders") 
+                }
+                else{
                     #geoms<-sort(geomData$geom)
                    mychoices=geomsall[str_detect(geomsall,paste0(input$selectedLayer,"_"))]
                 }
@@ -810,9 +821,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                               message = list("Please select aes first",
                                                              controller = input$controller))
                 }
-                if(length(setdiff(main$aes,c("x","y")))>0){
-                    updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale"),status="success")
-                }
+        #         if(length(setdiff(main$aes,c("x","y")))>0){
+        #             updateRadioGroupButtons(session,"selectedLayer","Select", 
+        # choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale","annotate"),status="success")
+        #         }
                 
             })
             observeEvent(input$resetmap,{
@@ -820,15 +832,16 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 resetLayer()
                 updateTextInput(session,"varset",label="varset")
                 # updateSelectInput(session,"geoms",selected="")
-                # updateSelectInput(session,"var",selected="")
+                updateSelectInput(session,"var",selected="")
                 #updateAceEditor(session,"layer",value="")
+                updateSelectInput(session,"aes",selected="")
                 updateTextInput(session,"argresult",value="") 
                 updateTextInput(session,"argresult2",value="") 
             })
             
             observeEvent(input$resetmain,{
                 resetMain()
-                updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale"),status="success")
+                # updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale","annotate"),status="success")
             })
             
             
@@ -1272,7 +1285,12 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             if(temp=="position") tempid<-"position2"
                             if(temp=="type") tempid<-"type2"
                             mychoices=unlist(strsplit(value,",",fixed=TRUE))
+                            if(tempid %in% c("colour","color","fill")){
+                                mychoices=c(mychoices,colors()[!str_detect(colors(),mychoices)])
+                            }
+                            if(length(mychoices)>0)
                             mywidth=(((max(nchar(mychoices))*8)%/%100)+1)*100
+                            else mywidth=100
                             mylist[[no]]= selectizeInput3(tempid,label=temp,
                                                  choices=mychoices,width=mywidth,
                                                  options=list(create=TRUE))
@@ -1286,12 +1304,19 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             no=no+1
                         }
                     }
+                    if(input$geoms %in% c("scale_x_log10","scale_y_log10")){
+                        mylist[[no]]=actionButton("addMathFormat","Add math_format")
+                        no=no+1
+                    }
                     
                     do.call(tagList,mylist)
                
                 }
             })
-           
+           observeEvent(input$addMathFormat,{
+               updateTextInput(session,"breaks",value="scales::trans_breaks('log10', function(x) 10^x)")
+               updateTextInput(session,"labels",value="scales::math_format(10^.x)")
+           })
             # observeEvent(input$args,{
             #     updateTextInput(session,"arg",label=input$args,value=themeData$value[themeData$setting==input$args])
             # })
@@ -1301,45 +1326,12 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 kind<-themeData$input[themeData$setting==input$args]
                 value<-themeData$value[themeData$setting==input$args]
                 mylist=list()
-                if(kind=="text") {
-                    mylist[[1]]<-textInput("arg",label=input$args,value=value)
-                    if(str_detect(value,"\\(")) {
-                        fname=unlist(strsplit(value,"\\("))[1]
-                        selected=settingData[str_detect(settingData$geom,fname),]
-                        count=nrow(selected)
-                        no=2
-                        if(count>0){
-                            for(i in 1:count){
-                                temp=selected$setting[i]
-                                value=selected$value[i]
-                                placeholder=selected$placeholder[i]
-                                if(selected$input[i]=="select") {
-                                    tempid<-temp
-                                    if(temp=="position") tempid<-"position2"
-                                    if(temp=="type") tempid<-"type2"
-                                    mychoices=unlist(strsplit(value,",",fixed=TRUE))
-                                    if(tempid %in% c("colour","fill")){
-                                        mychoices=c(unlist(strsplit(value,",",fixed=TRUE)),colors())
-                                        
-                                    }
-                                    mywidth=(((max(nchar(mychoices))*8)%/%100)+1)*100
-                                    mylist[[no]]= selectizeInput3(tempid,label=temp,
-                                                               choices=mychoices,width=mywidth,
-                                                               options=list(create=TRUE))
-                                } else if(selected$input[i]=="numeric"){
-                                    mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
-                                } else if(selected$input[i]=="text"){
-                                    mywidth=min((((max(nchar(value),nchar(placeholder))*8)%/%100)+1)*100,200)
-                                    mylist[[no]]=textInput3(temp,label=temp,value=value,width=mywidth,placeholder=placeholder)
-                                } else if(selected$input[i]=="checkbox"){
-                                    mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
-                                }
-                                no=no+1
-                            }
-                        }
-                    }
+                if(kind %in% c("text","select")) {
+                    if(kind=="text") mylist[[1]]<-textInput("arg",label=input$args,value=value)
+                    if(kind=="select") mylist[[1]]<-selectInput("arg",label=input$args,choices=unlist(strsplit(value,",")))
+                    mylist[[2]]=uiOutput("argsUI2")
+                    
                 }
-                else if(kind=="select") mylist[[1]]<-selectInput("arg",label=input$args,choices=unlist(strsplit(value,",")))
                 else if(kind=="checkbox") mylist[[1]]<-checkboxInput("arg",label=input$args,value=as.logical(value))
                 
                 
@@ -1347,6 +1339,50 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
             })
              
+            output$argsUI2=renderUI({
+                value=input$arg
+                if(str_detect(value,"\\(")) {
+                fname=unlist(strsplit(value,"\\("))[1]
+                selected=settingData[str_detect(settingData$geom,fname),]
+                count=nrow(selected)
+                mylist=list()
+                no=1
+                if(count>0){
+                    for(i in 1:count){
+                        temp=selected$setting[i]
+                        value=selected$value[i]
+                        placeholder=selected$placeholder[i]
+                        if(selected$input[i]=="select") {
+                            tempid<-temp
+                            if(temp=="position") tempid<-"position2"
+                            if(temp=="type") tempid<-"type2"
+                            mychoices=unlist(strsplit(value,",",fixed=TRUE))
+                            if(tempid %in% c("colour","color","fill")){
+                                mychoices=c(mychoices,colors())
+                            }
+                            mywidth=(((max(nchar(mychoices))*8)%/%100)+1)*100
+                            mylist[[no]]= selectizeInput3(tempid,label=temp,
+                                                          choices=mychoices,width=mywidth,
+                                                          options=list(create=TRUE))
+                        } else if(selected$input[i]=="numeric"){
+                            mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
+                        } else if(selected$input[i]=="text"){
+                            mywidth=min((((max(nchar(value),nchar(placeholder))*8)%/%100)+1)*100,200)
+                            mylist[[no]]=textInput3(temp,label=temp,value=value,width=mywidth,placeholder=placeholder)
+                        } else if(selected$input[i]=="checkbox"){
+                            mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
+                        }
+                        no=no+1
+                    }
+                }
+                do.call(tagList,mylist)
+            }
+            })
+            
+            observeEvent(input$arg,{
+                updateTextInput(session,"argresult",value=input$arg)
+            })
+            
             makeTheme=reactive({
                 result=""
                 if(input$geoms=="theme"){
@@ -1355,7 +1391,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     kind<-themeData$input[themeData$setting==input$args]
                     value<-themeData$value[themeData$setting==input$args]
                     
-                    if(kind=="text") {
+                    if(kind %in% c("text","select")) {
                         if(str_detect(value,"\\(")) {
                             
                             result=unlist(strsplit(value,"\\)"))[1]
@@ -1398,7 +1434,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                            
                             result=paste0(result,tempresult2)
                             result=paste0(result,")")
-                        } else{
+                        } else if(kind=="text"){
                             #result=paste0(result,input$args,"=",input$arg)
                             quoted=themeData$quoted[themeData$setting==input$args]
                             if(quoted){
@@ -1406,15 +1442,19 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             } else{
                                 result=paste0(result,input$arg)
                             }
-                        }
-                    }
-                    else if(kind=="select") {
-                        if(!is.null(input$arg)){
-                        if(input$arg!=unlist(strsplit(value,","))[1]){
-                          result=paste0(result,"'",input$arg,"'")
-                        }
-                        } else{
-                            result=""
+                        } else if(kind=="select") {
+                            if(!is.null(input$arg)){
+                                if(input$arg!=unlist(strsplit(value,","))[1]){
+                                    quoted=themeData$quoted[themeData$setting==input$args]
+                                    if(quoted){
+                                    result=paste0(result,"'",input$arg,"'")
+                                    } else{
+                                        result=paste0(result,input$arg) 
+                                    }
+                                }
+                            } else{
+                                result=""
+                            }
                         }
                     }
                     else if(kind=="checkbox") {
