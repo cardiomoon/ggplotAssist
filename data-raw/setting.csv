@@ -7,11 +7,11 @@
 "geom_smooth,stat_smooth","method","select","auto,lm,glm,gam,loess,rlm",FALSE,""
 "geom_smooth,stat_smooth","formula","text","y~x",FALSE,""
 "geom_smooth,stat_smooth","se","checkbox","TRUE",FALSE,""
-"facet_grid,facet_wrap","scales","select","fixed,free_x,free_y,free",FALSE,""
-"facet_grid,facet_wrap","space","select","fixed,free_x,free_y,free",FALSE,""
-"facet_grid,facet_wrap","labeller","text","",FALSE,""
-"facet_grid","margins","checkbox","FALSE",FALSE,""
-"facet_wrap","stop.position","select","top,bottom,left,right",FALSE,""
+"facet_wrap,facet_grid","scales","select","fixed,free_x,free_y,free",TRUE,NA
+"facet_wrap","nrow,ncol","text","",FALSE,"NULL"
+"facet_grid","space","select","fixed,free_x,free_y,free",FALSE,""
+"facet_grid","margins","checkbox","FALSE",FALSE,NA
+"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed",TRUE,""
 "geom_text,geom_label","parse","checkbox","FALSE",FALSE,""
 "geom_text,geom_label","nudge_x","numeric","0",FALSE,""
 "geom_text,geom_label","nudge_y","numeric","0",FALSE,""
@@ -247,3 +247,11 @@
 "borders","colour","select","grey50,",TRUE,""
 "borders","xlim","text","",FALSE,"NULL"
 "borders","ylim","text","",FALSE,"NULL"
+"xlim,ylim","min,max","text","",FALSE,""
+"facet_grid,facet_wrap","shrink","checkbox","TRUE",FALSE,NA
+"facet_grid,facet_wrap","as.table","checkbox","TRUE",FALSE,""
+"facet_wrap,facet_grid","drop","checkbox","TRUE",FALSE,NA
+"facet_grid,facet_wrap","switch","select","NULL,x,y",TRUE,"By default, the labels are displayed on the top and right of the plot"
+"facet_wrap","dir","select","h,v",TRUE,""
+"facet_wrap","strip.position","select","top,bottom,left,right",TRUE,NA
+"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_bquote",FALSE,""

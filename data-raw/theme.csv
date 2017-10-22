@@ -32,7 +32,7 @@
 "plot","plot.title,plot.subtitle,plot.caption","select","element_text(),element_blank()",FALSE,""
 "plot","plot.margin","text","margin()",FALSE,""
 "strip","strip.background","select","element_rect(),element_blank()",FALSE,""
-"strip","strip.placement","select","inside,outside",FALSE,""
+"strip","strip.placement","select","inside,outside",TRUE,""
 "strip","strip.text,strip.text.x,strip.text.y","select","element_text(),element_blank()",FALSE,""
 "strip","strip.switch.pad.grid,strip.switch.pad.wrap","text","unit()",FALSE,""
 "etc","complete","checkbox","FALSE",FALSE,""

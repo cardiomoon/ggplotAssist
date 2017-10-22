@@ -243,7 +243,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             fluidRow(
                 
                 column(3,
-                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale","annotate","others"),status="success"),
+                       radioGroupButtons("selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale","annotate","limits","others"),status="success"),
                        selectInput("geoms",NA,choices=geomsall,selectize=FALSE,size=23,selected=""),
                        actionButton("showEx","Show Example")
                 ),
@@ -369,12 +369,12 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 X
             }
             
-            # output$mainText=renderPrint({
-            #     temp=makeGuideLegend()
-            #     temp
-            # })
-            
-            #observe(makeGuideLegend())
+            output$mainText=renderPrint({
+                temp=makeGuideLegend()
+                temp
+            })
+
+            observe(makeGuideLegend())
             
             output$text=renderPrint({
                 if(input$doPreprocessing) eval(parse(text=input$preprocessing))
@@ -395,6 +395,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     mychoices=geomsall[str_detect(geomsall,"annota")]
                 } else if(input$selectedLayer=="others"){
                     mychoices=c("borders") 
+                } else if(input$selectedLayer=="limits"){
+                    mychoices=c("expand_limits","lims","xlim","ylim") 
                 }
                 else{
                     #geoms<-sort(geomData$geom)
@@ -446,7 +448,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observeEvent(input$asFactor,{
                 
                 result=c()
-                df=get(input$mydata)
+                if(input$doPreprocessing) eval(parse(text=input$preprocessing))
+                df=eval(parse(text=input$mydata))
                 if(input$asFactor==TRUE){
                     for(i in 1:ncol(df)){
                         result=c(result,ifelse(is.numeric(df[[colnames(df)[[i]]]]),
@@ -463,7 +466,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observeEvent(input$asFactor2,{
                 
                 result=c()
-                df=get(input$mydata)
+                if(input$doPreprocessing) eval(parse(text=input$preprocessing))
+                df=eval(parse(text=input$mydata))
                 if(input$asFactor2==TRUE){
                     for(i in 1:ncol(df)){
                         result=c(result,ifelse(is.numeric(df[[colnames(df)[[i]]]]),
@@ -525,7 +529,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     need(any(class(try(eval(parse(text=input$mydata)))) %in% c("tbl_df","tibble","data.frame")),
                          "Please enter the name of data")
                 )
-                data1<-get(input$mydata)
+                
+                data1<-eval(parse(text=input$mydata))
+                
                 if(!is.null(data1)) {
                     updateSelectInput(session,"varmain",
                                       choices=c(colnames(data1),
@@ -919,14 +925,18 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         
                     }
                 }
-                if(input$geoms=="labs"){
-                    count=length(main$aes)
-                    if(count>0){
-                        for(i in 1:count){
+                if(input$geoms %in% c("labs","lims","expand_limits")){
+                    maincount=length(main$aes)
+                    if(maincount>0){
+                        for(i in 1:maincount){
                             tempvar=main$aes[i]
                             if(!is.null(input[[tempvar]])){
                             if(input[[tempvar]]!="") {
-                                temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                                if(input$geoms=="labs"){
+                                   temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                                } else{
+                                    temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                                }
                             }
                             }
                         }
@@ -944,11 +954,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             if(!is.null(input[[tempvar]])){
                                 if(input[[tempvar]]!=valuechoice[1]) {
                                     if(selected$quoted[i]==TRUE){
-                                    tempvarvalue=paste0("'",input[[tempvar]],"'")
+                                        tempvarvalue=paste0("'",input[[tempvar]],"'")
                                     } else{
                                         if(!is.na(as.numeric(input[[tempvar]]))) tempvarvalue=input[[tempvar]]
                                         else if(!is.na(as.logical(input[[tempvar]]))) tempvarvalue=input[[tempvar]]
-                                        else tempvarvalue=paste0("'",input[[tempvar]],"'")
+                                        else tempvarvalue=paste0(input[[tempvar]])
                                     }
                                     if(tempvar=="position2"){
                                         temp=mypaste0(temp,"position=",tempvarvalue)
@@ -987,6 +997,32 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(input$geomdata!="") {
                     if(str_locate(temp,"\\(")[1,1]!=str_length(temp)) temp=paste0(temp,",")
                     temp=paste0(temp,"data=",input$geomdata)
+                }
+                if(input$geoms=="facet_grid"){
+                    if(!is.null(input$labeller)){
+                    if(input$labeller=="label_value"){
+                    varnames=setdiff(c(input$facetrow,input$facetcol),".")
+                    varnames<-c(".default",varnames,".rows",".cols")
+                    count=length(varnames)
+                    mylist=list()
+                    labeltemp<-""
+                    for(i in 1:count){
+                        if(!is.null(input[[varnames[i]]])){
+                        if(input[[varnames[i]]]!="NULL"){
+                            if(labeltemp!="") labeltemp=paste0(labeltemp,",")
+                            labeltemp=paste0(labeltemp,varnames[i],"=",input[[varnames[i]]])     
+                        }
+                        }
+                    }
+                    if(!is.null(input[[".multi_line"]])){
+                    if(input[[".multi_line"]]==FALSE) {
+                            if(labeltemp!="") labeltemp=paste0(labeltemp,",")
+                            labeltemp<-paste0(labeltemp,".multi_line=FALSE")
+                    }
+                    }
+                    if(labeltemp!="") temp=paste0(temp,",labeller=labeller(",labeltemp,")")
+                    }
+                    }
                 }
                 temp=paste0(temp,")")
                     
@@ -1250,13 +1286,13 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                                  choices=c("",colnames(df)),multiple=TRUE)
                         no=no+1
                     }
-                    if(input$geoms=="labs") {
+                    if(input$geoms %in% c("labs","lims","expand_limits")) {
                         count=length(main$aes)
                         if(count>0){
                             for(i in 1:count){
                             temp=main$aes[i]
                            mylist[[no]]=textInput3(temp,temp,value="",
-                                                   placeholder=paste0("label for ",temp),width=200)
+                                                   placeholder=paste0(input$geoms," for ",temp),width=200)
                            no=no+1
                             }
                         }
@@ -1308,11 +1344,30 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         mylist[[no]]=actionButton("addMathFormat","Add math_format")
                         no=no+1
                     }
-                    
+                    if(input$geoms=="facet_grid"){
+                        mylist[[no]]=uiOutput("labellerUI")
+                        no=no+1
+                    }
                     do.call(tagList,mylist)
                
                 }
             })
+            output$labellerUI=renderUI({
+                 varnames=setdiff(c(input$facetrow,input$facetcol),".")
+                 mychoices=c("NULL","label_value","label_both","label_bquote"
+                             ,"label_context","label_parsed","label_wrap_gen")
+                 varnames<-c(varnames,".rows",".cols",".default")
+                 count=length(varnames)
+                 mylist=list()
+                 for(i in 1:count){
+                     mylist[[i]]<-selectizeInput3(varnames[i],label=varnames[i],
+                                                  choices=mychoices,width=200,
+                                                  options=list(create=TRUE))
+                 }
+                 mylist[[count+1]]<-checkboxInput(".multi_line",".multi_line",value=TRUE)
+                 do.call(tagList,mylist)
+            })
+            
            observeEvent(input$addMathFormat,{
                updateTextInput(session,"breaks",value="scales::trans_breaks('log10', function(x) 10^x)")
                updateTextInput(session,"labels",value="scales::math_format(10^.x)")
