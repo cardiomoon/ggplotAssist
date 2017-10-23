@@ -1,5 +1,5 @@
-# dplyrAssist 0.1.0
+# ggplotAssist 0.1.0
 ====================
-(2017-Sep-2)
+(2017-Oct-24)
 
-* new function "dplyrAssist" added
+* new function "ggplotAssist" added
