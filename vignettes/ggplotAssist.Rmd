@@ -16,6 +16,15 @@ knitr::opts_chunk$set(echo = TRUE,comment = NA,fig.align='center',out.width="90%
 The 'ggplotAssist' is an RStudio addin for teaching and learning plot generation using the 'ggplot2' package. You can learn each steps of plot generation - aesthetics mapping, select geometries, add scales, apply theme - by clicking your mouse without coding. You can see the resultant plot and see the each steps of plot layer by layer. You get resultant code for ggplot. 
 ```
 
+## Prerequisite
+
+You have to install the developmental version of R package `editData` from github.
+
+```{r,eval=FALSE}
+#install.packages("devtools")
+devtools::install_github("cardiomoon/editData")
+```
+
 ## Install package
 
 You can install `ggplotAssist` package from github. 
