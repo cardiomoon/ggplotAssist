@@ -18,7 +18,7 @@
 #' @importFrom dplyr filter select lead
 #' @importFrom scales muted
 #' @importFrom magrittr "%>%"
-#' @importFrom editData checkboxInput3 numericInput3 selectInput3 textInput3 selectizeInput3
+#' @importFrom editData checkboxInput3 numericInput3 selectInput3 textInput3 
 #' @importFrom ggplot2 map_data
 #' @importFrom stringr str_detect str_trim str_length str_locate str_c str_replace str_replace_all str_extract_all str_locate_all
 #' @importFrom grDevices colors
@@ -1666,5 +1666,28 @@ ggplotAssist=function(df=NULL,viewer="browser"){
 }
 
 
+#' side-by-side selectizeInput
+#'
+#' @param ... Further arguments to be passed to selectizeInput
+#' @param width Input width in pixel
+#' @importFrom shiny selectizeInput
+#' @export
+#'@examples
+#'library(shiny)
+#'# Only run examples in interactive R sessions
+#'if (interactive()) {
+#'   ui <- fluidPage(
+#'          selectizeInput3("color", "color", choices=colors())
+#'     )
+#'     server <- function(input, output) {
+#'
+#'     }
+#'     shinyApp(ui, server)
+#'}
+selectizeInput3=function (..., width = 100)
+{
+    mywidth = paste(width, "px", sep = "")
+    div(style = "display:inline-block;", selectizeInput(..., width = mywidth))
+}
 
 
