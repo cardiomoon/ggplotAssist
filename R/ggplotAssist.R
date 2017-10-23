@@ -95,7 +95,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     geomsall<-sort(unique(c(geomData$geom,unlist(strsplit(settingData$geom,",")))))
     aeses<-c("x","y","z","group","colour","fill","label","alpha","linetype","size","shape","xmin","xmax","ymin","ymax","sample")
     types<-c("mapping","setting")
-    data<-get(df)
+    data<-eval(parse(text=mydata))
     colno=length(colnames(data))
     
     dfj<-data.frame(grp=c('A','B'),fit=4:5,se=1:2)
@@ -209,7 +209,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        h3("Data / Preprocessing"),
                        materialSwitch("doPreprocessing","Preprocessing",value=FALSE,status="success",right=TRUE),
                        textAreaInput("preprocessing",NULL,value="",rows=3,placeholder="Enter R codes for preprocessing here !"),
-                       textInput("mydata","Enter data name",value=df),
+                       textInput("mydata","Enter data name",value=mydata),
                        materialSwitch("showDataStr","show str",status="success",right=TRUE)),
                 column(2,
                        
@@ -1254,10 +1254,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     insertText(text=result)
                     stopApp()
                 } else{
-                
-                    stopApp(result)
+                    p<-eval(parse(text=result))
+                    stopApp(p)
                 }
                 
+            })
+            
+            observeEvent(input$cancel, {
+                stopApp(NULL)
             })
             
             value2choices=function(value){
