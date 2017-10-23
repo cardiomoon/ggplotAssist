@@ -36,11 +36,11 @@
 #' library(editData)
 #' library(shinyWidgets)
 #' library(gcookbook)
-#'
-#' \dontrun{
-#' ggplotAssist(mtcars)
-#' result<-ggplot(iris)
-#' cat(attr(result,"code"))
+#' library(shiny)
+#'# Only run examples in interactive R sessions
+#' if (interactive()) {
+#'     result<-ggplotAssist(mtcars)
+#'     result
 #' }
 ggplotAssist=function(df=NULL,viewer="browser"){
 
