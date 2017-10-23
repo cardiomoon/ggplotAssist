@@ -55,7 +55,7 @@ The intended way to use this is as follows:
 
 <img src="https://raw.githubusercontent.com/cardiomoon/ggplotAssistFigures/master/5.jpg" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" width="90%" style="display: block; margin: auto;" />
 
-5. If you finish to make a layer, press `Add Layer` button(1) to ad layer. You can see added layers(2). You can delete layer with `delete layer` button after select layer to delete.
+5. If you finish to make a layer, press `Add Layer` button(1) to add the layer. You can see added layers(2). You can delete a layer with `delete layer` button after select a layer to delete.
 
 <img src="https://raw.githubusercontent.com/cardiomoon/ggplotAssistFigures/master/6.jpg" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" width="90%" style="display: block; margin: auto;" />
 
