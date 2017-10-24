@@ -185,6 +185,15 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         result
     }
     
+    extractMapping=function(x){
+        mapping=c()
+        for(i in 1:length(x)){
+            result=eval(parse(text=x[i]))
+            mapping=c(mapping,names(result$mapping)) 
+        }
+        mapping
+    }
+    
     settingData=splitData(settingData,"setting")
     themeData=splitData(themeData,"setting")
 
@@ -926,10 +935,12 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     }
                 }
                 if(input$geoms %in% c("labs","lims","expand_limits")){
-                    maincount=length(main$aes)
+                    myAes=c(main$aes,extractMapping(input$layers))
+                    maincount=length(myAes)
+                    
                     if(maincount>0){
                         for(i in 1:maincount){
-                            tempvar=main$aes[i]
+                            tempvar=myAes[i]
                             if(!is.null(input[[tempvar]])){
                             if(input[[tempvar]]!="") {
                                 if(input$geoms=="labs"){
@@ -1291,10 +1302,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         no=no+1
                     }
                     if(input$geoms %in% c("labs","lims","expand_limits")) {
-                        count=length(main$aes)
+                        myAes=c(main$aes,extractMapping(input$layers))
+                        count=length(myAes)
                         if(count>0){
                             for(i in 1:count){
-                            temp=main$aes[i]
+                            temp=myAes[i]
                            mylist[[no]]=textInput3(temp,temp,value="",
                                                    placeholder=paste0(input$geoms," for ",temp),width=200)
                            no=no+1
