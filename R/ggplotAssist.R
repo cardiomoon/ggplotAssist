@@ -422,6 +422,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observeEvent(input$geoms,{
           
                 if(!is.null(input$geoms)){
+                   
                 if(input$geoms=="guides"){
                     choices<-setdiff(main$aes,c("x","y"))
                 } else {
@@ -1039,8 +1040,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     
                     }
                 
-                temp
+                
                 }
+                temp
             }
             
             mypaste0=function(temp,...){
@@ -1149,9 +1151,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"var",selected="")
                 updateSelectInput(session,"aes",selected="")
                 updateTextInput(session,"varset",label="varset",value="")
-                resetLayer()
-                layer$type<-layer$aes<-layer$var<-c()
                 updateTextAreaInput(session,"layer",value="")
+                layer$type<-layer$aes<-layer$var<-c()
+                resetLayer()
+                
+                
                 
             })
             
