@@ -189,8 +189,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         mapping=c()
         if(length(x)>0){
         for(i in 1:length(x)){
-            result=eval(parse(text=x[i]))
+            result<-tryCatch(eval(parse(text=x[i])),error=function(e) "error")
+            if(!("character" %in% class(result))){
             mapping=c(mapping,names(result$mapping)) 
+            }
         }
         }
         mapping
@@ -984,8 +986,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(count>0){
                     for(i in 1:count){
                         tempvar=selected$setting[i]
-                        if(tempvar=="position") tempvar="position2"
-                        if(tempvar=="type") tempvar="type2"
+                        if(tempvar %in% c("position","type","color","colour","fill")) {
+                            tempvar2<-tempvar
+                            tempvar<-paste0(tempvar,"2")
+                        }
                         value=selected$value[i]
                         valuechoice=unlist(strsplit(value,","))
                         valuechoice=str_trim(valuechoice)
@@ -999,13 +1003,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                         else if(!is.na(as.logical(input[[tempvar]]))) tempvarvalue=input[[tempvar]]
                                         else tempvarvalue=paste0(input[[tempvar]])
                                     }
-                                    if(tempvar=="position2"){
-                                        temp=mypaste0(temp,"position=",tempvarvalue)
-                                    } else if(tempvar=="type2"){
-                                        temp=mypaste0(temp,"type=",tempvarvalue)
-                                    } else{
-                                      temp=mypaste0(temp,tempvar,"=",tempvarvalue)
+                                    if(tempvar %in% c("position2","type2","color2","colour2","fill2")) {
+                                         tempvar<-tempvar2
                                     }
+                                    temp=mypaste0(temp,tempvar,"=",tempvarvalue)
+                                    
                                 }
                             }
                         } else if(selected$input[i]=="numeric"){
@@ -1365,10 +1367,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             mywidth=min((((max(nchar(value),nchar(placeholder))*8)%/%100)+1)*100,200)
                         if(selected$input[i]=="select") {
                             tempid<-temp
-                            if(temp=="position") tempid<-"position2"
-                            if(temp=="type") tempid<-"type2"
+                            if(temp %in% c("position","type","color","colour","fill")) {
+                                tempid<-paste0(temp,"2")
+                            }
                             mychoices=unlist(strsplit(value,",",fixed=TRUE))
-                            if(tempid %in% c("colour","color","fill")){
+                            if(tempid %in% c("colour2","color2","fill2")){
                                 mychoices=c(mychoices,colors()[!str_detect(colors(),mychoices)])
                             }
                             if(length(mychoices)>0)
