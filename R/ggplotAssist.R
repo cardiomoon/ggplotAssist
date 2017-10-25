@@ -187,9 +187,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     
     extractMapping=function(x){
         mapping=c()
+        if(length(x)>0){
         for(i in 1:length(x)){
             result=eval(parse(text=x[i]))
             mapping=c(mapping,names(result$mapping)) 
+        }
         }
         mapping
     }
@@ -304,8 +306,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                            #textInput("arg","arg",value=""),
                            uiOutput("argsUI"),
                            textInput("argresult","argresult",value=""),
+                           conditionalPanel(condition="true==false",
                            textInput("argresult2","argresult2",value=""),
                            textAreaInput("argresult3","argresult3",value="")
+                           )
                     )
                 ),
                 column(4,
@@ -319,6 +323,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        
                        selectInput("layers","Added layers",choices="",selectize=FALSE,size=5),
                        actionButton("dellayer","Delete Layer")
+                       #,verbatimTextOutput("test2")
                        
                        
                 )
@@ -394,7 +399,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             
             observeEvent(input$selectedLayer,{
                 #geomData=read.csv("geom.csv",stringsAsFactors = FALSE)
-                
+                if(input$selectedLayer %in% c("facet","labs","guides","scale",
+                                              "annotate","limits","others")){
+                    updateRadioButtons(session,"type",selected="setting")
+                }   
                 if(input$selectedLayer=="guides"){
                    mychoices="guides" 
                 } else if(input$selectedLayer=="labs"){
@@ -422,9 +430,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observeEvent(input$geoms,{
           
                 if(!is.null(input$geoms)){
-                   
+                
                 if(input$geoms=="guides"){
                     choices<-setdiff(main$aes,c("x","y"))
+                    choices<-c(choices,extractMapping(layers$layer))
+                    
                 } else {
                     temp=geomData[geomData$geom==input$geoms,"aes"]
                     if(length(temp)==0) choices=c("")
@@ -887,6 +897,23 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"aesmain",selected="")
                 updateSelectInput(session,"varmain",selected="")
             }
+            
+            # output$test2=renderPrint({
+            #     mylayer=data.frame(type=layer$type,aes=layer$aes,var=layer$var)
+            #     head(mylayer)
+            #     map=mylayer[mylayer$type=="mapping",]
+            #     set=mylayer[mylayer$type=="setting",]
+            #     findob<-input$geoms
+            #     #find exact geom(not ...2, or ...n)
+            #     findob<-paste0(findob,"^2n|",findob,",|",findob,"$")
+            #     
+            #     selected=settingData[str_detect(settingData$geom,findob),]
+            #     set=set[!(set$aes %in% selected$setting),]
+            #     nmap=nrow(map)
+            #     nset=nrow(set)
+            #     cat("nmap=",nmap,"\n")
+            #     cat("nset=",nset,"\n")
+            # })
             makeLayer=function(){
                 
                 temp=""
@@ -936,7 +963,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     }
                 }
                 if(input$geoms %in% c("labs","lims","expand_limits")){
-                    myAes=c(main$aes,extractMapping(input$layers))
+                    myAes=c(main$aes,extractMapping(layers$layer))
                     maincount=length(myAes)
                     
                     if(maincount>0){
@@ -1306,7 +1333,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         no=no+1
                     }
                     if(input$geoms %in% c("labs","lims","expand_limits")) {
-                        myAes=c(main$aes,extractMapping(input$layers))
+                        myAes=c(main$aes,extractMapping(layers$layer))
                         count=length(myAes)
                         if(count>0){
                             for(i in 1:count){
