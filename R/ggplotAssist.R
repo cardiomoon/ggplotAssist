@@ -6,10 +6,10 @@
 #' @return An R code for ggplot
 #' @importFrom shiny div selectInput runApp fluidPage tags HTML titlePanel hr fluidRow column
 #' @importFrom shiny textInput checkboxInput numericInput conditionalPanel verbatimTextOutput uiOutput h3 actionButton showModal modalDialog modalButton
-#' @importFrom shiny validate need renderPrint updateTextInput updateCheckboxInput reactive renderPlot 
+#' @importFrom shiny validate need renderPrint updateTextInput updateCheckboxInput reactive renderPlot updateRadioButtons
 #' @importFrom shiny updateSelectizeInput renderUI htmlOutput tagList updateNumericInput updateSelectInput imageOutput textAreaInput updateTextAreaInput
 #' @importFrom shiny observe br observeEvent renderImage stopApp plotOutput runGadget dialogViewer paneViewer h4 radioButtons sliderInput reactiveValues updateSliderInput browserViewer animationOptions
-#' @importFrom shinyWidgets radioGroupButtons materialSwitch pickerInput updateMaterialSwitch updateRadioGroupButtons
+#' @importFrom shinyWidgets radioGroupButtons materialSwitch pickerInput updateMaterialSwitch updateRadioGroupButtons 
 #' @importFrom shinyAce aceEditor updateAceEditor
 #' @importFrom utils capture.output
 #' @importFrom rstudioapi getActiveDocumentContext insertText
