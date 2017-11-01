@@ -538,7 +538,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(!is.null(data1)) {
                     updateSelectInput(session,"varmain",
                                       choices=c(colnames(data1),
-                                                "1","..density..",".count..","..prop.."),selected="")
+                                                "1","..density..","..count..","..prop.."),selected="")
                     updateSelectInput(session,"var",choices=colnames(data1),selected="")
                     
                 }
