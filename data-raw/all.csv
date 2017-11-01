@@ -1,0 +1,716 @@
+"geom","setting","input","value","quoted","placeholder","group"
+"geom_contour","lineend","select","round,butt,square",TRUE,"",NA
+"geom_path","linejoin","select","round,mitre,bevel",TRUE,"",NA
+"geom_contour","linejoin","select","round,mitre,bevel",TRUE,"",NA
+"geom_density2d","linejoin","select","round,mitre,bevel",TRUE,"",NA
+"geom_density_2d","linejoin","select","round,mitre,bevel",TRUE,"",NA
+"geom_quantile","linejoin","select","round,mitre,bevel",TRUE,"",NA
+"stat_quantile","linejoin","select","round,mitre,bevel",TRUE,"",NA
+"geom_path","linemitre","numeric","1",FALSE,"",NA
+"geom_contour","linemitre","numeric","1",FALSE,"",NA
+"geom_denisty2d","linemitre","numeric","1",FALSE,"",NA
+"geom_density_2d","linemitre","numeric","1",FALSE,"",NA
+"geom_quantile","linemitre","numeric","1",FALSE,"",NA
+"geom_path","arrow","text","",FALSE,"arrow()",NA
+"geom_segment","arrow","text","",FALSE,"arrow()",NA
+"geom_curve","arrow","text","",FALSE,"arrow()",NA
+"geom_step","direction","select","hv,vh",TRUE,"",NA
+"geom_smooth","method","select","auto,lm,glm,gam,loess,rlm",TRUE,"",NA
+"stat_smooth","method","select","auto,lm,glm,gam,loess,rlm",TRUE,"",NA
+"geom_smooth","formula","text","y~x",FALSE,"",NA
+"stat_smooth","formula","text","y~x",FALSE,"",NA
+"geom_smooth","se","checkbox","TRUE",FALSE,"",NA
+"stat_smooth","se","checkbox","TRUE",FALSE,"",NA
+"facet_wrap","scales","select","fixed,free_x,free_y,free",TRUE,NA,NA
+"facet_grid","scales","select","fixed,free_x,free_y,free",TRUE,NA,NA
+"facet_wrap","nrow","text","",FALSE,"NULL",NA
+"facet_wrap","ncol","text","",FALSE,"NULL",NA
+"facet_grid","space","select","fixed,free_x,free_y,free",TRUE,"",NA
+"facet_grid","margins","checkbox","FALSE",FALSE,NA,NA
+"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed",TRUE,"",NA
+"geom_text","parse","checkbox","FALSE",FALSE,"",NA
+"geom_label","parse","checkbox","FALSE",FALSE,"",NA
+"geom_text","nudge_x","numeric","0",FALSE,"",NA
+"geom_label","nudge_x","numeric","0",FALSE,"",NA
+"geom_text","nudge_y","numeric","0",FALSE,"",NA
+"geom_label","nudge_y","numeric","0",FALSE,"",NA
+"geom_text","check_overlap","checkbox","FALSE",FALSE,"",NA
+"stat_bin_2d","bins","text","30",FALSE,"",NA
+"geom_contour","bins","text","30",FALSE,"",NA
+"geom_hex","bins","text","30",FALSE,"",NA
+"stat_bin_hex","bins","text","30",FALSE,"",NA
+"geom_bin2d","binwidth","text","",FALSE,"",NA
+"stat_bin_2d","binwidth","text","",FALSE,"",NA
+"geom_contour","binwidth","text","",FALSE,"",NA
+"geom_histogram","binwidth","text","",FALSE,"",NA
+"stat_bin","binwidth","text","",FALSE,"",NA
+"geom_freqpoly","binwidth","text","",FALSE,"",NA
+"geom_bar","width","text","",FALSE,"",NA
+"geom_col","width","text","",FALSE,"",NA
+"stat_count","width","text","",FALSE,"",NA
+"geom_boxplot","outlier.colour","text","",TRUE,"",NA
+"geom_boxplot","outlier.fill","text","",TRUE,"",NA
+"geom_boxplot","outlier.shape","numeric","19",FALSE,"",NA
+"geom_boxplot","outlier.size","numeric","1.5",FALSE,"",NA
+"geom_boxplot","outlier.stroke","numeric","0.5",FALSE,"",NA
+"geom_boxplot","outlier.alpha","numeric","1",FALSE,"",NA
+"geom_boxplot","notch","checkbox","FALSE",FALSE,"",NA
+"geom_boxplot","notchwidth","numeric","0.5",FALSE,"",NA
+"geom_boxplot","varwidth","checkbox","FALSE",FALSE,"",NA
+"geom_crossbar","fatten","numeric","2.5",FALSE,"",NA
+"geom_pointrange","fatten","numeric","4",FALSE,"",NA
+"geom_segment","lineend","select","butt,round,square",TRUE,"",NA
+"geom_curve","lineend","select","butt,round,square",TRUE,"",NA
+"geom_density_2d","lineend","select","butt,round,square",TRUE,"",NA
+"geom_density2d","lineend","select","butt,round,square",TRUE,"",NA
+"geom_path","lineend","select","butt,round,square",TRUE,"",NA
+"geom_quantile","lineend","select","butt,round,square",TRUE,"",NA
+"stat_quantile","lineend","select","butt,round,square",TRUE,"",NA
+"geom_curve","curvature","numeric","0.5",FALSE,"",NA
+"geom_curve","angle","numeric","90",FALSE,"",NA
+"geom_curve","ncp","numeric","5",FALSE,"",NA
+"stat_density","bw","select","nrd0,nrd,ucv,bcv,SJ",TRUE,"",NA
+"geom_density","bw","select","nrd0,nrd,ucv,bcv,SJ",TRUE,"",NA
+"geom_violin","bw","select","nrd0,nrd,ucv,bcv,SJ",TRUE,"",NA
+"stat_ydensity","bw","select","nrd0,nrd,ucv,bcv,SJ",TRUE,"",NA
+"stat_density","adjust","numeric","1",FALSE,"",NA
+"geom_density","adjust","numeric","1",FALSE,"",NA
+"geom_violin","adjust","numeric","1",FALSE,"",NA
+"stat_ydensity","adjust","numeric","1",FALSE,"",NA
+"stat_density","kernel","select","gaussian,epanechnikov,rectangular,triangular,biweight,cosine,optcosine",TRUE,"",NA
+"geom_density","kernel","select","gaussian,epanechnikov,rectangular,triangular,biweight,cosine,optcosine",TRUE,"",NA
+"geom_violin","kernel","select","gaussian,epanechnikov,rectangular,triangular,biweight,cosine,optcosine",TRUE,"",NA
+"stat_ydensity","kernel","select","gaussian,epanechnikov,rectangular,triangular,biweight,cosine,optcosine",TRUE,"",NA
+"stat_density","n","numeric","512",FALSE,"",NA
+"geom_density","n","numeric","512",FALSE,"",NA
+"geom_density","trim","checkbox","FALSE",FALSE,"",NA
+"stat_density","trim","checkbox","FALSE",FALSE,"",NA
+"stat_density_2d","contour","checkbox","TRUE",FALSE,"",NA
+"stat_density_2d","n","numeric","100",FALSE,"",NA
+"stat_density_2d","h","text","",FALSE,"",NA
+"geom_dotplot","binwidth","text","",FALSE,"",NA
+"geom_hex","binwidth","text","",FALSE,"",NA
+"stat_bin_hex","binwidth","text","",FALSE,"",NA
+"geom_dotplot","binaxis","select","x,y",TRUE,"",NA
+"geom_dotplot","method","select","dotdensity,histodot",TRUE,"",NA
+"geom_dotplot","binpositions","select","bygroup,all",TRUE,"",NA
+"geom_dotplot","stackdir","select","up,down,center,centerwhole",TRUE,"",NA
+"geom_dotplot","stackratio","numeric","1",FALSE,"",NA
+"geom_dotplot","dotsize","numeric","1",FALSE,"",NA
+"geom_dotplot","stackgroups","checkbox","FALSE",FALSE,"",NA
+"geom_dotplot","origin","text","",FALSE,"",NA
+"geom_dotplot","right","checkbox","TRUE",FALSE,"",NA
+"geom_dotplot","width","numeric","0.9",FALSE,"",NA
+"stat_bin","bins","text","",FALSE,"",NA
+"geom_freqpoly","bins","text","",FALSE,"",NA
+"geom_histogram","bins","text","",FALSE,"",NA
+"stat_bin","center","text","",FALSE,"",NA
+"geom_freqpoly","center","text","",FALSE,"",NA
+"geom_histogram","center","text","",FALSE,"",NA
+"stat_bin","boundary","text","",FALSE,"",NA
+"geom_freqpoly","boundary","text","",FALSE,"",NA
+"geom_histogram","boundary","text","",FALSE,"",NA
+"stat_bin","breaks","text","",FALSE,"",NA
+"geom_freqpoly","breaks","text","",FALSE,"",NA
+"geom_histogram","breaks","text","",FALSE,"",NA
+"stat_bin","closed","select","right,left",TRUE,"",NA
+"geom_freqpoly","closed","select","right,left",TRUE,"",NA
+"geom_histogram","closed","select","right,left",TRUE,"",NA
+"stat_bin","pad","checkbox","FALSE",FALSE,"",NA
+"geom_freqpoly","pad","checkbox","FALSE",FALSE,"",NA
+"geom_histogram","pad","checkbox","FALSE",FALSE,"",NA
+"geom_jitter","width","numeric","0.4",FALSE,"",NA
+"geom_jitter","height","numeric","0.4",FALSE,"",NA
+"geom_label","label.padding","text","unit(0.25, ""lines"")",FALSE,"unit(0.25, ""lines"")",NA
+"geom_label","label.r","text","unit(0.15, ""lines"")",FALSE,"unit(0.15, ""lines"")",NA
+"geom_label","label.size","numeric","0.25",FALSE,"",NA
+"geom_map","map","text","",FALSE,"",NA
+"geom_qq","distribution","text","stats::qnorm",FALSE,"",NA
+"stat_qq","distribution","text","stats::qnorm",FALSE,"",NA
+"geom_qq","dparam","text","list()",FALSE,"",NA
+"stat_qq","dparam","text","list()",FALSE,"",NA
+"stat_quantile","quantiles","text","c(0.25,0.5,0.75)",FALSE,"",NA
+"geom_quantile","quantiles","text","c(0.25,0.5,0.75)",FALSE,"",NA
+"stat_quantile","formula","text","",FALSE,"",NA
+"geom_quantile","formula","text","",FALSE,"",NA
+"stat_quantile","method","select","rq,rqss",TRUE,"",NA
+"geom_quantile","method","select","rq,rqss",TRUE,"",NA
+"stat_quantile","method.args","text","list()",FALSE,"",NA
+"geom_quantile","method.args","text","list()",FALSE,"",NA
+"geom_raster","hjust","numeric","0.5",FALSE,"",NA
+"geom_raster","vjust","numeric","0.5",FALSE,"",NA
+"geom_raster","interpolate","checkbox","FALSE",FALSE,"",NA
+"geom_rug","sides","text","bl",TRUE,"",NA
+"stat_smooth","n","numeric","80",FALSE,"",NA
+"geom_smooth","n","numeric","80",FALSE,"",NA
+"stat_smooth","span","numeric","0.75",FALSE,"",NA
+"geom_smooth","span","numeric","0.75",FALSE,"",NA
+"stat_smooth","fullrange","checkbox","FALSE",FALSE,"",NA
+"geom_smooth","fullrange","checkbox","FALSE",FALSE,"",NA
+"stat_smooth","level","numeric","0.95",FALSE,"",NA
+"geom_smooth","level","numeric","0.95",FALSE,"",NA
+"stat_smooth","method.args","text","list()",FALSE,"",NA
+"geom_smooth","method.args","text","list()",FALSE,"",NA
+"geom_violin","draw_quantiles","text","",FALSE,"",NA
+"stat_ydensity","draw_quantiles","text","",FALSE,"",NA
+"geom_violin","trim","checkbox","TRUE",FALSE,"",NA
+"stat_ydensity","trim","checkbox","TRUE",FALSE,"",NA
+"geom_violin","scale","select","area,count,width",TRUE,"",NA
+"stat_ydensity","scale","select","area,count,width",TRUE,"",NA
+"guide_legend","title","text","",TRUE,"waiver()",NA
+"guide_colorbar","title","text","",TRUE,"waiver()",NA
+"guide_legend","title.position","select",",top,bottom,left,right",TRUE,"",NA
+"guide_colorbar","title.position","select",",top,bottom,left,right",TRUE,"",NA
+"guide_legend","title.theme","text","",FALSE,"element_text()",NA
+"guide_colorbar","title.theme","text","",FALSE,"element_text()",NA
+"guide_legend","title.hjust","text","",FALSE,"",NA
+"guide_colorbar","title.hjust","text","",FALSE,"",NA
+"guide_legend","title.vjust","text","",FALSE,"",NA
+"guide_colorbar","title.vjust","text","",FALSE,"",NA
+"guide_legend","label","checkbox","TRUE",FALSE,"",NA
+"guide_colorbar","label","checkbox","TRUE",FALSE,"",NA
+"guide_legend","label.position","select",",top,bottom,left,right",TRUE,"",NA
+"guide_colorbar","label.position","select",",top,bottom,left,right",TRUE,"",NA
+"guide_legend","label.theme","text","",FALSE,"element_text()",NA
+"guide_colorbar","label.theme","text","",FALSE,"element_text()",NA
+"guide_legend","label.hjust","text","",FALSE,"",NA
+"guide_colorbar","label.hjust","text","",FALSE,"",NA
+"guide_legend","label.vjust","text","",FALSE,"",NA
+"guide_colorbar","label.vjust","text","",FALSE,"",NA
+"guide_legend","keywidth","text","",FALSE,"A numeric or a unit() object",NA
+"guide_legend","keyheight","text","",FALSE,"A numeric or a unit() object",NA
+"guide_legend","direction","select",",horizontal,vertical",TRUE,"",NA
+"guide_colorbar","direction","select",",horizontal,vertical",TRUE,"",NA
+"guide_legend","default.unit","select","line,npc,cm,inches,mm,points,picas,bigpts,dida,cicero,scaledpts,lines,char,native,snpc,strwidth,strheight,grobwidth,grobheight",TRUE,"",NA
+"guide_colorbar","default.unit","select","line,npc,cm,inches,mm,points,picas,bigpts,dida,cicero,scaledpts,lines,char,native,snpc,strwidth,strheight,grobwidth,grobheight",TRUE,"",NA
+"guide_legend","override.aes","text","list()",FALSE,"",NA
+"guide_legend","nrow","text","",FALSE,"",NA
+"guide_legend","ncol","text","",FALSE,"",NA
+"guide_legend","byrow","checkbox","FALSE",FALSE,"",NA
+"guide_legend","reverse","checkbox","FALSE",FALSE,"",NA
+"guide_colorbar","reverse","checkbox","FALSE",FALSE,"",NA
+"guide_legend","order","text","0",FALSE,"",NA
+"guide_colorbar","order","text","0",FALSE,"",NA
+"guide_colorbar","barwidth","text","",FALSE,"A numeric or a unit() object",NA
+"guide_colorbar","barheight","text","",FALSE,"A numeric or a unit() object",NA
+"guide_colorbar","nbin","numeric","20",FALSE,"",NA
+"guide_colorbar","raster","checkbox","TRUE",FALSE,"",NA
+"guide_colorbar","ticks","checkbox","TRUE",FALSE,"",NA
+"guide_colorbar","draw.ulim","checkbox","TRUE",FALSE,"",NA
+"guide_colorbar","draw.llim","checkbox","TRUE",FALSE,"",NA
+"scale_x_continuous","name","text","",TRUE,"waiver()",NA
+"scale_y_continuous","name","text","",TRUE,"waiver()",NA
+"scale_x_log10","name","text","",TRUE,"waiver()",NA
+"scale_y_log10","name","text","",TRUE,"waiver()",NA
+"scale_x_reverse","name","text","",TRUE,"waiver()",NA
+"scale_y_reverse","name","text","",TRUE,"waiver()",NA
+"scale_x_sqrt","name","text","",TRUE,"waiver()",NA
+"scale_y_sqrt","name","text","",TRUE,"waiver()",NA
+"scale_x_continuous","breaks","text","",FALSE,"waiver()",NA
+"scale_y_continuous","breaks","text","",FALSE,"waiver()",NA
+"scale_x_log10","breaks","text","",FALSE,"waiver()",NA
+"scale_y_log10","breaks","text","",FALSE,"waiver()",NA
+"scale_x_reverse","breaks","text","",FALSE,"waiver()",NA
+"scale_y_reverse","breaks","text","",FALSE,"waiver()",NA
+"scale_x_sqrt","breaks","text","",FALSE,"waiver()",NA
+"scale_y_sqrt","breaks","text","",FALSE,"waiver()",NA
+"scale_x_continuous","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_y_continuous","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_x_log10","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_y_log10","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_x_reverse","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_y_reverse","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_x_sqrt","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_y_sqrt","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_x_continuous","labels","text","",FALSE,"waiver()",NA
+"scale_y_continuous","labels","text","",FALSE,"waiver()",NA
+"scale_x_log10","labels","text","",FALSE,"waiver()",NA
+"scale_y_log10","labels","text","",FALSE,"waiver()",NA
+"scale_x_reverse","labels","text","",FALSE,"waiver()",NA
+"scale_y_reverse","labels","text","",FALSE,"waiver()",NA
+"scale_x_sqrt","labels","text","",FALSE,"waiver()",NA
+"scale_y_sqrt","labels","text","",FALSE,"waiver()",NA
+"scale_x_continuous","limits","text","",FALSE,"NULL",NA
+"scale_y_continuous","limits","text","",FALSE,"NULL",NA
+"scale_x_log10","limits","text","",FALSE,"NULL",NA
+"scale_y_log10","limits","text","",FALSE,"NULL",NA
+"scale_x_reverse","limits","text","",FALSE,"NULL",NA
+"scale_y_reverse","limits","text","",FALSE,"NULL",NA
+"scale_x_sqrt","limits","text","",FALSE,"NULL",NA
+"scale_y_sqrt","limits","text","",FALSE,"NULL",NA
+"scale_x_continuous","expand","text","",FALSE,"waiver()",NA
+"scale_y_continuous","expand","text","",FALSE,"waiver()",NA
+"scale_x_log10","expand","text","",FALSE,"waiver()",NA
+"scale_y_log10","expand","text","",FALSE,"waiver()",NA
+"scale_x_reverse","expand","text","",FALSE,"waiver()",NA
+"scale_y_reverse","expand","text","",FALSE,"waiver()",NA
+"scale_x_sqrt","expand","text","",FALSE,"waiver()",NA
+"scale_y_sqrt","expand","text","",FALSE,"waiver()",NA
+"scale_x_continuous","oob","text","censor",FALSE,"",NA
+"scale_y_continuous","oob","text","censor",FALSE,"",NA
+"scale_x_log10","oob","text","censor",FALSE,"",NA
+"scale_y_log10","oob","text","censor",FALSE,"",NA
+"scale_x_reverse","oob","text","censor",FALSE,"",NA
+"scale_y_reverse","oob","text","censor",FALSE,"",NA
+"scale_x_sqrt","oob","text","censor",FALSE,"",NA
+"scale_y_sqrt","oob","text","censor",FALSE,"",NA
+"scale_x_continuous","na.value","text","NA_real_",FALSE,"",NA
+"scale_y_continuous","na.value","text","NA_real_",FALSE,"",NA
+"scale_x_log10","na.value","text","NA_real_",FALSE,"",NA
+"scale_y_log10","na.value","text","NA_real_",FALSE,"",NA
+"scale_x_reverse","na.value","text","NA_real_",FALSE,"",NA
+"scale_y_reverse","na.value","text","NA_real_",FALSE,"",NA
+"scale_x_sqrt","na.value","text","NA_real_",FALSE,"",NA
+"scale_y_sqrt","na.value","text","NA_real_",FALSE,"",NA
+"scale_x_continuous","trans","select","identity,asn,atanh,boxcox,exp,log,log10,log1p,log2,logit,probability,probit,reciprocal,reverse,sqrt",TRUE,"",NA
+"scale_y_continuous","trans","select","identity,asn,atanh,boxcox,exp,log,log10,log1p,log2,logit,probability,probit,reciprocal,reverse,sqrt",TRUE,"",NA
+"scale_x_continuous","trans","select","identity,asn,atanh,boxcox,exp,log,log10,log1p,log2,logit,probability,probit,reciprocal,reverse,sqrt",TRUE,"",NA
+"scale_y_continuous","trans","select","identity,asn,atanh,boxcox,exp,log,log10,log1p,log2,logit,probability,probit,reciprocal,reverse,sqrt",TRUE,"",NA
+"scale_x_reverse","trans","select","identity,asn,atanh,boxcox,exp,log,log10,log1p,log2,logit,probability,probit,reciprocal,reverse,sqrt",TRUE,"",NA
+"scale_y_reverse","trans","select","identity,asn,atanh,boxcox,exp,log,log10,log1p,log2,logit,probability,probit,reciprocal,reverse,sqrt",TRUE,"",NA
+"scale_radius","trans","select","identity,asn,atanh,boxcox,exp,log,log10,log1p,log2,logit,probability,probit,reciprocal,reverse,sqrt",TRUE,"",NA
+"scale_size","trans","select","identity,asn,atanh,boxcox,exp,log,log10,log1p,log2,logit,probability,probit,reciprocal,reverse,sqrt",TRUE,"",NA
+"scale_x_continuous","position","select","bottom,top",TRUE,"",NA
+"scale_x_log10","position","select","bottom,top",TRUE,"",NA
+"scale_x_reverse","position","select","bottom,top",TRUE,"",NA
+"scale_x_sqrt","position","select","bottom,top",TRUE,"",NA
+"scale_y_continuous","position","select","left,right",TRUE,"",NA
+"scale_y_log10","position","select","left,right",TRUE,"",NA
+"scale_y_reverse","position","select","left,right",TRUE,"",NA
+"scale_y_sqrt","position","select","left,right",TRUE,"",NA
+"scale_x_continuous","sec.axis","text","",FALSE,"waiver()",NA
+"scale_y_continuous","sec.axis","text","",FALSE,"waiver()",NA
+"scale_x_log10","sec.axis","text","",FALSE,"waiver()",NA
+"scale_y_log10","sec.axis","text","",FALSE,"waiver()",NA
+"scale_x_reverse","sec.axis","text","",FALSE,"waiver()",NA
+"scale_y_reverse","sec.axis","text","",FALSE,"waiver()",NA
+"scale_x_sqrt","sec.axis","text","",FALSE,"waiver()",NA
+"scale_y_sqrt","sec.axis","text","",FALSE,"waiver()",NA
+"scale_colour_brewer","type","select","seq,div,qual",TRUE,"",NA
+"scale_fill_brewer","type","select","seq,div,qual",TRUE,"",NA
+"scale_colour_distiller","type","select","seq,div,qual",TRUE,"",NA
+"scale_fill_distiller","type","select","seq,div,qual",TRUE,"",NA
+"scale_colour_brewer","palette","select","1,BrBG,PiYG,PRGn,PuOr,RdBu,RdGy,RdYlBu,RdYlGn,Spectral,Accent,Dark2,Paired,Pastel1,Pastel2,Set1,Set2,Set3,Blues,BuGn,BuPu,GnBu,Greens,Greys,Oranges,OrRd,PuBu,PuBuGn,PuRd,Purples,RdPu,Reds,YlGn,YlGnBu,YlOrBr,YlOrRd",TRUE,"",NA
+"scale_fill_brewer","palette","select","1,BrBG,PiYG,PRGn,PuOr,RdBu,RdGy,RdYlBu,RdYlGn,Spectral,Accent,Dark2,Paired,Pastel1,Pastel2,Set1,Set2,Set3,Blues,BuGn,BuPu,GnBu,Greens,Greys,Oranges,OrRd,PuBu,PuBuGn,PuRd,Purples,RdPu,Reds,YlGn,YlGnBu,YlOrBr,YlOrRd",TRUE,"",NA
+"scale_colour_distiller","palette","select","1,BrBG,PiYG,PRGn,PuOr,RdBu,RdGy,RdYlBu,RdYlGn,Spectral,Accent,Dark2,Paired,Pastel1,Pastel2,Set1,Set2,Set3,Blues,BuGn,BuPu,GnBu,Greens,Greys,Oranges,OrRd,PuBu,PuBuGn,PuRd,Purples,RdPu,Reds,YlGn,YlGnBu,YlOrBr,YlOrRd",TRUE,"",NA
+"scale_fill_distiller","palette","select","1,BrBG,PiYG,PRGn,PuOr,RdBu,RdGy,RdYlBu,RdYlGn,Spectral,Accent,Dark2,Paired,Pastel1,Pastel2,Set1,Set2,Set3,Blues,BuGn,BuPu,GnBu,Greens,Greys,Oranges,OrRd,PuBu,PuBuGn,PuRd,Purples,RdPu,Reds,YlGn,YlGnBu,YlOrBr,YlOrRd",TRUE,"",NA
+"scale_colour_brewer","direction","text","1",FALSE,"",NA
+"scale_fill_brewer","direction","text","1",FALSE,"",NA
+"scale_colour_distiller","direction","text","-1",FALSE,"",NA
+"scale_fill_distiller","direction","text","-1",FALSE,"",NA
+"scale_colour_distiller","values","text","",FALSE,"NULL",NA
+"scale_fill_distiller","values","text","",FALSE,"NULL",NA
+"scale_colour_distiller","space","text","Lab",TRUE,"",NA
+"scale_fill_distiller","space","text","Lab",TRUE,"",NA
+"scale_colour_distiller","na.values","text","grey50",TRUE,"",NA
+"scale_fill_distiller","na.values","text","grey50",TRUE,"",NA
+"scale_colour_distiller","guide","select","colourbar,legend",TRUE,"",NA
+"scale_fill_distiller","guide","select","colourbar,legend",TRUE,"",NA
+"scale_colour_grey","start","text","0.2",FALSE,"",NA
+"scale_fill_grey","start","text","0.2",FALSE,"",NA
+"scale_colour_grey","end","text","0.8",FALSE,"",NA
+"scale_fill_grey","end","text","0.8",FALSE,"",NA
+"scale_colour_grey","na.value","text","red",TRUE,"",NA
+"scale_fill_grey","na.value","text","red",TRUE,"",NA
+"scale_colour_gradient","low","text","#132B43",TRUE,"",NA
+"scale_fill_gradient","low","text","#132B43",TRUE,"",NA
+"scale_colour_gradient","high","text","#56B1F7",TRUE,"",NA
+"scale_fill_gradient","high","text","#56B1F7",TRUE,"",NA
+"scale_colour_gradient","space","select","Lab",TRUE,"",NA
+"scale_fill_gradient","space","select","Lab",TRUE,"",NA
+"scale_colour_gradient2","space","select","Lab",TRUE,"",NA
+"scale_fill_gradient2","space","select","Lab",TRUE,"",NA
+"scale_colour_gradientn","space","select","Lab",TRUE,"",NA
+"scale_fill_gradientn","space","select","Lab",TRUE,"",NA
+"scale_colour_gradient","na.value","text","grey50",TRUE,"",NA
+"scale_fill_gradient","na.value","text","grey50",TRUE,"",NA
+"scale_colour_gradient2","na.value","text","grey50",TRUE,"",NA
+"scale_fill_gradient2","na.value","text","grey50",TRUE,"",NA
+"scale_colour_gradientn","na.value","text","grey50",TRUE,"",NA
+"scale_fill_gradientn","na.value","text","grey50",TRUE,"",NA
+"scale_colour_gradient","guide","select","colourbar,legend",TRUE,"",NA
+"scale_fill_gradient","guide","select","colourbar,legend",TRUE,"",NA
+"scale_colour_gradient2","guide","select","colourbar,legend",TRUE,"",NA
+"scale_fill_gradient2","guide","select","colourbar,legend",TRUE,"",NA
+"scale_colour_gradientn","guide","select","colourbar,legend",TRUE,"",NA
+"scale_fill_gradientn","guide","select","colourbar,legend",TRUE,"",NA
+"scale_colour_gradient2","low","text","muted('red')",TRUE,"",NA
+"scale_fill_gradient2","low","text","muted('red')",TRUE,"",NA
+"scale_colour_gradient2","mid","text","white",TRUE,"",NA
+"scale_fill_gradient2","mid","text","white",TRUE,"",NA
+"scale_colour_gradient2","high","text","muted('blue')",TRUE,"",NA
+"scale_fill_gradient2","high","text","muted('blue')",TRUE,"",NA
+"scale_colour_gradientn","colours","text","",FALSE,"",NA
+"scale_fill_gradientn","colours","text","",FALSE,"",NA
+"scale_colour_gradient2","midpoint","text","0",FALSE,"",NA
+"scale_fill_gradient2","midpoint","text","0",FALSE,"",NA
+"scale_shape","solid","checkbox","TRUE",FALSE,"",NA
+"scale_shape_continuous","solid","checkbox","TRUE",FALSE,"",NA
+"scale_shape_discrete","solid","checkbox","TRUE",FALSE,"",NA
+"scale_colour_identity","guide","text","none",TRUE,"",NA
+"scale_fill_identity","guide","text","none",TRUE,"",NA
+"scale_shape_identity","guide","text","none",TRUE,"",NA
+"scale_linetype_identity","guide","text","none",TRUE,"",NA
+"scale_alpha_identity","guide","text","none",TRUE,"",NA
+"scale_size_identity","guide","text","none",TRUE,"",NA
+"scale_colour_manual","values","text","",FALSE,"",NA
+"scale_fill_manual","values","text","",FALSE,"",NA
+"scale_size_manual","values","text","",FALSE,"",NA
+"scale_shape_manual","values","text","",FALSE,"",NA
+"scale_linetype_manual","values","text","",FALSE,"",NA
+"scale_alpha_manual","values","text","",FALSE,"",NA
+"scale_radius","name","text","",FALSE,"waiver()",NA
+"scale_size","name","text","",FALSE,"waiver()",NA
+"scale_radius","breaks","text","",FALSE,"waiver()",NA
+"scale_size","breaks","text","",FALSE,"waiver()",NA
+"scale_radius","labels","text","",FALSE,"waiver()",NA
+"scale_size","labels","text","",FALSE,"waiver()",NA
+"scale_radius","limits","text","",FALSE,"NULL",NA
+"scale_size","limits","text","",FALSE,"NULL",NA
+"scale_radius","range","text","c(1,6)",FALSE,"",NA
+"scale_size","range","text","c(1,6)",FALSE,"",NA
+"scale_radius","guide","text","legend",TRUE,"",NA
+"scale_size","guide","text","legend",TRUE,"",NA
+"scale_size_area","max_size","text","6",FALSE,"",NA
+"scale_colour_continuous","type","select","gradient,viridis",TRUE,"",NA
+"scale_fill_continuous","type","select","gradient,viridis",TRUE,"",NA
+"scale_alpha","range","text","c(0.1,1)",FALSE,"",NA
+"scale_alpha_continuous","range","text","c(0.1,1)",FALSE,"",NA
+"scale_alpha_ordinal","range","text","c(0.1,1)",FALSE,"",NA
+"scale_colour_hue","h","text","c(0,360)+15",FALSE,"",NA
+"scale_fill_hue","h","text","c(0,360)+15",FALSE,"",NA
+"scale_colour_hue","c","text","100",FALSE,"",NA
+"scale_fill_hue","c","text","100",FALSE,"",NA
+"scale_colour_hue","l","text","65",FALSE,"",NA
+"scale_fill_hue","l","text","65",FALSE,"",NA
+"scale_colour_hue","h.start","text","0",FALSE,"",NA
+"scale_fill_hue","h.start","text","0",FALSE,"",NA
+"scale_colour_hue","direction","select","1,-1",TRUE,"",NA
+"scale_fill_hue","direction","select","1,-1",TRUE,"",NA
+"scale_colour_hue","na.value","text","grey50",TRUE,"",NA
+"scale_fill_hue","na.value","text","grey50",TRUE,"",NA
+"scale_x_date","name","text","",FALSE,"waiver()",NA
+"scale_y_date","name","text","",FALSE,"waiver()",NA
+"scale_x_datetime","name","text","",FALSE,"waiver()",NA
+"scale_y_datetime","name","text","",FALSE,"waiver()",NA
+"scale_x_time","name","text","",FALSE,"waiver()",NA
+"scale_y_time","name","text","",FALSE,"waiver()",NA
+"scale_x_date","breaks","text","",FALSE,"waiver()",NA
+"scale_y_date","breaks","text","",FALSE,"waiver()",NA
+"scale_x_datetime","breaks","text","",FALSE,"waiver()",NA
+"scale_y_datetime","breaks","text","",FALSE,"waiver()",NA
+"scale_x_time","breaks","text","",FALSE,"waiver()",NA
+"scale_y_time","breaks","text","",FALSE,"waiver()",NA
+"scale_x_date","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_y_date","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_x_datetime","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_y_datetime","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_x_time","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_y_time","minor_breaks","text","",FALSE,"waiver()",NA
+"scale_x_date","labels","text","",FALSE,"waiver()",NA
+"scale_y_date","labels","text","",FALSE,"waiver()",NA
+"scale_x_datetime","labels","text","",FALSE,"waiver()",NA
+"scale_y_datetime","labels","text","",FALSE,"waiver()",NA
+"scale_x_time","labels","text","",FALSE,"waiver()",NA
+"scale_y_time","labels","text","",FALSE,"waiver()",NA
+"scale_x_date","expand","text","",FALSE,"waiver()",NA
+"scale_y_date","expand","text","",FALSE,"waiver()",NA
+"scale_x_datetime","expand","text","",FALSE,"waiver()",NA
+"scale_y_datetime","expand","text","",FALSE,"waiver()",NA
+"scale_x_time","expand","text","",FALSE,"waiver()",NA
+"scale_y_time","expand","text","",FALSE,"waiver()",NA
+"scale_x_date","date_breaks","text","",FALSE,"waiver()",NA
+"scale_y_date","date_breaks","text","",FALSE,"waiver()",NA
+"scale_x_datetime","date_breaks","text","",FALSE,"waiver()",NA
+"scale_y_datetime","date_breaks","text","",FALSE,"waiver()",NA
+"scale_x_date","date_labels","text","",FALSE,"waiver()",NA
+"scale_y_date","date_labels","text","",FALSE,"waiver()",NA
+"scale_x_datetime","date_labels","text","",FALSE,"waiver()",NA
+"scale_y_datetime","date_labels","text","",FALSE,"waiver()",NA
+"scale_x_date","date_minor_breaks","text","",FALSE,"waiver()",NA
+"scale_y_date","date_minor_breaks","text","",FALSE,"waiver()",NA
+"scale_x_datetime","date_minor_breaks","text","",FALSE,"waiver()",NA
+"scale_y_datetime","date_minor_breaks","text","",FALSE,"waiver()",NA
+"scale_x_date","limits","text","",FALSE,"NULL",NA
+"scale_y_date","limits","text","",FALSE,"NULL",NA
+"scale_x_datetime","limits","text","",FALSE,"NULL",NA
+"scale_y_datetime","limits","text","",FALSE,"NULL",NA
+"scale_x_time","limits","text","",FALSE,"NULL",NA
+"scale_y_time","limits","text","",FALSE,"NULL",NA
+"scale_x_date","position","select","bottom,top",TRUE,"",NA
+"scale_x_datetime","position","select","bottom,top",TRUE,"",NA
+"scale_x_time","position","select","bottom,top",TRUE,"",NA
+"scale_y_date","position","select","left,right",TRUE,"",NA
+"scale_y_datetime","position","select","left,right",TRUE,"",NA
+"scale_y_time","position","select","left,right",TRUE,"",NA
+"scale_x_datetime","timezone","text","",FALSE,"NULL",NA
+"scale_y_datetime","timezone","text","",FALSE,"NULL",NA
+"scale_x_time","oob","text","censor",FALSE,"",NA
+"scale_y_time","oob","text","censor",FALSE,"",NA
+"scale_x_time","na.value","text","NA_real_",FALSE,"",NA
+"scale_y_time","na.value","text","NA_real_",FALSE,"",NA
+"margin","t","text","0",FALSE,"",NA
+"margin","r","text","0",FALSE,"",NA
+"margin","b","text","0",FALSE,"",NA
+"margin","l","text","0",FALSE,"",NA
+"margin","unit","select","pt,line,npc,cm,inches,mm,picas,bigpts,dida,cicero,scaledpts,lines,char,native,snpc,strwidth,strheight,grobwidth,grobheight",TRUE,"",NA
+"element_rect","fill","select","NULL",TRUE,"",NA
+"element_text","family","select","NULL,mono,sans,serif,Courier,Helvetica,Times",TRUE,"",NA
+"element_text","face","select","NULL,plain,italic,bold,bold.italic",TRUE,"",NA
+"element_rect","colour","select","NULL",TRUE,"",NA
+"element_line","colour","select","NULL",TRUE,"",NA
+"element_text","colour","select","NULL",TRUE,"",NA
+"element_rect","size","text","",FALSE,"NULL",NA
+"element_line","size","text","",FALSE,"NULL",NA
+"element_text","size","text","",FALSE,"NULL",NA
+"element_rect","linetype","select","NULL,blank,solid,dashed,dotted,dotdash,longdash,twodash",TRUE,"",NA
+"element_line","linetype","select","NULL,blank,solid,dashed,dotted,dotdash,longdash,twodash",TRUE,"",NA
+"element_line","arrow","text","",FALSE,"arrow()",NA
+"element_text","hjust","text","",FALSE,"NULL",NA
+"element_text","vjust","text","",FALSE,"NULL",NA
+"element_text","angle","text","",FALSE,"NULL",NA
+"element_text","lineheight","text","",FALSE,"NULL",NA
+"element_text","margin","text","",FALSE,"margin()",NA
+"element_text","debug","checkbox","FALSE",FALSE,"",NA
+"arrow","angle","text","30",FALSE,"",NA
+"arrow","length","text","unit(0.25,""inches"")",FALSE,"unit(0.25,""inches"")",NA
+"arrow","ends","select","last, first,both",TRUE,"",NA
+"arrow","type","select","open,closed",TRUE,"",NA
+"theme_grey","base_size","text","11",FALSE,"",NA
+"theme_gray","base_size","text","11",FALSE,"",NA
+"theme_bw","base_size","text","11",FALSE,"",NA
+"theme_linedraw","base_size","text","11",FALSE,"",NA
+"theme_light","base_size","text","11",FALSE,"",NA
+"theme_dark","base_size","text","11",FALSE,"",NA
+"theme_minimal","base_size","text","11",FALSE,"",NA
+"theme_classic","base_size","text","11",FALSE,"",NA
+"theme_void","base_size","text","11",FALSE,"",NA
+"theme_test","base_size","text","11",FALSE,"",NA
+"theme_stata","base_size","text","11",FALSE,"",NA
+"theme_tufte","base_size","text","11",FALSE,"",NA
+"theme_grey","base_family","select",",",TRUE,"",NA
+"theme_gray","base_family","select",",",TRUE,"",NA
+"theme_bw","base_family","select",",",TRUE,"",NA
+"theme_linedraw","base_family","select",",",TRUE,"",NA
+"theme_light","base_family","select",",",TRUE,"",NA
+"theme_dark","base_family","select",",",TRUE,"",NA
+"theme_minimal","base_family","select",",",TRUE,"",NA
+"theme_classic","base_family","select",",",TRUE,"",NA
+"theme_void","base_family","select",",",TRUE,"",NA
+"theme_test","base_family","select",",",TRUE,"",NA
+"theme_grey","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_gray","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_bw","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_linedraw","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_light","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_dark","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_minimal","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_classic","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_void","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_test","base_line_size","text","base_size/22",FALSE,"",NA
+"theme_grey","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_gray","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_bw","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_linedraw","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_light","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_dark","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_minimal","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_classic","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_void","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_test","base_rect_size","text","base_size/22",FALSE,"",NA
+"theme_wsj","base_size","text","12",FALSE,"",NA
+"theme_excel","base_size","text","12",FALSE,"",NA
+"theme_fivethirtyeight","base_size","text","12",FALSE,"",NA
+"theme_wsj","color","text","brown",TRUE,"",NA
+"theme_wsj","base_family","text","sans",TRUE,"",NA
+"theme_economist","base_family","text","sans",TRUE,"",NA
+"theme_economist_white","base_family","text","sans",TRUE,"",NA
+"theme_fivethirtyeight","base_family","text","sans",TRUE,"",NA
+"theme_stata","base_family","text","sans",TRUE,"",NA
+"theme_wsj","title_family","text","mono",TRUE,"",NA
+"theme_economist","base_size","text","10",FALSE,"",NA
+"theme_economist","horizontal","checkbox","TRUE",FALSE,"",NA
+"theme_economist_white","horizontal","checkbox","TRUE",FALSE,"",NA
+"theme_excel","horizontal","checkbox","TRUE",FALSE,"",NA
+"theme_economist","dkpanel","checkbox","FALSE",FALSE,"",NA
+"theme_economist","stata","checkbox","FALSE",FALSE,"",NA
+"theme_economist_white","gray_bg","checkbox","FALSE",FALSE,"",NA
+"theme_excel","base_family","text","",TRUE,"",NA
+"theme_stata","scheme","select","S2color,s2mono,s1color,s1rcolor,s1mono,s2manual,s1manual,sj",TRUE,"",NA
+"theme_tufte","base_family","text","serif",TRUE,"",NA
+"theme_tufte","ticks","checkbox","TRUE",FALSE,"",NA
+"element_line","lineend","select","NULL,round,butt,square",TRUE,"",NA
+"unit","x","text","",FALSE,"",NA
+"unit","units","select","line,npc,cm,inches,mm,points,picas,bigpts,dida,cicero,scaledpts,lines,char,native,snpc,strwidth,strheight,grobwidth,grobheight",TRUE,"",NA
+"coord_fixed","ratio","text","1",FALSE,"aspect ratio, expressed as y / x",NA
+"coord_cartesian","xlim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_fixed","xlim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_flip","xlim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_map","xlim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_quickmap","xlim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_sf","xlim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_cartesian","ylim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_fixed","ylim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_flip","ylim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_map","ylim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_quickmap","ylim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_sf","ylim","text","",FALSE,"Limits for the x and y axes",NA
+"coord_cartesian","expand","checkbox","TRUE",FALSE,"If TRUE, the default, adds a small expansion factor to the limits to ensure that data and axes don't overlap. If FALSE, limits are taken exactly from the data or xlim/ylim.",NA
+"coord_sf","expand","checkbox","TRUE",FALSE,"If TRUE, the default, adds a small expansion factor to the limits to ensure that data and axes don't overlap. If FALSE, limits are taken exactly from the data or xlim/ylim.",NA
+"coord_fixed","expand","checkbox","TRUE",FALSE,"If TRUE, the default, adds a small expansion factor to the limits to ensure that data and axes don't overlap. If FALSE, limits are taken exactly from the data or xlim/ylim.",NA
+"coord_flip","expand","checkbox","TRUE",FALSE,"If TRUE, the default, adds a small expansion factor to the limits to ensure that data and axes don't overlap. If FALSE, limits are taken exactly from the data or xlim/ylim.",NA
+"coord_quickmap","expand","checkbox","TRUE",FALSE,"If TRUE, the default, adds a small expansion factor to the limits to ensure that data and axes don't overlap. If FALSE, limits are taken exactly from the data or xlim/ylim.",NA
+"coord_map","projection","select","mercator,sinusoidal,cylequalarea,cylindrical,rectangular,gall,mollweide,gilbert,azequidistant,azequalarea,gnomonic,perspectuve,orthographic,stereographic,laue,fisheye,newyorker,conic,simpleconic,guyou,squae,tetra,hex,harrison,trapezoidal,lune",TRUE,NA,NA
+"coord_map","parameters","text","",FALSE,"unnamed parameters passed on mapproj::mapproject()",NA
+"coord_map","orientation","text","",FALSE,"projection orientation, which defaults to c(90, 0, mean(range(x)))",NA
+"coord_polar","theta","select","x,y",TRUE,"variable to map angle to (x or y)",NA
+"coord_polar","start","text","0",FALSE,"offset of starting point from 12 o'clock in radians",NA
+"coord_polar","direction","text","1",FALSE,"1, clockwise; -1, anticlockwise",NA
+"coord_sf","crs","text","",FALSE,"Use this to select a specific CRS. If not specified, will use the CRS defined in the first layer",NA
+"coord_sf","datum","text","sf::st_crs(4326)",FALSE,"CRS that provides datum to use when generating graticules",NA
+"coord_sf","ndiscr","text","100",FALSE,"number of segments to use for discretizing graticule lines; try increasing this when graticules look unexpected",NA
+"coord_trans","x","select","identity,log10,sqrt",TRUE,"",NA
+"coord_trans","y","select","identity,log10,sqrt",TRUE,"",NA
+"coord_trans","limx","text","",FALSE,"limits for x and y axes.",NA
+"coord_trans","limy","text","",FALSE,"limits for x and y axes.",NA
+"xlab","label","text","",TRUE,"The text for the x-axis label",NA
+"ylab","label","text","",TRUE,"The text for the y-axis label",NA
+"ggtitle","label","text","",TRUE,"The text for the plot title",NA
+"ggtitle","subtitle","text","",TRUE,"A text for subtitle",NA
+"labs","title","text","",TRUE,"The text for the plot title",NA
+"labs","subtitle","text","",TRUE,"The text for the  plot subtitle",NA
+"labs","caption","text","",TRUE,"The text for the plot caption",NA
+"annotate","geom","select","text,rect,segment,pointrange",TRUE,"name of geom to use for annotation",NA
+"annotate","x","text","",FALSE,"positioning aesthetics ",NA
+"annotate","y","text","",FALSE,"positioning aesthetics ",NA
+"annotate","xmn","text","",FALSE,"positioning aesthetics ",NA
+"annotate","ymin","text","",FALSE,"positioning aesthetics ",NA
+"annotate","xmax","text","",FALSE,"positioning aesthetics ",NA
+"annotate","ymax","text","",FALSE,"positioning aesthetics ",NA
+"annotate","xend","text","",FALSE,"positioning aesthetics ",NA
+"annotate","yend","text","",FALSE,"positioning aesthetics ",NA
+"annotation_custom","grob","text","",FALSE,"grob to display",NA
+"annotation_custom","xmin","text","-Inf",FALSE,"x location ",NA
+"annotation_custom","ymin","text","-Inf",FALSE,"x location ",NA
+"annotation_custom","xmax","text","Inf",FALSE,"y location",NA
+"annotation_custom","ymax","text","Inf",FALSE,"y location",NA
+"annotation_logticks","base","text","10",FALSE,"the base of the log (default 10)",NA
+"annotation_logticks","side","text","bl",TRUE,"string containing any of ""trbl"", for top, right, bottom, and left",NA
+"annotation_logticks","scaled","checkbox","TRUE",FALSE,"s the data already log-scaled?",NA
+"annotation_logticks","short","text","unit(0.1, ""cm"")",FALSE,"unit(0.1, ""cm"")",NA
+"annotation_logticks","mid","text","unit(0.2,""cm"")",FALSE,"unit(0.2,""cm"")",NA
+"annotation_logticks","long","text","unit(0.3,""cm"")",FALSE,"unit(0.3,""cm"")",NA
+"annotation_logticks","colour","select","black",TRUE,"",NA
+"annotation_logticks","size","text","0.5",FALSE,"",NA
+"annotation_logticks","linetype","select","solid,blank,dashed,dotted,dotdash,longdash,twodash",TRUE,"",NA
+"annotation_logticks","alpha","text","1",FALSE,"",NA
+"annotation_map","map","text","",FALSE,"data frame representing a map",NA
+"annotation_raster","raster","text","",FALSE,"raster object to display",NA
+"annotation_raster","xmin","text","",FALSE,"x, y location (in data coordinate)",NA
+"annotation_raster","xmax","text","",FALSE,"x, y location (in data coordinate)",NA
+"annotation_raster","ymin","text","",FALSE,"x, y location (in data coordinate)",NA
+"annotation_raster","ymax","text","",FALSE,"x, y location (in data coordinate)",NA
+"annotation_raster","interpolate","checkbox","FALSE",FALSE,"If TRUE interpolate linearly, if FALSE (the default) don't interpolate",NA
+"borders","database","select","world,usa,state,county",TRUE,NA,NA
+"borders","region","text",".",TRUE,"map region",NA
+"borders","fill","select","NA,",TRUE,"",NA
+"borders","colour","select","grey50,",TRUE,"",NA
+"borders","xlim","text","",FALSE,"NULL",NA
+"borders","ylim","text","",FALSE,"NULL",NA
+"xlim","min","text","",FALSE,"",NA
+"ylim","min","text","",FALSE,"",NA
+"xlim","max","text","",FALSE,"",NA
+"ylim","max","text","",FALSE,"",NA
+"facet_grid","shrink","checkbox","TRUE",FALSE,NA,NA
+"facet_wrap","shrink","checkbox","TRUE",FALSE,NA,NA
+"facet_grid","as.table","checkbox","TRUE",FALSE,"",NA
+"facet_wrap","as.table","checkbox","TRUE",FALSE,"",NA
+"facet_wrap","drop","checkbox","TRUE",FALSE,NA,NA
+"facet_grid","drop","checkbox","TRUE",FALSE,NA,NA
+"facet_grid","switch","select","NULL,x,y",TRUE,"By default, the labels are displayed on the top and right of the plot",NA
+"facet_wrap","switch","select","NULL,x,y",TRUE,"By default, the labels are displayed on the top and right of the plot",NA
+"facet_wrap","dir","select","h,v",TRUE,"",NA
+"facet_wrap","strip.position","select","top,bottom,left,right",TRUE,NA,NA
+"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_bquote",TRUE,"",NA
+"theme","line","select","element_line(),element_blank()",FALSE,NA,NA
+"line","line","select","element_line(),element_blank()",FALSE,"","all"
+"rect","rect","select","element_rect(),element_blank()",FALSE,"","all"
+"text","text","select","element_text(),element_blank()",FALSE,"","all"
+"title","title","select","element_text(),element_blank()",FALSE,"","all"
+"aspect.ratio","aspect.ratio","text","",FALSE,"","all"
+"axis.title","axis.title","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.title.x","axis.title.x","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.title.x.top","axis.title.x.top","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.title.x.bottom","axis.title.x.bottom","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.title.y","axis.title.y","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.title.y.left","axis.title.y.left","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.title.y.right","axis.title.y.right","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.text","axis.text","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.text.x","axis.text.x","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.text.x.top","axis.text.x.top","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.text.x.bottom","axis.text.x.bottom","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.text.y","axis.text.y","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.text.y.left","axis.text.y.left","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.text.y.right","axis.text.y.right","select","element_text(),element_blank()",FALSE,"","axis"
+"axis.ticks","axis.ticks","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.ticks.x","axis.ticks.x","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.ticks.x.top","axis.ticks.x.top","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.ticks.x.bottom","axis.ticks.x.bottom","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.ticks.y","axis.ticks.y","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.ticks.y.left","axis.ticks.y.left","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.ticks.y.right","axis.ticks.y.right","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.ticks.length","axis.ticks.length","text","unit()",FALSE,"","axis"
+"axis.line","axis.line","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.line.x","axis.line.x","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.line.x.top","axis.line.x.top","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.line.x.bottom","axis.line.x.bottom","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.line.y","axis.line.y","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.line.y.left","axis.line.y.left","select","element_line(),element_blank()",FALSE,"","axis"
+"axis.line.yright","axis.line.yright","select","element_line(),element_blank()",FALSE,"","axis"
+"legend.background","legend.background","select","element_rect(),element_blank()",FALSE,"","legend"
+"legend.margin","legend.margin","text","margin()",FALSE,"","legend"
+"legend.spacing","legend.spacing","text","unit()",FALSE,"","legend"
+"legend.spacing.x","legend.spacing.x","text","unit()",FALSE,"","legend"
+"legend.spacing.y","legend.spacing.y","text","unit()",FALSE,"","legend"
+"legend.key","legend.key","select","element_rect(),element_blank()",FALSE,"","legend"
+"legend.key.size","legend.key.size","text","unit()",FALSE,"","legend"
+"legend.key.height","legend.key.height","text","unit()",FALSE,"","legend"
+"legend.key.width","legend.key.width","text","unit()",FALSE,"","legend"
+"legend.text","legend.text","select","element_text(),element_blank()",FALSE,"","legend"
+"legend.text.align","legend.text.align","text","",FALSE,"alignment of legend labels (number from 0 (left) to 1 (right))","legend"
+"legend.title","legend.title","select","element_text(),element_blank()",FALSE,"","legend"
+"legend.title.align","legend.title.align","text","",FALSE,"alignment of legend title (number from 0 (left) to 1 (right))","legend"
+"legend.position","legend.position","select",",right,bottom,left,top,none",FALSE,"","legend"
+"legend.direction","legend.direction","select","horizontal,vertical",FALSE,"","legend"
+"legend.justification","legend.justification","text","",FALSE,"","legend"
+"legend.box","legend.box","select","horizontal,vertical",TRUE,"","legend"
+"legend.box.just","legend.box.just","select","top,bottom,left,right",TRUE,"","legend"
+"legend.box.margin","legend.box.margin","text","margin()",FALSE,"","legend"
+"legend.box.background","legend.box.background","select","element_rect(),element_blank()",FALSE,"","legend"
+"legend.box.spacing","legend.box.spacing","text","unit()",FALSE,"","legend"
+"panel.background","panel.background","select","element_rect(),element_blank()",FALSE,"","panel"
+"panel.spacing","panel.spacing","text","unit()",FALSE,"","panel"
+"panel.spacing.x","panel.spacing.x","text","unit()",FALSE,"","panel"
+"panel.spacing.y","panel.spacing.y","text","unit()",FALSE,"","panel"
+"panel.grid","panel.grid","select","element_line(),element_blank()",FALSE,"","panel"
+"panel.grid.major","panel.grid.major","select","element_line(),element_blank()",FALSE,"","panel"
+"panel.grid.minor","panel.grid.minor","select","element_line(),element_blank()",FALSE,"","panel"
+"panel.grid.major.x","panel.grid.major.x","select","element_line(),element_blank()",FALSE,"","panel"
+"panel.grid.major.y","panel.grid.major.y","select","element_line(),element_blank()",FALSE,"","panel"
+"panel.grid.minor.x","panel.grid.minor.x","select","element_line(),element_blank()",FALSE,"","panel"
+"panel.grid.minor.y","panel.grid.minor.y","select","element_line(),element_blank()",FALSE,"","panel"
+"panel.ontop","panel.ontop","checkbox","TRUE",FALSE,"","panel"
+"plot.background","plot.background","select","element_rect(),element_blank()",FALSE,"","plot"
+"plot.title","plot.title","select","element_text(),element_blank()",FALSE,"","plot"
+"plot.subtitle","plot.subtitle","select","element_text(),element_blank()",FALSE,"","plot"
+"plot.caption","plot.caption","select","element_text(),element_blank()",FALSE,"","plot"
+"plot.margin","plot.margin","text","margin()",FALSE,"","plot"
+"strip.background","strip.background","select","element_rect(),element_blank()",FALSE,"","strip"
+"strip.placement","strip.placement","select","inside,outside",TRUE,"","strip"
+"strip.text","strip.text","select","element_text(),element_blank()",FALSE,"","strip"
+"strip.text.x","strip.text.x","select","element_text(),element_blank()",FALSE,"","strip"
+"strip.text.y","strip.text.y","select","element_text(),element_blank()",FALSE,"","strip"
+"strip.switch.pad.grid","strip.switch.pad.grid","text","unit()",FALSE,"","strip"
+"strip.switch.pad.wrap","strip.switch.pad.wrap","text","unit()",FALSE,"","strip"
+"complete","complete","checkbox","FALSE",FALSE,"","etc"
+"validate","validate","checkbox","TRUE",FALSE,"","etc"

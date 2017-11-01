@@ -1,8 +1,11 @@
 # ggplotAssist 0.1.1
 ====================
-(2017-Oct-25)
+(2017-Nov-2)
 
-* bug fixed
+* new function "uiOutput3","textInput4" added
+
+* An recursive shiny module "textFunctionInput" and "textFunction" added
+
 
 # ggplotAssist 0.1.0
 ====================

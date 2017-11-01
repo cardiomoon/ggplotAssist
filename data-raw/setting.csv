@@ -85,16 +85,21 @@
 "geom_violin,stat_ydensity","scale","select","area,count,width",TRUE,""
 "guide_legend,guide_colorbar","title","text","",TRUE,"waiver()"
 "guide_legend,guide_colorbar","title.position","select",",top,bottom,left,right",TRUE,""
-"guide_legend,guide_colorbar","title.theme","text","element_text()",FALSE,""
+"guide_legend,guide_colorbar","title.theme","text","",FALSE,"element_text()"
 "guide_legend,guide_colorbar","title.hjust","text","",FALSE,""
 "guide_legend,guide_colorbar","title.vjust","text","",FALSE,""
 "guide_legend,guide_colorbar","label","checkbox","TRUE",FALSE,""
 "guide_legend,guide_colorbar","label.position","select",",top,bottom,left,right",TRUE,""
-"guide_legend,guide_colorbar","label.theme","text","element_text()",FALSE,""
+"guide_legend,guide_colorbar","label.theme","text","",FALSE,"element_text()"
 "guide_legend,guide_colorbar","label.hjust","text","",FALSE,""
 "guide_legend,guide_colorbar","label.vjust","text","",FALSE,""
+<<<<<<< HEAD
+"guide_legend","keywidth","text","",FALSE,"A numeric or a unit() object"
+"guide_legend","keyheight","text","",FALSE,"A numeric or a unit() object"
+=======
 "guide_legend","keywidth","text","",FALSE,""
 "guide_legend","keyheight","text","",FALSE,""
+>>>>>>> 911378438e589cebd0bfb14b730ef66d38ebdbeb
 "guide_legend,guide_colorbar","direction","select",",horizontal,vertical",TRUE,""
 "guide_legend,guide_colorbar","default.unit","select","line,npc,cm,inches,mm,points,picas,bigpts,dida,cicero,scaledpts,lines,char,native,snpc,strwidth,strheight,grobwidth,grobheight",TRUE,""
 "guide_legend","override.aes","text","list()",FALSE,""
@@ -103,8 +108,8 @@
 "guide_legend","byrow","checkbox","FALSE",FALSE,""
 "guide_legend,guide_colorbar","reverse","checkbox","FALSE",FALSE,""
 "guide_legend,guide_colorbar","order","text","0",FALSE,""
-"guide_colorbar","barwidth","text","",FALSE,""
-"guide_colorbar","barheight","text","",FALSE,""
+"guide_colorbar","barwidth","text","",FALSE,"A numeric or a unit() object"
+"guide_colorbar","barheight","text","",FALSE,"A numeric or a unit() object"
 "guide_colorbar","nbin","numeric","20",FALSE,""
 "guide_colorbar","raster","checkbox","TRUE",FALSE,""
 "guide_colorbar","ticks","checkbox","TRUE",FALSE,""
@@ -255,4 +260,8 @@
 "facet_wrap","dir","select","h,v",TRUE,""
 "facet_wrap","strip.position","select","top,bottom,left,right",TRUE,NA
 "facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_bquote",TRUE,""
+<<<<<<< HEAD
+"theme","line","select","element_line(),element_blank()",FALSE,NA
+=======
 "theme","line","select","element_line(),element_blank()",FALSE,"NA"
+>>>>>>> 911378438e589cebd0bfb14b730ef66d38ebdbeb

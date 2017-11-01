@@ -65,8 +65,7 @@ splitData=function(df,colname){
      } else{
           result=c()
           for(i in 1:nrow(df)){
-               # cat("i=",i,"\n")
-               # cat("df[[colname]][i]=",df[[colname]][i],"\n")     
+                  
                if(str_detect(df[[colname]][i],",")){
                     valuechoice=unlist(strsplit(df[[colname]][i],","))
                     valuechoice=str_trim(valuechoice)
@@ -89,12 +88,12 @@ splitData=function(df,colname){
 #' @importFrom shiny NS
 #' @export
 #' @examples
-#'library(shiny)
-#'# Only run examples in interactive R sessions
-#'if (interactive()) {
+#' library(shiny)
+#' # Only run examples in interactive R sessions
+#' if (interactive()) {
 #'   ui=fluidPage(
 #'       textFunctionInput("text"),
-#'       textOutput("text)
+#'       textOutput("text")
 #'   )
 #'   server=function(input,output,session){
 #'        
@@ -109,7 +108,7 @@ splitData=function(df,colname){
 #'        })
 #'   }
 #'   shinyApp(ui,server)
-#'}
+#' }
 textFunctionInput=function(id){ 
     ns<-NS(id)
     
@@ -160,6 +159,7 @@ textFunction=function(input,output,session,argList=reactive(argList),
             
         if(!is.null(findob)){
             #find exact geom(not ...2, or ...n)
+                    findob<-paste0("^",findob) 
                     findob<-paste0(findob,"^2n|",findob,",|",findob,"$")
                     result<-settingData()[str_detect(settingData()$geom,findob),]
                     if(nrow(result)==0) result<-NULL
@@ -213,6 +213,7 @@ textFunction=function(input,output,session,argList=reactive(argList),
                      } else if(selected$input[i]=="checkbox"){
                          mylist[[no]]= checkboxInput3(ns(temp),label=temp,value=as.logical(value))
                      }
+                     #cat("ns(temp)=",ns(temp),"\n")
                      no=no+1
                  }
 
@@ -268,7 +269,7 @@ textFunction=function(input,output,session,argList=reactive(argList),
     
      myfunction=reactive({
         count=0
-        
+        code<-""
         if(editCode()) code<-input$text
         myOptions<-rv$myArgs() 
         
@@ -280,7 +281,7 @@ textFunction=function(input,output,session,argList=reactive(argList),
         if(count>0){
             
             tempcode=""
-            result=list()
+            result <- vector(mode = "list", length = count)
             for(i in 1:count){
                 temp=selected$setting[i]
                 value=selected$value[i]
@@ -329,4 +330,10 @@ textFunction=function(input,output,session,argList=reactive(argList),
         code
     })
     return(myfunction)
+}
+
+updateTextFunctionInput=function (session, inputId, value = NULL) 
+{
+    message <- list( value = value)
+    session$sendInputMessage(inputId, message)
 }

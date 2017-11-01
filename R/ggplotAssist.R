@@ -48,8 +48,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     # geomData=read.csv("data-raw/geom.csv",stringsAsFactors = FALSE)
     # settingData=read.csv("data-raw/setting.csv",stringsAsFactors = FALSE)
     # defaultVar=read.csv("data-raw/default.csv",stringsAsFactors = FALSE)
-    # devtools::use_data(geomData,settingData,defaultVar,internal=TRUE,overwrite=TRUE)
-      
+    # themeData=read.csv("data-raw/theme.csv",stringsAsFactors = FALSE)
+    # allData=read.csv("data-raw/all.csv",stringsAsFactors = FALSE)
+    # devtools::use_data(geomData,settingData,defaultVar,themeData,allData,internal=TRUE,overwrite=TRUE)
+
      if(!isNamespaceLoaded("tidyverse")){
           attachNamespace("tidyverse")
      }
@@ -158,32 +160,6 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         # cat("result=",result,"\n")
         result
     }
-    splitData=function(df,colname){
-        # df=settingData
-        # colname="setting"
-        # nrow(df)
-        if(nrow(df)==0){
-            result=df
-        } else{
-            result=c()
-            for(i in 1:nrow(df)){
-                # cat("i=",i,"\n")
-                # cat("df[[colname]][i]=",df[[colname]][i],"\n")     
-                if(str_detect(df[[colname]][i],",")){
-                    valuechoice=unlist(strsplit(df[[colname]][i],","))
-                    valuechoice=str_trim(valuechoice)
-                    for(j in 1:length(valuechoice)){
-                        result=rbind(result,df[i,])
-                        result[nrow(result),colname]=valuechoice[j] 
-                    }
-                } else{
-                    result=rbind(result,df[i,])
-                }
-                
-            } 
-        }
-        result
-    }
     
     extractMapping=function(x){
         mapping=c()
@@ -199,7 +175,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     }
     
     settingData=splitData(settingData,"setting")
+    settingData=splitData(settingData,"geom")
     themeData=splitData(themeData,"setting")
+    themeData$geom=themeData$setting
+    
 
       # retValue=runApp(list(
         ui=miniPage(
@@ -300,18 +279,20 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                         
                 )),
                 conditionalPanel(condition="input.geoms=='theme'",
-                    column(3,
+                    column(2,
                            selectInput("args","arguments",choices=c(),
                                        selectize=FALSE,size=30,selected="")
                     ),
-                    column(2,
+                    column(3,
                            #textInput("arg","arg",value=""),
-                           uiOutput("argsUI"),
-                           textInput("argresult","argresult",value=""),
-                           conditionalPanel(condition="true==false",
-                           textInput("argresult2","argresult2",value=""),
-                           textAreaInput("argresult3","argresult3",value="")
-                           )
+                           # uiOutput("argsUI"),
+                           # textInput("argresult","argresult",value=""),
+                           # conditionalPanel(condition="true==false",
+                           # textInput("argresult2","argresult2",value=""),
+                           # textAreaInput("argresult3","argresult3",value="")
+                           # )
+                           textFunctionInput("theme")
+                           
                     )
                 ),
                 column(4,
@@ -984,55 +965,59 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     }
                 }
                 if(count>0){
-                    for(i in 1:count){
-                        tempvar=selected$setting[i]
-                        if(tempvar %in% c("position","type","color","colour","fill")) {
-                            tempvar2<-tempvar
-                            tempvar<-paste0(tempvar,"2")
-                        }
-                        value=selected$value[i]
-                        valuechoice=unlist(strsplit(value,","))
-                        valuechoice=str_trim(valuechoice)
-                        if(selected$input[i]=="select") {
-                            if(!is.null(input[[tempvar]])){
-                                if(input[[tempvar]]!=valuechoice[1]) {
-                                    if(selected$quoted[i]==TRUE){
-                                        tempvarvalue=paste0("'",input[[tempvar]],"'")
-                                    } else{
-                                        if(!is.na(as.numeric(input[[tempvar]]))) tempvarvalue=input[[tempvar]]
-                                        else if(!is.na(as.logical(input[[tempvar]]))) tempvarvalue=input[[tempvar]]
-                                        else tempvarvalue=paste0(input[[tempvar]])
-                                    }
-                                    if(tempvar %in% c("position2","type2","color2","colour2","fill2")) {
-                                         tempvar<-tempvar2
-                                    }
-                                    temp=mypaste0(temp,tempvar,"=",tempvarvalue)
-                                    
-                                }
-                            }
-                        } else if(selected$input[i]=="numeric"){
-                            if(!is.null(input[[tempvar]])){
-                                if(input[[tempvar]]!=value) {
-                                    temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
-                                }
-                            }
-                        } else if(selected$input[i]=="text"){
-                            if(!is.null(input[[tempvar]])){
-                                if(input[[tempvar]]!=value) {
-                                    if(selected$quoted[i]==TRUE){
-                                        if(str_detect(input[[tempvar]],"\\(")) temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
-                                        else temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
-                                    } else{
-                                        temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
-                                    }
-                                }
-                            }
-                        } else if(selected$input[i]=="checkbox"){
-                            if(!is.null(input[[tempvar]])){
-                            if(input[[tempvar]]!=value) 
-                            temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
-                            }
-                        }
+                    # for(i in 1:count){
+                    #     tempvar=selected$setting[i]
+                    #     if(tempvar %in% c("position","type","color","colour","fill")) {
+                    #         tempvar2<-tempvar
+                    #         tempvar<-paste0(tempvar,"2")
+                    #     }
+                    #     value=selected$value[i]
+                    #     valuechoice=unlist(strsplit(value,","))
+                    #     valuechoice=str_trim(valuechoice)
+                    #     if(selected$input[i]=="select") {
+                    #         if(!is.null(input[[tempvar]])){
+                    #             if(input[[tempvar]]!=valuechoice[1]) {
+                    #                 if(selected$quoted[i]==TRUE){
+                    #                     tempvarvalue=paste0("'",input[[tempvar]],"'")
+                    #                 } else{
+                    #                     if(!is.na(as.numeric(input[[tempvar]]))) tempvarvalue=input[[tempvar]]
+                    #                     else if(!is.na(as.logical(input[[tempvar]]))) tempvarvalue=input[[tempvar]]
+                    #                     else tempvarvalue=paste0(input[[tempvar]])
+                    #                 }
+                    #                 if(tempvar %in% c("position2","type2","color2","colour2","fill2")) {
+                    #                      tempvar<-tempvar2
+                    #                 }
+                    #                 temp=mypaste0(temp,tempvar,"=",tempvarvalue)
+                    #                 
+                    #             }
+                    #         }
+                    #     } else if(selected$input[i]=="numeric"){
+                    #         if(!is.null(input[[tempvar]])){
+                    #             if(input[[tempvar]]!=value) {
+                    #                 temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                    #             }
+                    #         }
+                    #     } else if(selected$input[i]=="text"){
+                    #         if(!is.null(input[[tempvar]])){
+                    #             if(input[[tempvar]]!=value) {
+                    #                 if(selected$quoted[i]==TRUE){
+                    #                     if(str_detect(input[[tempvar]],"\\(")) temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                    #                     else temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
+                    #                 } else{
+                    #                     temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                    #                 }
+                    #             }
+                    #         }
+                    #     } else if(selected$input[i]=="checkbox"){
+                    #         if(!is.null(input[[tempvar]])){
+                    #         if(input[[tempvar]]!=value) 
+                    #         temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
+                    #         }
+                    #     }
+                    # }
+                    layercode<-result()
+                    if(layercode!=""){
+                        temp=mypaste0(temp,layercode)
                     }
                 }
                 if(input$geomdata!="") {
@@ -1346,50 +1331,53 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             }
                         }
                     }
-                    
-                    findob<-input$geoms
-                    #find exact geom(not ...2, or ...n)
-                    findob<-paste0(findob,"^2n|",findob,",|",findob,"$")
-                    if(input$selectedLayer=="guides"){
-                    if(input$guideaes %in% c("guide_legend","guide_colorbar")) {
-                        findob<-input$guideaes
-                    } else{
-                        findob<-"!@#$%"
-                    } 
-                    }
-                    selected=settingData[str_detect(settingData$geom,findob),]
-                    count=nrow(selected)
-                    if(count>0){
-                        for(i in 1:count){
-                            temp=selected$setting[i]
-                            value=selected$value[i]
-                            placeholder=selected$placeholder[i]
-                            mywidth=min((((max(nchar(value),nchar(placeholder))*8)%/%100)+1)*100,200)
-                        if(selected$input[i]=="select") {
-                            tempid<-temp
-                            if(temp %in% c("position","type","color","colour","fill")) {
-                                tempid<-paste0(temp,"2")
-                            }
-                            mychoices=unlist(strsplit(value,",",fixed=TRUE))
-                            if(tempid %in% c("colour2","color2","fill2")){
-                                mychoices=c(mychoices,colors()[!str_detect(colors(),mychoices)])
-                            }
-                            if(length(mychoices)>0)
-                            mywidth=(((max(nchar(mychoices))*8)%/%100)+1)*100
-                            else mywidth=100
-                            mylist[[no]]= selectizeInput3(tempid,label=temp,
-                                                 choices=mychoices,width=mywidth,
-                                                 options=list(create=TRUE))
-                        } else if(selected$input[i]=="numeric"){
-                            mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
-                        } else if(selected$input[i]=="text"){
-                            mylist[[no]]=textInput3(temp,label=temp,value=value,placeholder=placeholder,width=mywidth)
-                        } else if(selected$input[i]=="checkbox"){
-                            mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
-                        }
-                            no=no+1
-                        }
-                    }
+                    mylist[[no]]=textFunctionInput("geomText")
+                    no=no+1
+                    # mylist[[no]]=textInput("geomText2","geomText2",value="")
+                    # no=no+1
+                    # findob<-input$geoms
+                    # #find exact geom(not ...2, or ...n)
+                    # findob<-paste0(findob,"^2n|",findob,",|",findob,"$")
+                    # if(input$selectedLayer=="guides"){
+                    # if(input$guideaes %in% c("guide_legend","guide_colorbar")) {
+                    #     findob<-input$guideaes
+                    # } else{
+                    #     findob<-"!@#$%"
+                    # } 
+                    # }
+                    # selected=settingData[str_detect(settingData$geom,findob),]
+                    # count=nrow(selected)
+                    # if(count>0){
+                    #     for(i in 1:count){
+                    #         temp=selected$setting[i]
+                    #         value=selected$value[i]
+                    #         placeholder=selected$placeholder[i]
+                    #         mywidth=min((((max(nchar(value),nchar(placeholder))*8)%/%100)+1)*100,200)
+                    #     if(selected$input[i]=="select") {
+                    #         tempid<-temp
+                    #         if(temp %in% c("position","type","color","colour","fill")) {
+                    #             tempid<-paste0(temp,"2")
+                    #         }
+                    #         mychoices=unlist(strsplit(value,",",fixed=TRUE))
+                    #         if(tempid %in% c("colour2","color2","fill2")){
+                    #             mychoices=c(mychoices,colors()[!str_detect(colors(),mychoices)])
+                    #         }
+                    #         if(length(mychoices)>0)
+                    #         mywidth=(((max(nchar(mychoices))*8)%/%100)+1)*100
+                    #         else mywidth=100
+                    #         mylist[[no]]= selectizeInput3(tempid,label=temp,
+                    #                              choices=mychoices,width=mywidth,
+                    #                              options=list(create=TRUE))
+                    #     } else if(selected$input[i]=="numeric"){
+                    #         mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
+                    #     } else if(selected$input[i]=="text"){
+                    #         mylist[[no]]=textInput3(temp,label=temp,value=value,placeholder=placeholder,width=mywidth)
+                    #     } else if(selected$input[i]=="checkbox"){
+                    #         mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
+                    #     }
+                    #         no=no+1
+                    #     }
+                    # }
                     if(input$geoms %in% c("scale_x_log10","scale_y_log10")){
                         mylist[[no]]=actionButton("addMathFormat","Add math_format")
                         no=no+1
@@ -1419,238 +1407,41 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             })
             
            observeEvent(input$addMathFormat,{
-               updateTextInput(session,"breaks",value="scales::trans_breaks('log10', function(x) 10^x)")
-               updateTextInput(session,"labels",value="scales::math_format(10^.x)")
+               tempid=paste0("geomText-",input$geoms)
+               updateTextInput(session,"geomText-breaks-text",value="scales::trans_breaks('log10', function(x) 10^x)")
+               
+               updateTextInput(session,"geomText-labels-text",value="scales::math_format(10^.x)")
            })
             # observeEvent(input$args,{
             #     updateTextInput(session,"arg",label=input$args,value=themeData$value[themeData$setting==input$args])
             # })
             # 
-            output$argsUI=renderUI({
-                if(!is.null(input$args)){
-                kind<-themeData$input[themeData$setting==input$args]
-                value<-themeData$value[themeData$setting==input$args]
-                mylist=list()
-                if(kind %in% c("text","select")) {
-                    if(kind=="text") mylist[[1]]<-textInput("arg",label=input$args,value=value)
-                    if(kind=="select") mylist[[1]]<-selectInput("arg",label=input$args,choices=unlist(strsplit(value,",")))
-                    mylist[[2]]=uiOutput("argsUI2")
-                    
-                }
-                else if(kind=="checkbox") mylist[[1]]<-checkboxInput("arg",label=input$args,value=as.logical(value))
-                
-                
-                do.call(tagList,mylist)
-                }
-            })
-             
-            output$argsUI2=renderUI({
-                value=input$arg
-                if(str_detect(value,"\\(")) {
-                fname=unlist(strsplit(value,"\\("))[1]
-                selected=settingData[str_detect(settingData$geom,fname),]
-                count=nrow(selected)
-                mylist=list()
-                no=1
-                if(count>0){
-                    for(i in 1:count){
-                        temp=selected$setting[i]
-                        value=selected$value[i]
-                        placeholder=selected$placeholder[i]
-                        if(selected$input[i]=="select") {
-                            tempid<-temp
-                            if(temp=="position") tempid<-"position2"
-                            if(temp=="type") tempid<-"type2"
-                            mychoices=unlist(strsplit(value,",",fixed=TRUE))
-                            if(tempid %in% c("colour","color","fill")){
-                                mychoices=c(mychoices,colors())
-                            }
-                            mywidth=(((max(nchar(mychoices))*8)%/%100)+1)*100
-                            mylist[[no]]= selectizeInput3(tempid,label=temp,
-                                                          choices=mychoices,width=mywidth,
-                                                          options=list(create=TRUE))
-                        } else if(selected$input[i]=="numeric"){
-                            mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
-                        } else if(selected$input[i]=="text"){
-                            mywidth=min((((max(nchar(value),nchar(placeholder))*8)%/%100)+1)*100,200)
-                            mylist[[no]]=textInput3(temp,label=temp,value=value,width=mywidth,placeholder=placeholder)
-                        } else if(selected$input[i]=="checkbox"){
-                            mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
-                        }
-                        no=no+1
-                    }
-                }
-                do.call(tagList,mylist)
-            }
-            })
+           
             
-            observeEvent(input$arg,{
-                updateTextInput(session,"argresult",value=input$arg)
-            })
+           
             
-            makeTheme=reactive({
-                result=""
-                if(input$geoms=="theme"){
-                    
-                if(!is.null(input$args)){
-                    kind<-themeData$input[themeData$setting==input$args]
-                    value<-themeData$value[themeData$setting==input$args]
-                    
-                    if(kind %in% c("text","select")) {
-                        if(str_detect(value,"\\(")) {
-                            
-                            result=unlist(strsplit(value,"\\)"))[1]
-                            
-                            fname=unlist(strsplit(value,"\\("))[1]
-                            selected=settingData[str_detect(settingData$geom,fname),]
-                            count=nrow(selected)
-                            tempresult=c()
-                            if(count>0){
-                                for(i in 1:count){
-                                    temp=selected$setting[i]
-                                    tvalue=selected$value[i]
-                                    kind2=selected$input[i]
-                                    tempid<-temp
-                                    if(temp=="position") tempid<-"position2"
-                                    if(temp=="type") tempid<-"type2"
-                                    if(!is.null(input[[tempid]])){
-                                    if(input[[tempid]]!=tvalue){
-                                        if(kind2=="select"){
-                                            if(input[[tempid]]!=unlist(strsplit(tvalue,","))[1]){
-                                          tempresult=c(tempresult,paste0(tempid,"='",input[[tempid]],"'"))    
-                                            }
-                                        } else{
-                                            if(selected$quoted[i]){
-                                            tempresult=c(tempresult,paste0(tempid,"='",input[[tempid]],"'"))    
-                                            } else{
-                                            tempresult=c(tempresult,paste0(tempid,"=",input[[tempid]]))
-                                            }
-                                        }
-                                    }
-                                    }
-                                    
-                                }
-                            }
-                            if(length(tempresult)>0) {
-                                tempresult2=str_c(tempresult,collapse=",")
-                            } else {
-                                tempresult2=tempresult
-                            }
-                           
-                            result=paste0(result,tempresult2)
-                            result=paste0(result,")")
-                        } else if(kind=="text"){
-                            #result=paste0(result,input$args,"=",input$arg)
-                            quoted=themeData$quoted[themeData$setting==input$args]
-                            if(quoted){
-                                result=paste0(result,"'",input$arg,"'")
-                            } else{
-                                result=paste0(result,input$arg)
-                            }
-                        } else if(kind=="select") {
-                            if(!is.null(input$arg)){
-                                if(input$arg!=unlist(strsplit(value,","))[1]){
-                                    quoted=themeData$quoted[themeData$setting==input$args]
-                                    if(quoted){
-                                    result=paste0(result,"'",input$arg,"'")
-                                    } else{
-                                        result=paste0(result,input$arg) 
-                                    }
-                                }
-                            } else{
-                                result=""
-                            }
-                        }
-                    }
-                    else if(kind=="checkbox") {
-                        if(!is.null(input$arg)){
-                        if(input$arg!=as.logical(value)){
-                          result=paste0(result,input$arg)
-                        }
-                        }
-                    } 
-                    
-                    
-                   
-                }
-                   
-                }
-                
-                result
-            })   
-                
+            
             observe({
-                if(!is.null(input$geoms)){
-                if(input$geoms=="theme"){
-                    #print("observe1")
-                    if(!is.null(input$args)){
-                        #updateTextInput(session,"argresult2",value="")
-                        updateTextInput(session,"argresult",value=makeTheme())
-                        #updateTextInput(session,"arg",value=makeTheme())
-                        
-                    }
-                    
-                }
-                }
+                rv$argList<-list(label="text",mode="text",value=input$geoms,choices=NULL,width=200,
+                                 bg="lightcyan",placeholder="")
+                
+                rv$argList2<-list(label="text",mode="text",value=input$args,choices=NULL,width=200,
+                                  bg="lightcyan",placeholder="")
             })
             
-            observeEvent(input$args,{
-                updateTextInput(session,"argresult2",value="")
-            })
-            observeEvent(input$argresult,{
-                #print("observeEvent input$argresult")
-                value<-themeData$value[themeData$setting==input$args]
-                if(input$argresult==""){
-                    updateTextInput(session,"argresult2",value="")
-          
-                } else if(input$argresult!=value ){
-                updateTextInput(session,"argresult2",value=paste0(input$args,"=",input$argresult))
-                   
+            result=callModule(textFunction,"geomText",argList=reactive(rv$argList),
+                              editCode=reactive(FALSE),settingData=reactive(settingData))
+            
+            result2=callModule(textFunction,"theme",argList=reactive(rv$argList2),
+                        editCode=reactive(FALSE),settingData=reactive(allData))
+            
+            observe({
+                #updateTextAreaInput(session,"geomText2",value=result())
+                if(!is.null(input$args)) {
+                    temp=paste0("theme(",result2(),")")
+                    updateTextAreaInput(session,"layer",value=temp)
                 }
                 
-            })
-            
-            observeEvent(input$argresult2,{
-                if(!is.null(input$geoms)){
-                    if(input$geoms=="theme"){
-                        updateTextAreaInput(session,"argresult3",value=makeTheme2())
-                    }
-                }
-            })
-            
-            observeEvent(input$argresult3,{
-                if(!is.null(input$geoms)){
-                    if(input$geoms=="theme"){
-                updateTextAreaInput(session,"layer",value=input$argresult3)
-                    }
-                }
-            })
-            
-            class(eval(parse(text="theme()")))
-            
-            makeTheme2=reactive({
-                
-                
-                if(input$argresult3=="") result="theme()"
-                else result=input$argresult3
-                   # cat("result=",result,"\n")
-                    #result="theme(legend.background=element_rect(fill='red'),legend.position='element_rect()')"
-                    
-                    value<-themeData$value[themeData$setting==input$args]
-                    (args<-extractArgs(result))
-                    #cat("args=",args,"\n")
-                    (args1<-setdiff2(args,input$args))
-                    #cat("args1=",args1,"\n")
-                    args2<-args1    
-                    if(input$argresult2=="") {
-                        args2<-args1
-                    } else if(input$argresult!=value) {
-                        args2<-c(args1,input$argresult2)
-                    }
-                    #cat("args2=",args2,"\n")
-                    result=paste0("theme(",str_c(args2,collapse=","),")")
-                    
-                    result
             })
             
             separateCode=function(code){
