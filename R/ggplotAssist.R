@@ -44,7 +44,16 @@
 #' }
 ggplotAssist=function(df=NULL,viewer="browser"){
 
-     
+    # require(stringr)
+    # rawData=read.csv("data-raw/setting.csv",stringsAsFactors = FALSE)
+    # rawData2=read.csv("data-raw/theme.csv",stringsAsFactors = FALSE)
+    # settingData=splitData(rawData,"setting")
+    # settingData=splitData(settingData,"geom")
+    # themeData=splitData(rawData2,"setting")
+    # themeData$geom=themeData$setting
+    # themeData=splitData(themeData,"geom")
+    # allData=full_join(settingData,themeData)
+    # write.csv(allData,"data-raw/all.csv",row.names = FALSE)
     # geomData=read.csv("data-raw/geom.csv",stringsAsFactors = FALSE)
     # settingData=read.csv("data-raw/setting.csv",stringsAsFactors = FALSE)
     # defaultVar=read.csv("data-raw/default.csv",stringsAsFactors = FALSE)
@@ -1025,15 +1034,20 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     temp=paste0(temp,"data=",input$geomdata)
                 }
                 if(input$geoms=="facet_grid"){
-                    if(!is.null(input$labeller)){
-                    if(input$labeller=="label_value"){
+                    if(!is.null(input[["geomText-labeller-text"]])){
+                        # cat('input[["geomText-labeller-text"]]=',input[["geomText-labeller-text"]],"\n")
+                        # cat(input[["geomText-labeller-text"]]=="label_value","\n")
+                    if(input[["geomText-labeller-text"]]=="label_value"){
                     varnames=setdiff(c(input$facetrow,input$facetcol),".")
                     varnames<-c(".default",varnames,".rows",".cols")
+                    # varnames2<-paste0("geomText-",varnames,"-text")
+                    #cat(varnames)
                     count=length(varnames)
-                    mylist=list()
+                    #mylist=list()
                     labeltemp<-""
                     for(i in 1:count){
                         if(!is.null(input[[varnames[i]]])){
+                            #cat("input[['",varnames[i],"']]=",input[[varnames[i]]],"\n")
                         if(input[[varnames[i]]]!="NULL"){
                             if(labeltemp!="") labeltemp=paste0(labeltemp,",")
                             labeltemp=paste0(labeltemp,varnames[i],"=",input[[varnames[i]]])     

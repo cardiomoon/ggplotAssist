@@ -27,7 +27,7 @@
 "facet_wrap","ncol","text","",FALSE,"NULL",NA
 "facet_grid","space","select","fixed,free_x,free_y,free",TRUE,"",NA
 "facet_grid","margins","checkbox","FALSE",FALSE,NA,NA
-"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed",TRUE,"",NA
+"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed",FALSE,"",NA
 "geom_text","parse","checkbox","FALSE",FALSE,"",NA
 "geom_label","parse","checkbox","FALSE",FALSE,"",NA
 "geom_text","nudge_x","numeric","0",FALSE,"",NA
@@ -177,8 +177,13 @@
 "guide_colorbar","label.hjust","text","",FALSE,"",NA
 "guide_legend","label.vjust","text","",FALSE,"",NA
 "guide_colorbar","label.vjust","text","",FALSE,"",NA
+"<<<<<<< HEAD","","","",NA,"",NA
 "guide_legend","keywidth","text","",FALSE,"A numeric or a unit() object",NA
 "guide_legend","keyheight","text","",FALSE,"A numeric or a unit() object",NA
+"=======","","","",NA,"",NA
+"guide_legend","keywidth","text","",FALSE,"",NA
+"guide_legend","keyheight","text","",FALSE,"",NA
+">>>>>>> 911378438e589cebd0bfb14b730ef66d38ebdbeb","","","",NA,"",NA
 "guide_legend","direction","select",",horizontal,vertical",TRUE,"",NA
 "guide_colorbar","direction","select",",horizontal,vertical",TRUE,"",NA
 "guide_legend","default.unit","select","line,npc,cm,inches,mm,points,picas,bigpts,dida,cicero,scaledpts,lines,char,native,snpc,strwidth,strheight,grobwidth,grobheight",TRUE,"",NA
@@ -631,8 +636,21 @@
 "facet_wrap","switch","select","NULL,x,y",TRUE,"By default, the labels are displayed on the top and right of the plot",NA
 "facet_wrap","dir","select","h,v",TRUE,"",NA
 "facet_wrap","strip.position","select","top,bottom,left,right",TRUE,NA,NA
-"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_bquote",TRUE,"",NA
+"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_bquote",FALSE,"",NA
 "theme","line","select","element_line(),element_blank()",FALSE,NA,NA
+"theme","line","select","element_line(),element_blank()",FALSE,NA,NA
+"label_value","labels","text","",FALSE,"Data frame of labels. ",NA
+"label_both","labels","text","",FALSE,"Data frame of labels. ",NA
+"label_context","labels","text","",FALSE,"Data frame of labels. ",NA
+"label_parsed","labels","text","",FALSE,"Data frame of labels. ",NA
+"label_wrap_gen","width","text","25",FALSE,"Maximum number of characters before wrapping the strip.",NA
+"label_value","multi_line","checkbox","TRUE",FALSE,"Whether to display the labels of multiple factors on separate lines",NA
+"label_both","multi_line","checkbox","TRUE",FALSE,"Whether to display the labels of multiple factors on separate lines",NA
+"label_context","multi_line","checkbox","TRUE",FALSE,"Whether to display the labels of multiple factors on separate lines",NA
+"label_parsed","multi_line","checkbox","TRUE",FALSE,"Whether to display the labels of multiple factors on separate lines",NA
+"label_wrap_gen","multi_line","checkbox","TRUE",FALSE,"Whether to display the labels of multiple factors on separate lines",NA
+"label_both","sep","text",": ",TRUE,"String separating variables and values.",NA
+"label_context","sep","text",": ",TRUE,"String separating variables and values.",NA
 "line","line","select","element_line(),element_blank()",FALSE,"","all"
 "rect","rect","select","element_rect(),element_blank()",FALSE,"","all"
 "text","text","select","element_text(),element_blank()",FALSE,"","all"

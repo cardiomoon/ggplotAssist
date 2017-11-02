@@ -173,7 +173,7 @@ textFunction=function(input,output,session,argList=reactive(argList),
          ns <- session$ns
        
          myOptions<-rv$myArgs() 
-         
+        # cat("ns('text')=",ns("text"),"\n")
        tagList(
             if(myOptions$mode=="text") 
                if(editCode())
