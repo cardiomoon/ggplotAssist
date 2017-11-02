@@ -1,3 +1,10 @@
+#'  Binary operator opposite of %in%
+#' @param x a vector
+#' @param y a vector
+#' @export
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+
 #' A shiny app for learn ggplot2
 
 #' @param df A tibble or a tbl_df or a data.frame to manipulate
@@ -64,10 +71,6 @@ ggplotAssist=function(df=NULL,viewer="browser"){
      if(!isNamespaceLoaded("tidyverse")){
           attachNamespace("tidyverse")
      }
-    
-    if(!isNamespaceLoaded("ggplot2")){
-        attachNamespace("ggplot2")
-    }
     
     if(!isNamespaceLoaded("ggthemes")){
         attachNamespace("ggthemes")
@@ -276,7 +279,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        textInput("varset","varset",width="200px"),
                        checkboxInput("addquote","addquote",value=FALSE)),
                        conditionalPanel(condition="input.geoms=='guides'",
-                                        selectInput("guideaes","guideaes",choices="")
+                                        #selectInput("guideaes","guideaes",choices=""),
+                                        textFunctionInput("guideText")
                        ),
                        conditionalPanel(condition="input.type=='setting'", 
                                         uiOutput("varsetUI")
@@ -375,13 +379,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 X
             }
             
-            output$mainText=renderPrint({
-                temp=makeGuideLegend()
-                temp
-            })
-
-            observe(makeGuideLegend())
-            
+           
             output$text=renderPrint({
                 if(input$doPreprocessing) eval(parse(text=input$preprocessing))
                 df=eval(parse(text=input$mydata))
@@ -445,7 +443,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(str_detect(input$geoms,"stat")){
                     updateSelectInput(session,"geom",selected=getDefault(defaultVar,input$geoms,"geom"))
                 }
-                if(input$geoms!="theme"){
+                if(input$geoms %!in% c("theme","guides")){
                     temp=makeLayer()
                     updateTextAreaInput(session,"layer",value=temp)
                 }
@@ -683,102 +681,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
             })
             
-            observeEvent(input$guideaes,{
-                # if(!is.null(input$aes)){
-                # pos=grep(input$aes,layer$aes)
-                # if(length(pos)>0){
-                #     layer$type=layer$type[-pos]
-                #     layer$aes=layer$aes[-pos]
-                #     layer$var=layer$var[-pos]
-                # }
-                # }
-               
-                    # layer$type=addValue(layer$type,"setting")
-                    # layer$aes=addValue(layer$aes,input$aes)
-                    # layer$var=addValue(layer$var,"guide_legend()")
-                   
-                if(input$guideaes %in% c("legend","colorbar","none")){
-                    updateTextInput(session,"guideLegend",value=paste0("'",input$guideaes,"'"))
-                 # layer$type=addValue(layer$type,"setting")
-                 # layer$aes=addValue(layer$aes,input$aes)
-                 # layer$var=addValue(layer$var,paste0("'",input$guideaes,"'"))
-             } 
-            })
-            
-            observeEvent(input$guideLegend,{
-                if(!is.null(input$geoms)){
-                if(input$geoms=="guides"){
-                    if(!is.null(input$aes)){
-                    pos=grep(input$aes,layer$aes)
-                    if(length(pos)>0){
-                        layer$type=layer$type[-pos]
-                        layer$aes=layer$aes[-pos]
-                        layer$var=layer$var[-pos]
-                    }
-                    layer$type=addValue(layer$type,"setting")
-                    layer$aes=addValue(layer$aes,input$aes)
-                    layer$var=addValue(layer$var,input$guideLegend)
-                    }
-                }
-                }
-            })
-            
-            makeGuideLegend=reactive({
-                
-                    if(input$guideaes %in% c("none","colorbar","legend")){
-                        temp=paste0("'",input$guideaes,"'")
-                    } else{
-               
-                        temp=paste0(input$guideaes,"(")
-                        # layer<-NULL
-                        # if(file.exists("layer.csv")) layer=read.csv("layer.csv")
-                        
-                        selected=settingData[str_detect(settingData$geom,input$guideaes),]
-                        count=nrow(selected)
-                        
-                        if(count>0){
-                            for(i in 1:count){
-                                tempvar=selected$setting[i]
-                                value=selected$value[i]
-                                valuechoice=unlist(strsplit(value,","))
-                                valuechoice=str_trim(valuechoice)
-                                if(selected$input[i]=="select") {
-                                    if(!is.null(input[[tempvar]])){
-                                        if(input[[tempvar]]!=valuechoice[1]) {
-                                            temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
-                                        }
-                                    }
-                                } else if(selected$input[i]=="numeric"){
-                                    if(!is.null(input[[tempvar]])){
-                                        
-                                        if(input[[tempvar]]!=value) 
-                                            temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
-                                    }
-                                } else if(selected$input[i]=="text"){
-                                    if(!is.null(input[[tempvar]])){
-                                        if(input[[tempvar]]!=value) {
-                                            if(selected$quoted[i]==TRUE){
-                                                temp=mypaste0(temp,tempvar,"='",input[[tempvar]],"'")
-                                            } else{
-                                                temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
-                                            }
-                                        }
-                                    }
-                                } else if(selected$input[i]=="checkbox"){
-                                    if(!is.null(input[[tempvar]])){
-                                        if(input[[tempvar]]!=value) 
-                                            temp=mypaste0(temp,tempvar,"=",input[[tempvar]])
-                                    }
-                                }
-                            }
-                        }
-                        
-                        temp=paste0(temp,")")
-                    }
-                    updateTextInput(session,"guideLegend",value=temp)
-                    
-                    temp
-            })
+          
             
             # observeEvent(input$addmap,{
             # 
@@ -910,7 +813,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 
                 temp=""
                 if(!is.null(input$geoms)){
-                    if(input$geoms!="theme"){
+                    if(input$geoms %!in% c("theme","guide")){
                 temp=paste0(input$geoms,"(")
                 # layer<-NULL
                 # if(file.exists("layer.csv")) layer=read.csv("layer.csv")
@@ -1347,51 +1250,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     }
                     mylist[[no]]=textFunctionInput("geomText")
                     no=no+1
-                    # mylist[[no]]=textInput("geomText2","geomText2",value="")
-                    # no=no+1
-                    # findob<-input$geoms
-                    # #find exact geom(not ...2, or ...n)
-                    # findob<-paste0(findob,"^2n|",findob,",|",findob,"$")
-                    # if(input$selectedLayer=="guides"){
-                    # if(input$guideaes %in% c("guide_legend","guide_colorbar")) {
-                    #     findob<-input$guideaes
-                    # } else{
-                    #     findob<-"!@#$%"
-                    # } 
-                    # }
-                    # selected=settingData[str_detect(settingData$geom,findob),]
-                    # count=nrow(selected)
-                    # if(count>0){
-                    #     for(i in 1:count){
-                    #         temp=selected$setting[i]
-                    #         value=selected$value[i]
-                    #         placeholder=selected$placeholder[i]
-                    #         mywidth=min((((max(nchar(value),nchar(placeholder))*8)%/%100)+1)*100,200)
-                    #     if(selected$input[i]=="select") {
-                    #         tempid<-temp
-                    #         if(temp %in% c("position","type","color","colour","fill")) {
-                    #             tempid<-paste0(temp,"2")
-                    #         }
-                    #         mychoices=unlist(strsplit(value,",",fixed=TRUE))
-                    #         if(tempid %in% c("colour2","color2","fill2")){
-                    #             mychoices=c(mychoices,colors()[!str_detect(colors(),mychoices)])
-                    #         }
-                    #         if(length(mychoices)>0)
-                    #         mywidth=(((max(nchar(mychoices))*8)%/%100)+1)*100
-                    #         else mywidth=100
-                    #         mylist[[no]]= selectizeInput3(tempid,label=temp,
-                    #                              choices=mychoices,width=mywidth,
-                    #                              options=list(create=TRUE))
-                    #     } else if(selected$input[i]=="numeric"){
-                    #         mylist[[no]]= numericInput3(temp,label=temp,value=as.numeric(value))
-                    #     } else if(selected$input[i]=="text"){
-                    #         mylist[[no]]=textInput3(temp,label=temp,value=value,placeholder=placeholder,width=mywidth)
-                    #     } else if(selected$input[i]=="checkbox"){
-                    #         mylist[[no]]= checkboxInput3(temp,label=temp,value=as.logical(value))
-                    #     }
-                    #         no=no+1
-                    #     }
-                    # }
+                    
+                  
                     if(input$geoms %in% c("scale_x_log10","scale_y_log10")){
                         mylist[[no]]=actionButton("addMathFormat","Add math_format")
                         no=no+1
@@ -1436,11 +1296,15 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             
             
             observe({
+               
+                    
                 rv$argList<-list(label="text",mode="text",value=input$geoms,choices=NULL,width=200,
                                  bg="lightcyan",placeholder="")
                 
                 rv$argList2<-list(label="text",mode="text",value=input$args,choices=NULL,width=200,
                                   bg="lightcyan",placeholder="")
+                
+                rv$argList3<-list(label="text",mode="select",label=input$aes,choices=c("'legend'","guide_legend()","'colorbar'","guide_colorbar()","'none'"),width=200)
             })
             
             result=callModule(textFunction,"geomText",argList=reactive(rv$argList),
@@ -1449,6 +1313,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             result2=callModule(textFunction,"theme",argList=reactive(rv$argList2),
                         editCode=reactive(FALSE),settingData=reactive(allData))
             
+            result3=callModule(textFunction,"guideText",argList=reactive(rv$argList3),
+                               editCode=reactive(TRUE),settingData=reactive(settingData))
+            
             observe({
                 #updateTextAreaInput(session,"geomText2",value=result())
                 if(!is.null(input$args)) {
@@ -1456,6 +1323,18 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                     updateTextAreaInput(session,"layer",value=temp)
                 }
                 
+            })
+            
+            observe({
+                #updateTextAreaInput(session,"geomText2",value=result())
+                if((!is.null(input$geoms))&(!is.null(input$aes))) {
+                   if(input$geoms=="guides"){
+                    temp=paste0("guides(",input$aes,"=",result3(),")")
+                    updateTextAreaInput(session,"layer",value=temp)
+                   }
+                    
+                }
+
             })
             
             separateCode=function(code){

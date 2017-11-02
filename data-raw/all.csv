@@ -181,8 +181,6 @@
 "guide_legend","keywidth","text","",FALSE,"A numeric or a unit() object",NA
 "guide_legend","keyheight","text","",FALSE,"A numeric or a unit() object",NA
 "=======","","","",NA,"",NA
-"guide_legend","keywidth","text","",FALSE,"",NA
-"guide_legend","keyheight","text","",FALSE,"",NA
 ">>>>>>> 911378438e589cebd0bfb14b730ef66d38ebdbeb","","","",NA,"",NA
 "guide_legend","direction","select",",horizontal,vertical",TRUE,"",NA
 "guide_colorbar","direction","select",",horizontal,vertical",TRUE,"",NA

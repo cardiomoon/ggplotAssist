@@ -97,8 +97,6 @@
 "guide_legend","keywidth","text","",FALSE,"A numeric or a unit() object"
 "guide_legend","keyheight","text","",FALSE,"A numeric or a unit() object"
 "=======","","","",NA,""
-"guide_legend","keywidth","text","",FALSE,""
-"guide_legend","keyheight","text","",FALSE,""
 ">>>>>>> 911378438e589cebd0bfb14b730ef66d38ebdbeb","","","",NA,""
 "guide_legend,guide_colorbar","direction","select",",horizontal,vertical",TRUE,""
 "guide_legend,guide_colorbar","default.unit","select","line,npc,cm,inches,mm,points,picas,bigpts,dida,cicero,scaledpts,lines,char,native,snpc,strwidth,strheight,grobwidth,grobheight",TRUE,""
