@@ -185,7 +185,7 @@
 "arrow","ends","select","last, first,both",TRUE,""
 "arrow","type","select","open,closed",TRUE,""
 "theme_grey,theme_gray,theme_bw,theme_linedraw,theme_light,theme_dark,theme_minimal,theme_classic,theme_void,theme_test,theme_stata,theme_tufte","base_size","text","11",FALSE,""
-"theme_grey,theme_gray,theme_bw,theme_linedraw,theme_light,theme_dark,theme_minimal,theme_classic,theme_void,theme_test","base_family","select",",",TRUE,""
+"theme_grey,theme_gray,theme_bw,theme_linedraw,theme_light,theme_dark,theme_minimal,theme_classic,theme_void,theme_test","base_family","select",",mono,sans,serif,Courier,Helvetica,Times",TRUE,""
 "theme_grey,theme_gray,theme_bw,theme_linedraw,theme_light,theme_dark,theme_minimal,theme_classic,theme_void,theme_test","base_line_size","text","base_size/22",FALSE,""
 "theme_grey,theme_gray,theme_bw,theme_linedraw,theme_light,theme_dark,theme_minimal,theme_classic,theme_void,theme_test","base_rect_size","text","base_size/22",FALSE,""
 "theme_wsj,theme_excel,theme_fivethirtyeight","base_size","text","12",FALSE,""

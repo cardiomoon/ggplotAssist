@@ -89,3 +89,17 @@ You can use the `ggplotAssist()` function as a regular function, e.g. in a comma
 ```r
 result <- ggplotAssist(mtcars)
 ```
+
+# Other topics
+
+## How to use guide_colorbar()?
+
+
+http://rpubs.com/cardiomoon/322415
+
+## Recursive shiny module for functionals
+
+
+There are many functions that takes a function as an input : **Functionals**. To handle a functional in a shiny app, you have to make a shiny module that allows **recursive** call. I have included an recursive shiny module `textFunction` in my package ggplotAssist. The UI of textFunction shiny module is `textFunctionInput` and the server function is `textFunction`. I also included two toy shiny app to demonstrate the recursive shiny module.
+
+You can read the full story at https://github.com/cardiomoon/ggplotAssist/blob/master/textFunctionInput.md
