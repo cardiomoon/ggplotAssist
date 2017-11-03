@@ -1,9 +1,20 @@
 library(ggplotAssist)
 library(shiny)
+library(markdown)
 # Only run examples in interactive R sessions
 if(interactive()){
     ui=fluidPage(
+        h3("Recursive Shiny Module for Functionals"), 
+        hr(),
+        HTML(markdownToHTML(fragment.only=TRUE, 
+                            text="There are many functions that takes a function as an input : `Functionals`. 
+                            To handle a functional in a shiny app, you have to make a shiny module that allows `recursive` call.
+                            I have included an recursive shiny module `textFunction` in my package ggplotAssist. 
+                            The UI of textFunction shiny module is `textFunctionInput` and the server function is `textFunction`.
+                            Please try to select one of the functions in the following selectInput.")),
+        hr(),
         textFunctionInput("select"),
+        hr(),
         textOutput("text")
     )
     server=function(input,output,session){

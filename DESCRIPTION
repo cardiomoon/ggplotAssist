@@ -21,7 +21,8 @@ Imports:
     editData
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    markdown
 Authors@R: person("Keon-Woong", "Moon", email = "cardiomoon@gmail.com",
     role = c("aut", "cre"))
 URL: https://github.com/cardiomoon/ggplotAssist
