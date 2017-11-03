@@ -52,11 +52,53 @@ textInput4=function (inputId, label, value = "",width=100,bg=NULL,...)
                     style=style,spellcheck="false",autocorrect="off",...))
 }
 
+#' Create side-by side textAreaInput with disabled spell check
+#' 
+#' @param inputId The input slot that will be used to access the value.
+#' @param label Display label for the control, or NULL for no label.
+#' @param value Initial value.
+#' @param width The width of the input in pixel
+#' @param bg backgroung color
+#' @param ... arguments to be passed to textInput
+#' @export
+#' @examples 
+#' library(shiny)
+#' # Only run examples in interactive R sessions
+#' if (interactive()) {
+#'      ui <- fluidPage(
+#'           textAreaInput4("Code","Code","")
+#'      )
+#'      server <- function(input, output) {
+#'           
+#'      }
+#'      shinyApp(ui, server)
+#' }  
+textAreaInput4=function (inputId, label, value = "",bg=NULL,width="100%",...)
+{
+    style=paste0("width: ",width,";")
+    if(!is.null(bg)) style=paste0(style,"background-color:",bg,";")
+    div(class="form-group shiny-input-container",
+        tags$style(type="text/css", "textarea {width:100%}"),
+        if(!is.null(label)) tags$label(label, `for` = inputId),
+        tags$textarea(id = inputId, value = value,
+                   style=style,spellcheck="false",autocorrect="off",...))
+}
+
+# textareaInput<-function(inputId, label="",value="", rows=8, width=100){
+#     div(class="form-group shiny-input-container",
+#         tags$style(type="text/css", "textarea {width:100%}"),
+#         tags$textarea(id = inputId, placeholder = label, rows = rows, value=value,
+#                       style=paste("width: ",width,"px; display:inline-block;",sep=""))
+#     )    
+# }
+
+
 
 #'Elongate data.frame with column split by comma
 #'
 #' @param df a data.frame
 #' @param colname column name
+#' @export
 #' @return An elongated data.frame        
 splitData=function(df,colname){
      
@@ -88,27 +130,28 @@ splitData=function(df,colname){
 #' @importFrom shiny NS
 #' @export
 #' @examples
+#' library(ggplotAssist)
 #' library(shiny)
-#' # Only run examples in interactive R sessions
-#' if (interactive()) {
-#'   ui=fluidPage(
-#'       textFunctionInput("text"),
-#'       textOutput("text")
-#'   )
-#'   server=function(input,output,session){
-#'        
-#'        rawData=read.csv("data-raw/setting.csv",stringsAsFactors = FALSE)
-#'        settingData=splitData(rawData,"setting")
-#'        argList<-list(label="text",mode="text",value="element_text()",choices=NULL,width=200,
-#'               bg="lightcyan",placeholder="")
-#'        result=callModule(textFunction,"text",argList=reactive(rv$argList),
-#'               editCode=reactive(TRUE),settingData=reactive(settingData))
-#'        output$text=renderText({
-#'             result()
-#'        })
-#'   }
-#'   shinyApp(ui,server)
-#' }
+#'# Only run examples in interactive R sessions
+#'if(interactive()){
+#' ui=fluidPage(
+#'    textFunctionInput("text"),
+#'    textOutput("text")
+#')
+#'server=function(input,output,session){
+#'    rv=reactiveValues()
+#'    rawData=read.csv("data-raw/setting.csv",stringsAsFactors = FALSE)
+#'    settingData=splitData(rawData,"setting")
+#'    rv$argList<-list(label="text",mode="text",value="element_text()",choices=NULL,width=200,
+#'                     bg="lightcyan",placeholder="")
+#'    result=callModule(textFunction,"text",argList=reactive(rv$argList),
+#'                      editCode=reactive(TRUE),settingData=reactive(settingData))
+#'    output$text=renderText({
+#'        result()
+#'    })
+#'}
+#'shinyApp(ui,server)
+#'}
 textFunctionInput=function(id){ 
     ns<-NS(id)
     
@@ -332,8 +375,4 @@ textFunction=function(input,output,session,argList=reactive(argList),
     return(myfunction)
 }
 
-updateTextFunctionInput=function (session, inputId, value = NULL) 
-{
-    message <- list( value = value)
-    session$sendInputMessage(inputId, message)
-}
+

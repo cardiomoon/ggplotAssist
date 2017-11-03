@@ -2,6 +2,8 @@
 
 export(ggplotAssist)
 export(selectizeInput3)
+export(splitData)
+export(textAreaInput4)
 export(textFunction)
 export(textFunctionInput)
 export(textInput4)

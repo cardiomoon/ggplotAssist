@@ -1,10 +1,3 @@
-#'  Binary operator opposite of %in%
-#' @param x a vector
-#' @param y a vector
-#' @export
-'%!in%' <- function(x,y)!('%in%'(x,y))
-
-
 #' A shiny app for learn ggplot2
 
 #' @param df A tibble or a tbl_df or a data.frame to manipulate
@@ -121,6 +114,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
     statchoices=c("",sort(c(unique(defaultVar[defaultVar$var=="stat",]$default),"qq")))
     
     
+    '%!in%' <- function(x,y) {!('%in%'(x,y))}
+    
     getDefault=function(data,geoms,vars){
         result <- data %>% 
             filter(str_detect(data[["geom"]],geoms),str_detect(data[["var"]],vars)) %>%
@@ -212,7 +207,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 column(3,
                        h3("Data / Preprocessing"),
                        materialSwitch("doPreprocessing","Preprocessing",value=FALSE,status="success",right=TRUE),
-                       textAreaInput("preprocessing",NULL,value="",rows=3,placeholder="Enter R codes for preprocessing here !"),
+                       textAreaInput4("preprocessing",NULL,value="",rows=3,placeholder="Enter R codes for preprocessing here !"),
                        textInput("mydata","Enter data name",value=mydata),
                        materialSwitch("showDataStr","show str",status="success",right=TRUE)),
                 column(2,
@@ -230,7 +225,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 ),
                 column(4,
                        h3("R code for ggplot"),
-                       textAreaInput("maincode",NULL,value="",rows=3),
+                       textAreaInput4("maincode",NULL,value="",rows=3),
                        actionButton("resetmain","reset"),
                        conditionalPanel(condition="true==false",
                        verbatimTextOutput("mainText"))
@@ -310,7 +305,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 ),
                 column(4,
                        h4("Layer under construction"),
-                       textAreaInput("layer",NULL,value="",rows=2),
+                       textAreaInput4("layer",NULL,value="",rows=2,placeholder="R code for layer"),
                        #actionButton("updatePreview","Update Preview"),
                        actionButton("addlayer","Add Layer"),
                        actionButton("resetmap","reset"),
@@ -343,7 +338,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                    verbatimTextOutput("codes")),
                    conditionalPanel(condition="input.Option==1",
                                    
-                                    textAreaInput("CodeUC",NULL,value="",height="100px",width="500px"),
+                                    textAreaInput4("CodeUC",NULL,value="",height="100px",width="500px",rows=4),
                                     plotOutput("plot3",width="400px",height="300px")
                    )
                )
