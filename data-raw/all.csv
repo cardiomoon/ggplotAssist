@@ -649,6 +649,26 @@
 "label_wrap_gen","multi_line","checkbox","TRUE",FALSE,"Whether to display the labels of multiple factors on separate lines",NA
 "label_both","sep","text",": ",TRUE,"String separating variables and values.",NA
 "label_context","sep","text",": ",TRUE,"String separating variables and values.",NA
+"position_dodge","width","text","",FALSE,"Dodging width, when different to the width of the individual elements. ",NA
+"position_dodge2","width","text","",FALSE,"Dodging width, when different to the width of the individual elements. ",NA
+"position_dodge","preserve","select","total,single",TRUE,"",NA
+"position_dodge","padding","text","0.1",FALSE,"Padding between elements at the same position. ",NA
+"position_dodge2","reverse","checkbox","FALSE",FALSE,"If TRUE, will reverse the default stacking order. This is useful if you're rotating both the plot and legend.",NA
+"position_stack","vjust","text","1",FALSE,"Vertical adjustment for geoms that have a position (like points or lines), not a dimension (like bars or areas). 0-1",NA
+"position_fill","vjust","text","1",FALSE,"Vertical adjustment for geoms that have a position (like points or lines), not a dimension (like bars or areas). 0-1",NA
+"position_stack","reverse","checkbox","FALSE",FALSE,"if TRUE, will reverse the default stacking order. This is useful if you're rotating both the plot and legend.",NA
+"position_fill","reverse","checkbox","FALSE",FALSE,"if TRUE, will reverse the default stacking order. This is useful if you're rotating both the plot and legend.",NA
+"position_jitter","width","text","NULL",FALSE,"Amount of horizontal jitter.",NA
+"position_jitter","height","text","NULL",FALSE,"Amount of vertical  jitter.",NA
+"position_jitter","seed","text",NA,FALSE,"A random seed to make the jitter reproducible.",NA
+"position_jitterdodge","jitter.width","text","NULL",FALSE,"degree of jitter in x direction. Defaults to 40% of the resolution of the data.",NA
+"position_jitterdodge","jitter.height","text","0",FALSE,"degree of jitter in y direction. Defaults to 0.",NA
+"position_jitterdodge","dodge.width","text","0.75",FALSE,"the amount to dodge in the x direction. Defaults to 0.75, the default position_dodge() width.",NA
+"position_nudge","x","text","0",FALSE,"Amount of vertical and horizontal distance to move.
+",NA
+"position_nudge","y","text","0",FALSE,"Amount of vertical and horizontal distance to move.
+",NA
+"position_dodge2","preserve","select","single,total",TRUE,"",NA
 "line","line","select","element_line(),element_blank()",FALSE,"","all"
 "rect","rect","select","element_rect(),element_blank()",FALSE,"","all"
 "text","text","select","element_text(),element_blank()",FALSE,"","all"

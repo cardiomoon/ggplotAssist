@@ -1,6 +1,7 @@
 library(ggplotAssist)
 library(shiny)
 library(markdown)
+library(stringr)
 # Only run examples in interactive R sessions
 if(interactive()){
     ui=fluidPage(
@@ -24,7 +25,7 @@ if(interactive()){
         rawData=read.csv(filename,stringsAsFactors = FALSE)
         settingData=splitData(rawData,"setting")
         settingData=splitData(settingData,"geom")
-        rv$argList<-list(label="Select fucntion",mode="select",
+        rv$argList<-list(label="Select function",mode="select",
                          choices=c("element_text()","element_line()","guide_colorbar()","guide_legend()"),width=200
                          )
         result=callModule(textFunction,"select",argList=reactive(rv$argList),
@@ -32,6 +33,7 @@ if(interactive()){
         output$text=renderText({
             result()
         })
+        
     }
     shinyApp(ui,server)
 }

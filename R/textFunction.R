@@ -225,6 +225,7 @@ textFunction=function(input,output,session,argList=reactive(argList),
                             placeholder=myOptions$placeholder),
             if(myOptions$mode=="select")
                  selectizeInput3(ns("text"),label=myOptions$label,choices=myOptions$choices,
+                                 selected=myOptions$selected,
                               width=myOptions$width,options=list(create=TRUE)),
             uiOutput3(ns("functionInput2"))
        )

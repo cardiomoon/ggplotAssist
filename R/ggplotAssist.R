@@ -254,8 +254,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        h4("Aesthetics"),
                        selectInput("aes","aes",choices=aeses,selectize=FALSE,size=10),
                        conditionalPanel(condition="input.selectedLayer=='geom'|input.selectedLayer=='stat'",
-                       selectInput("position","position",
-                                   choices=c("","stack","fill","dodge","jitter","nudge","identity"))),
+                          # selectInput("position","position",
+                          #          choices=c("","stack","fill","dodge","jitter","nudge","identity"))
+                          textFunctionInput("position")
+                       ),
                        conditionalPanel(condition="input.selectedLayer=='geom'",
                                         selectInput("stat","stat",choices=statchoices)),
                        conditionalPanel(condition="input.selectedLayer=='stat'",
@@ -429,8 +431,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"aes",choices=choices,selected="")
                 updateSelectInput(session,"var",selected="")
                 
+                # selectInput("position","position",
+                #             choices=c("","stack","fill","dodge","jitter","nudge","identity"))
                 if(str_detect(input$geoms,"[geom|stat]")){
-                    updateSelectInput(session,"position",selected=getDefault(defaultVar,input$geoms,"position"))
+                    updateSelectizeInput(session,"position-text",
+                                         selected=getDefault(defaultVar,input$geoms,"position"))
                 }
                 if(str_detect(input$geoms,"geom")){
                     updateSelectInput(session,"stat",selected=getDefault(defaultVar,input$geoms,"stat"))
@@ -572,21 +577,39 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
             })
             
-            observeEvent(input$position,{
+            
+            # selectInput("position","position",
+            #             choices=c("","stack","fill","dodge","jitter","nudge","identity"))
+            #             
+            rv$argList4<-list(label="Position",mode="select",
+                             choices=c("","stack","fill","dodge","dodge2","jitter","nudge","identity",
+                                               "position_dodge()","position_dodge2()","position_fill()",
+                                               "position_identity()","position_jitter()","position_jitterdodge()",
+                                               "position_nudge()","position_stack()"),width=150
+            )
+            result4=callModule(textFunction,"position",argList=reactive(rv$argList4),
+                              editCode=reactive(TRUE),settingData=reactive(settingData))
+
+            observeEvent(input[["position-text"]],{
+                
+                cat("position-text\n")
                 if(input$selectedLayer!="scale"){
-                if(input$position!=""){
+                    if(!is.null(input[["position-text"]])){
+                if(input[["position-text"]]!=""){
                     if("position" %in% layer$aes){
                         pos=str_detect(layer$aes,"position")
                         layer$type=layer$type[!pos]
                         layer$aes=layer$aes[!pos]
                         layer$var=layer$var[!pos]
                     }
-                    if(input$position!=getDefault(defaultVar,input$geoms,"position")){
-                        myvar=paste0("'",input$position,"'")
+                    if(input[["position-text"]]!=getDefault(defaultVar,input$geoms,"position")){
+                        myvar=result4()
+                        if(!str_detect(myvar,"\\(")) myvar=paste0("'",myvar,"'")
                         layer$type=addValue(layer$type,"setting")
                         layer$aes=addValue(layer$aes,"position")
                         layer$var=addValue(layer$var,myvar)
                     }
+                }
                 }
                 temp=makeLayer()
             
@@ -594,6 +617,35 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
                
             })
+            observeEvent(result4(),{
+                
+               
+                if(input$selectedLayer!="scale"){
+                    if(!is.null(input[["position-text"]])){
+                        if(input[["position-text"]]!=""){
+                            if("position" %in% layer$aes){
+                                pos=str_detect(layer$aes,"position")
+                                layer$type=layer$type[!pos]
+                                layer$aes=layer$aes[!pos]
+                                layer$var=layer$var[!pos]
+                            }
+                            if(input[["position-text"]]!=getDefault(defaultVar,input$geoms,"position")){
+                                myvar=result4()
+                                if(!str_detect(myvar,"\\(")) myvar=paste0("'",myvar,"'")
+                                layer$type=addValue(layer$type,"setting")
+                                layer$aes=addValue(layer$aes,"position")
+                                layer$var=addValue(layer$var,myvar)
+                            }
+                        }
+                    }
+                    temp=makeLayer()
+                    
+                    updateTextAreaInput(session,"layer",value=temp)
+                }
+                
+            })
+            
+            
             observeEvent(input$stat,{
                 if(input$stat!=""){
                     if("stat" %in% layer$aes){
@@ -1415,7 +1467,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
 #'}
 selectizeInput3=function (..., width = 100)
 {
-    mywidth = paste(width, "px", sep = "")
+    mywidth = paste0(width, "px")
     div(style = "display:inline-block;", selectizeInput(..., width = mywidth))
 }
 
