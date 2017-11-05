@@ -181,6 +181,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
         mapping
     }
     
+    
+    
+    
+    
+    
     settingData=splitData(settingData,"setting")
     settingData=splitData(settingData,"geom")
     themeData=splitData(themeData,"setting")
@@ -226,8 +231,9 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 column(4,
                        h3("R code for ggplot"),
                        textAreaInput4("maincode",NULL,value="",rows=3),
-                       actionButton("resetmain","reset"),
-                       conditionalPanel(condition="true==false",
+                       actionButton("resetmain","Reset"),
+                       actionButton("resetAll","Reset All"),
+                       conditionalPanel(condition="true==true",
                        verbatimTextOutput("mainText"))
                        )
                 ),
@@ -268,8 +274,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        conditionalPanel(condition="input.type=='mapping'", 
                                         h4("mapping"),
                                         checkboxInput("asFactor2","as factor",value=FALSE),
-                                        selectInput("var","var",choices=colnames(data),
-                                                    selectize=FALSE,size=min(8,colno),selected="")),
+                                        selectInput("var","var",
+                                                    choices=c(colnames(data),"1","..density..","..count..","..prop.."),selectize=FALSE,size=min(8,colno),selected="")),
                        conditionalPanel(condition="input.type=='setting'", 
                                         h4("setting")),
                        conditionalPanel(condition="input.geoms!='guides'", 
@@ -294,13 +300,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                        selectize=FALSE,size=30,selected="")
                     ),
                     column(3,
-                           #textInput("arg","arg",value=""),
-                           # uiOutput("argsUI"),
-                           # textInput("argresult","argresult",value=""),
-                           # conditionalPanel(condition="true==false",
-                           # textInput("argresult2","argresult2",value=""),
-                           # textAreaInput("argresult3","argresult3",value="")
-                           # )
+                          
                            textFunctionInput("theme")
                            
                     )
@@ -310,12 +310,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        textAreaInput4("layer",NULL,value="",rows=2,placeholder="R code for layer"),
                        #actionButton("updatePreview","Update Preview"),
                        actionButton("addlayer","Add Layer"),
-                       actionButton("resetmap","reset"),
+                       actionButton("resetmap","Reset Layer"),
+                       hr(),
                        conditionalPanel(condition="true==false",
                                         numericInput("layerno","layerno",value=0)),
                        
-                       selectInput("layers","Added layers",choices="",selectize=FALSE,size=5),
-                       actionButton("dellayer","Delete Layer")
+                       selectInput("layers","Added layers",choices="",selectize=FALSE,size=7),
+                       actionButton("dellayer","Delete Layer"),
+                       actionButton("delAllLayer","Delete All Layers")
                        #,verbatimTextOutput("test2")
                        
                        
@@ -376,7 +378,33 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 X
             }
             
-           
+            # extractBarMapping=function(){
+            #     x=c(input$maincode,input$layer,layers$layer)
+            #     mapping=c()
+            #     if(length(x)>0){
+            #         for(i in 1:length(x)){
+            #             
+            #             if(str_detect(x[i],"ggplot")|str_detect(x[i],"geom_bar")
+            #                |str_detect(x[i],"geom_bar")) {
+            #                 result<-tryCatch(eval(parse(text=x[i])),error=function(e) "error")
+            #                 
+            #                 if(!("character" %in% class(result))){
+            #                     mapping=c(mapping,result$mapping) 
+            #                 }
+            #             }
+            #         }
+            #     }
+            #     mapping
+            #     names=c("x","x","fill","fill","color")
+            #     
+            #     if(sum(str_detect(names(mapping),"x"))>1){
+            #         
+            #     }
+            # }
+            
+           output$mainText=renderPrint({
+                str(extractBarMapping())
+           })
             output$text=renderPrint({
                 if(input$doPreprocessing) eval(parse(text=input$preprocessing))
                 df=eval(parse(text=input$mydata))
@@ -543,10 +571,10 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 data1<-eval(parse(text=input$mydata))
                 
                 if(!is.null(data1)) {
+                    mychoices=c(colnames(data1),"1","..density..","..count..","..prop..")
                     updateSelectInput(session,"varmain",
-                                      choices=c(colnames(data1),
-                                                "1","..density..","..count..","..prop.."),selected="")
-                    updateSelectInput(session,"var",choices=colnames(data1),selected="")
+                                      choices=mychoices,selected="")
+                    updateSelectInput(session,"var",choices=mychoices,selected="")
                     
                 }
                 
@@ -572,7 +600,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
                 
                 if(!is.null(data1)) {
-                    updateSelectInput(session,"var",choices=colnames(data1),selected="")
+                    updateSelectInput(session,"var",choices=c(colnames(data1),"1","..density..","..count..","..prop.."),selected="")
                     
                 }
             })
@@ -590,33 +618,33 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             result4=callModule(textFunction,"position",argList=reactive(rv$argList4),
                               editCode=reactive(TRUE),settingData=reactive(settingData))
 
-            observeEvent(input[["position-text"]],{
-                
-                cat("position-text\n")
-                if(input$selectedLayer!="scale"){
-                    if(!is.null(input[["position-text"]])){
-                if(input[["position-text"]]!=""){
-                    if("position" %in% layer$aes){
-                        pos=str_detect(layer$aes,"position")
-                        layer$type=layer$type[!pos]
-                        layer$aes=layer$aes[!pos]
-                        layer$var=layer$var[!pos]
-                    }
-                    if(input[["position-text"]]!=getDefault(defaultVar,input$geoms,"position")){
-                        myvar=result4()
-                        if(!str_detect(myvar,"\\(")) myvar=paste0("'",myvar,"'")
-                        layer$type=addValue(layer$type,"setting")
-                        layer$aes=addValue(layer$aes,"position")
-                        layer$var=addValue(layer$var,myvar)
-                    }
-                }
-                }
-                temp=makeLayer()
-            
-                updateTextAreaInput(session,"layer",value=temp)
-                }
-               
-            })
+            # observeEvent(input[["position-text"]],{
+            #     
+            #     
+            #     if(input$selectedLayer!="scale"){
+            #         if(!is.null(input[["position-text"]])){
+            #     if(input[["position-text"]]!=""){
+            #         if("position" %in% layer$aes){
+            #             pos=str_detect(layer$aes,"position")
+            #             layer$type=layer$type[!pos]
+            #             layer$aes=layer$aes[!pos]
+            #             layer$var=layer$var[!pos]
+            #         }
+            #         if(input[["position-text"]]!=getDefault(defaultVar,input$geoms,"position")){
+            #             myvar=result4()
+            #             if(!str_detect(myvar,"\\(")) myvar=paste0("'",myvar,"'")
+            #             layer$type=addValue(layer$type,"setting")
+            #             layer$aes=addValue(layer$aes,"position")
+            #             layer$var=addValue(layer$var,myvar)
+            #         }
+            #     }
+            #     }
+            #     temp=makeLayer()
+            # 
+            #     updateTextAreaInput(session,"layer",value=temp)
+            #     }
+            #    
+            # })
             observeEvent(result4(),{
                 
                
@@ -803,13 +831,24 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"var",selected="")
                 #updateAceEditor(session,"layer",value="")
                 updateSelectInput(session,"aes",selected="")
-                updateTextInput(session,"argresult",value="") 
-                updateTextInput(session,"argresult2",value="") 
+                
             })
             
             observeEvent(input$resetmain,{
                 resetMain()
-                # updateRadioGroupButtons(session,"selectedLayer","Select", choices = c("geom", "stat", "coord", "theme","facet","labs","guides","scale","annotate"),status="success")
+                temp=makeMain()
+                updateTextAreaInput(session,"maincode",value=temp)
+            })
+            
+            observeEvent(input$resetAll,{
+                
+                layers$layer <- NULL
+                updateSelectInput(session,"layers",choices="")
+                updateNumericInput(session,"layerno",value=0)
+                resetMain()
+                temp=makeMain()
+                updateTextAreaInput(session,"maincode",value=temp)
+              
             })
             
             
@@ -825,13 +864,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateSelectInput(session,"var",selected="")
                 updateTextInput(session,"varset",value="")
                 updateTextAreaInput(session,"layer",value="")
-                updateTextAreaInput(session,"argresult3",value="")
+                
                
             }
             resetMain=function(){
                 # if(file.exists("main.csv")) {
                 #     file.remove("main.csv")
                 # } 
+                # 
                 main$type <-c()
                 main$aes <-c()
                 main$var <-c()
@@ -1053,15 +1093,6 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 temp
             }
             
-            observeEvent(input$resetmain,{
-                
-                temp=makeMain()
-                
-                updateTextAreaInput(session,"maincode",value=temp)
-            })
-            
-           
-            
             # output$mainPlot=renderPlot({
             #     #input$addmain
             #     input$resetmain
@@ -1153,6 +1184,13 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 # write.csv(layers,"layers.csv",row.names=FALSE)
                 updateSelectInput(session,"layers",choices=layers$layer)
                 updateNumericInput(session,"layerno",value=input$layerno-1)
+                
+            })
+            observeEvent(input$delAllLayer,{
+                layers$layer <- NULL
+                
+                updateSelectInput(session,"layers",choices="")
+                updateNumericInput(session,"layerno",value=0)
                 
             })
             
@@ -1314,7 +1352,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             output$labellerUI=renderUI({
                  varnames=setdiff(c(input$facetrow,input$facetcol),".")
                  mychoices=c("NULL","label_value","label_both","label_bquote"
-                             ,"label_context","label_parsed","label_wrap_gen")
+                             ,"label_context","label_parsed","label_wrap_gen()")
                  varnames<-c(varnames,".rows",".cols",".default")
                  count=length(varnames)
                  mylist=list()

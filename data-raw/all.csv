@@ -27,7 +27,7 @@
 "facet_wrap","ncol","text","",FALSE,"NULL",NA
 "facet_grid","space","select","fixed,free_x,free_y,free",TRUE,"",NA
 "facet_grid","margins","checkbox","FALSE",FALSE,NA,NA
-"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed",FALSE,"",NA
+"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed,label_value(),label_both(),label_context(),label_parsed(),label_wrap_gen()",FALSE,"",NA
 "geom_text","parse","checkbox","FALSE",FALSE,"",NA
 "geom_label","parse","checkbox","FALSE",FALSE,"",NA
 "geom_text","nudge_x","numeric","0",FALSE,"",NA
@@ -634,7 +634,7 @@
 "facet_wrap","switch","select","NULL,x,y",TRUE,"By default, the labels are displayed on the top and right of the plot",NA
 "facet_wrap","dir","select","h,v",TRUE,"",NA
 "facet_wrap","strip.position","select","top,bottom,left,right",TRUE,NA,NA
-"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_bquote",FALSE,"",NA
+"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_value(),label_both(),label_context(),label_parsed(),label_wrap_gen()",FALSE,"",NA
 "theme","line","select","element_line(),element_blank()",FALSE,NA,NA
 "theme","line","select","element_line(),element_blank()",FALSE,NA,NA
 "label_value","labels","text","",FALSE,"Data frame of labels. ",NA
@@ -660,7 +660,7 @@
 "position_fill","reverse","checkbox","FALSE",FALSE,"if TRUE, will reverse the default stacking order. This is useful if you're rotating both the plot and legend.",NA
 "position_jitter","width","text","NULL",FALSE,"Amount of horizontal jitter.",NA
 "position_jitter","height","text","NULL",FALSE,"Amount of vertical  jitter.",NA
-"position_jitter","seed","text",NA,FALSE,"A random seed to make the jitter reproducible.",NA
+"position_jitter","seed","text","",FALSE,"A random seed to make the jitter reproducible.",NA
 "position_jitterdodge","jitter.width","text","NULL",FALSE,"degree of jitter in x direction. Defaults to 40% of the resolution of the data.",NA
 "position_jitterdodge","jitter.height","text","0",FALSE,"degree of jitter in y direction. Defaults to 0.",NA
 "position_jitterdodge","dodge.width","text","0.75",FALSE,"the amount to dodge in the x direction. Defaults to 0.75, the default position_dodge() width.",NA
@@ -716,8 +716,8 @@
 "legend.text.align","legend.text.align","text","",FALSE,"alignment of legend labels (number from 0 (left) to 1 (right))","legend"
 "legend.title","legend.title","select","element_text(),element_blank()",FALSE,"","legend"
 "legend.title.align","legend.title.align","text","",FALSE,"alignment of legend title (number from 0 (left) to 1 (right))","legend"
-"legend.position","legend.position","select",",right,bottom,left,top,none",FALSE,"","legend"
-"legend.direction","legend.direction","select","horizontal,vertical",FALSE,"","legend"
+"legend.position","legend.position","select",",right,bottom,left,top,none",TRUE,"","legend"
+"legend.direction","legend.direction","select","horizontal,vertical",TRUE,"","legend"
 "legend.justification","legend.justification","text","",FALSE,"","legend"
 "legend.box","legend.box","select","horizontal,vertical",TRUE,"","legend"
 "legend.box.just","legend.box.just","select","top,bottom,left,right",TRUE,"","legend"

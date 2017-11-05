@@ -344,8 +344,9 @@ textFunction=function(input,output,session,argList=reactive(argList),
                      if(selected$input[i]=="select") defaultValue=valuechoice[1]
                      else defaultValue=value
                      if(!is.null(resultCode)){
-                         
-                     if(resultCode!=defaultValue){
+                         # cat("resultCode=",resultCode,"\n")
+                         # cat("defaultValue=",defaultValue,"\n")
+                     if(!identical(resultCode,defaultValue)){
                         if(tempcode!="") tempcode=paste0(tempcode,",")
                         if(selected$quoted[i]) tempcode=paste0(tempcode,temp,"='",resultCode,"'")
                         else tempcode=paste0(tempcode,temp,"=",resultCode)

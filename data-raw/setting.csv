@@ -11,7 +11,7 @@
 "facet_wrap","nrow,ncol","text","",FALSE,"NULL"
 "facet_grid","space","select","fixed,free_x,free_y,free",TRUE,""
 "facet_grid","margins","checkbox","FALSE",FALSE,NA
-"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed",FALSE,""
+"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed,label_value(),label_both(),label_context(),label_parsed(),label_wrap_gen()",FALSE,""
 "geom_text,geom_label","parse","checkbox","FALSE",FALSE,""
 "geom_text,geom_label","nudge_x","numeric","0",FALSE,""
 "geom_text,geom_label","nudge_y","numeric","0",FALSE,""
@@ -257,7 +257,7 @@
 "facet_grid,facet_wrap","switch","select","NULL,x,y",TRUE,"By default, the labels are displayed on the top and right of the plot"
 "facet_wrap","dir","select","h,v",TRUE,""
 "facet_wrap","strip.position","select","top,bottom,left,right",TRUE,NA
-"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_bquote",FALSE,""
+"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_value(),label_both(),label_context(),label_parsed(),label_wrap_gen()",FALSE,""
 "theme","line","select","element_line(),element_blank()",FALSE,NA
 "theme","line","select","element_line(),element_blank()",FALSE,NA
 "label_value,label_both,label_context,label_parsed","labels","text","",FALSE,"Data frame of labels. "
@@ -272,7 +272,7 @@
 "position_stack,position_fill","reverse","checkbox","FALSE",FALSE,"if TRUE, will reverse the default stacking order. This is useful if you're rotating both the plot and legend."
 "position_jitter","width","text","NULL",FALSE,"Amount of horizontal jitter."
 "position_jitter","height","text","NULL",FALSE,"Amount of vertical  jitter."
-"position_jitter","seed","text",NA,FALSE,"A random seed to make the jitter reproducible."
+"position_jitter","seed","text","",FALSE,"A random seed to make the jitter reproducible."
 "position_jitterdodge","jitter.width","text","NULL",FALSE,"degree of jitter in x direction. Defaults to 40% of the resolution of the data."
 "position_jitterdodge","jitter.height","text","0",FALSE,"degree of jitter in y direction. Defaults to 0."
 "position_jitterdodge","dodge.width","text","0.75",FALSE,"the amount to dodge in the x direction. Defaults to 0.75, the default position_dodge() width."
