@@ -1,3 +1,11 @@
+# ggplotAssist 0.1.2
+====================
+(2017-Nov-5)
+
+* bug fixed
+
+* now support position_*() functions
+
 # ggplotAssist 0.1.1
 ====================
 (2017-Nov-2)
