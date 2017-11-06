@@ -1,8 +1,13 @@
-This is the re-submission of the package 'ggplotAssist'
+This is an update of the package 'ggplotAssist'.
 
-1) I have written package name and software name in single quotes (e.g. 'RStudio') in title and description.
+1) I had added an recursive shiny module "textFunctionInput" and "textFunction".
 
-2) I have omitted the redundant 'R' in 'R code' in description.
+2) I have added several new functions.
+
+3) I have added two toy shiny apps in the `inst` folder.
+
+4) Several bugs fixed.
+
 
 ## Test environments
 * local OS X install, R 3.4.2

@@ -379,8 +379,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             }
             
             extractBarMapping=function(){
-                x=c(input$maincode,input$layer,layers$layer)
-                mapping=c()
+                x=c(input$layer,layers$layer)
+                mapping1=c()
                 if(length(x)>0){
                     for(i in 1:length(x)){
 
@@ -389,22 +389,41 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                             result<-tryCatch(eval(parse(text=x[i])),error=function(e) "error")
 
                             if(!("character" %in% class(result))){
-                                mapping=c(mapping,result$mapping)
+                                mapping1=c(mapping1,result$mapping)
                             }
                         }
                     }
                 }
-                mapping
-                names=c("x","x","fill","fill","color")
-
-                if(sum(str_detect(names(mapping),"x"))>1){
-
+                mapping1
+                mapping2=c()
+                result<-tryCatch(eval(parse(text=input$maincode)),error=function(e) "error")
+                
+                if(!("character" %in% class(result))){
+                    mapping2=result$mapping
                 }
+                
+                names=names(mapping1)
+                findob=c("x","fill") 
+                
+                for(i in 1:length(findob)){
+                     if(!(findob[i] %in% names)){
+                         mapping1=c(mapping1,mapping2[names(mapping2)==findob[i]])
+                     }    
+                }
+                mapping1
             }
             
-           # output$mainText=renderPrint({
-           #      str(extractBarMapping())
-           # })
+           output$mainText=renderPrint({
+                result=extractBarMapping()
+                str(result)
+                
+                cat("\nresult$x\n")
+                xvar=deparse(result$x)
+                cat("xvar=",xvar)
+               
+                fillvar=deparse(result$fill)
+                cat("\nfillvar=",fillvar)
+           })
             output$text=renderPrint({
                 if(input$doPreprocessing) eval(parse(text=input$preprocessing))
                 df=eval(parse(text=input$mydata))
