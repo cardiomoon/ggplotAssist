@@ -12,7 +12,7 @@ vignette: >
 
 
 
-There are many functions that takes a function as an input : **Functionals**. To handle a functional in a shiny app, you have to make a shiny module that allows **recursive** call. I have included an recursive shiny module `textFunction` in my package ggplotAssist. The UI of textFunction shiny module is `textFunctionInput` and the server function is `textFunction`. I also included two toy shiny app to demonstrate the recursive shiny module.
+There are many functions that takes a function as an input : **Functionals**. To handle a functional in a shiny app, you have to make a shiny module that allows **recursive** call. I have included an recursive shiny module `textFunction` in my package ggplotAssist. The UI of textFunction shiny module is `textFunctionInput` and the server function is `textFunction`. I also included two toy shiny apps to demonstrate the recursive shiny module.
 
 
 ## Prerequisite

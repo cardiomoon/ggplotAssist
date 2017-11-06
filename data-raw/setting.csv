@@ -11,7 +11,7 @@
 "facet_wrap","nrow,ncol","text","",FALSE,"NULL"
 "facet_grid","space","select","fixed,free_x,free_y,free",TRUE,""
 "facet_grid","margins","checkbox","FALSE",FALSE,NA
-"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed,label_value(),label_both(),label_context(),label_parsed(),label_wrap_gen()",FALSE,""
+"facet_wrap","labeller","select","label_value,label_both,label_context,label_parsed,label_wrap_gen(),label_bquote()",FALSE,""
 "geom_text,geom_label","parse","checkbox","FALSE",FALSE,""
 "geom_text,geom_label","nudge_x","numeric","0",FALSE,""
 "geom_text,geom_label","nudge_y","numeric","0",FALSE,""
@@ -257,7 +257,7 @@
 "facet_grid,facet_wrap","switch","select","NULL,x,y",TRUE,"By default, the labels are displayed on the top and right of the plot"
 "facet_wrap","dir","select","h,v",TRUE,""
 "facet_wrap","strip.position","select","top,bottom,left,right",TRUE,NA
-"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_value(),label_both(),label_context(),label_parsed(),label_wrap_gen()",FALSE,""
+"facet_grid","labeller","select","label_value,label_both,label_context,label_parsed,label_wrap_gen(),label_bquote()",FALSE,""
 "theme","line","select","element_line(),element_blank()",FALSE,NA
 "theme","line","select","element_line(),element_blank()",FALSE,NA
 "label_value,label_both,label_context,label_parsed","labels","text","",FALSE,"Data frame of labels. "
@@ -279,3 +279,6 @@
 "position_nudge","x,y","text","0",FALSE,"Amount of vertical and horizontal distance to move.
 "
 "position_dodge2","preserve","select","single,total",TRUE,""
+"label_bquote","rows","text","",FALSE,"NULL"
+"label_bquote","cols","text","",FALSE,"NULL"
+"label_bquote","default","text","label_value",FALSE,""

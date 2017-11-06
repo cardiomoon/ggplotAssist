@@ -233,7 +233,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                        textAreaInput4("maincode",NULL,value="",rows=3),
                        actionButton("resetmain","Reset"),
                        actionButton("resetAll","Reset All"),
-                       conditionalPanel(condition="true==true",
+                       conditionalPanel(condition="true==false",
                        verbatimTextOutput("mainText"))
                        )
                 ),
@@ -378,33 +378,33 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 X
             }
             
-            # extractBarMapping=function(){
-            #     x=c(input$maincode,input$layer,layers$layer)
-            #     mapping=c()
-            #     if(length(x)>0){
-            #         for(i in 1:length(x)){
-            #             
-            #             if(str_detect(x[i],"ggplot")|str_detect(x[i],"geom_bar")
-            #                |str_detect(x[i],"geom_bar")) {
-            #                 result<-tryCatch(eval(parse(text=x[i])),error=function(e) "error")
-            #                 
-            #                 if(!("character" %in% class(result))){
-            #                     mapping=c(mapping,result$mapping) 
-            #                 }
-            #             }
-            #         }
-            #     }
-            #     mapping
-            #     names=c("x","x","fill","fill","color")
-            #     
-            #     if(sum(str_detect(names(mapping),"x"))>1){
-            #         
-            #     }
-            # }
+            extractBarMapping=function(){
+                x=c(input$maincode,input$layer,layers$layer)
+                mapping=c()
+                if(length(x)>0){
+                    for(i in 1:length(x)){
+
+                        if(str_detect(x[i],"ggplot")|str_detect(x[i],"geom_bar")
+                           |str_detect(x[i],"geom_bar")) {
+                            result<-tryCatch(eval(parse(text=x[i])),error=function(e) "error")
+
+                            if(!("character" %in% class(result))){
+                                mapping=c(mapping,result$mapping)
+                            }
+                        }
+                    }
+                }
+                mapping
+                names=c("x","x","fill","fill","color")
+
+                if(sum(str_detect(names(mapping),"x"))>1){
+
+                }
+            }
             
-           output$mainText=renderPrint({
-                str(extractBarMapping())
-           })
+           # output$mainText=renderPrint({
+           #      str(extractBarMapping())
+           # })
             output$text=renderPrint({
                 if(input$doPreprocessing) eval(parse(text=input$preprocessing))
                 df=eval(parse(text=input$mydata))
