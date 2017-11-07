@@ -289,7 +289,11 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                                         uiOutput("varsetUI")
                                         ),
                        conditionalPanel(condition="true==false",
-                       textInput("guideLegend","guideLegend",value=""))
+                       textInput("guideLegend","guideLegend",value="")),
+                       conditionalPanel(condition="true==false",
+                       #conditionalPanel(condition="input.geoms=='geom_bar'|input.geoms=='geom_col'",
+                                        hr(),
+                                        actionButton("addLabel","add Label"))
                        # ,actionButton("addmap","add")
                        
                         
@@ -370,7 +374,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
            
            
            
-            refreshMaincode=TRUE
+            refreshMaincode<-TRUE
+            refreshGeoms<-TRUE
            
             addValue=function(X,A){
                 if(is.null(X)) X<-A
@@ -379,21 +384,14 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             }
             
             extractBarMapping=function(){
-                x=c(input$layer,layers$layer)
+                x=input$layer
                 mapping1=c()
-                if(length(x)>0){
-                    for(i in 1:length(x)){
+                result<-tryCatch(eval(parse(text=x)),error=function(e) "error")
 
-                        if(str_detect(x[i],"ggplot")|str_detect(x[i],"geom_bar")
-                           |str_detect(x[i],"geom_bar")) {
-                            result<-tryCatch(eval(parse(text=x[i])),error=function(e) "error")
-
-                            if(!("character" %in% class(result))){
+                 if(!("character" %in% class(result))){
                                 mapping1=c(mapping1,result$mapping)
-                            }
-                        }
-                    }
-                }
+                 }
+                        
                 mapping1
                 mapping2=c()
                 result<-tryCatch(eval(parse(text=input$maincode)),error=function(e) "error")
@@ -403,7 +401,12 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 }
                 
                 names=names(mapping1)
-                findob=c("x","fill") 
+                findob=c("x","fill")
+                if(!is.null(input$stat)&(!is.null(input$geoms))){
+                if((input$stat=="identity")|(input$geoms=="geom_col")) findob=c(findob,"y") 
+                }
+                
+
                 
                 for(i in 1:length(findob)){
                      if(!(findob[i] %in% names)){
@@ -424,6 +427,38 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 fillvar=deparse(result$fill)
                 cat("\nfillvar=",fillvar)
            })
+           
+           observeEvent(input$addLabel,{
+               
+               
+               
+               layers$layer<-addValue(layers$layer,input$layer)
+               updateTextAreaInput(session,"layer",value="")
+               updateNumericInput(session,"layerno",value=input$layerno+1)
+               updateSelectInput(session,"layers",choices=layers$layer)
+               layer$type<-layer$aes<-layer$var<-c()
+               resetLayer()
+              
+                if(input[["position-text"]]=="stack"){
+                    refreshGeoms<<-FALSE
+                    #cat("refreshGeoms==FALSE\n")
+                   
+                    updateSelectInput(session,"geoms",selected="geom_text")
+                    refreshGeoms<<-TRUE
+                    #cat("refreshGeoms==TRUE\n")
+                    
+                     updateSelectInput(session,"position-text",selected="position_stack()")
+                     updateRadioButtons(session,"type",selected="mapping")
+                     updateSelectInput(session,"aes",selected="label")
+                     updateSelectInput(session,"stat",selected="count")
+                     updateSelectInput(session,"var",selected="..count..")
+                     updateTextInput(session,"position-vjust-text",value=0.5)
+                     
+                    
+                }
+              
+           })
+           
             output$text=renderPrint({
                 if(input$doPreprocessing) eval(parse(text=input$preprocessing))
                 df=eval(parse(text=input$mydata))
@@ -464,7 +499,8 @@ ggplotAssist=function(df=NULL,viewer="browser"){
             observeEvent(input$geoms,{
           
                 if(!is.null(input$geoms)){
-                
+                if(refreshGeoms){
+                    
                 if(input$geoms=="guides"){
                     choices<-setdiff(main$aes,c("x","y"))
                     choices<-c(choices,extractMapping(layers$layer))
@@ -493,6 +529,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 if(input$geoms %!in% c("theme","guides")){
                     temp=makeLayer()
                     updateTextAreaInput(session,"layer",value=temp)
+                }
                 }
                 }
                 # if(str_detect(input$geoms,"stat")){
