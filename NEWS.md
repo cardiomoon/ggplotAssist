@@ -1,3 +1,11 @@
+# ggplotAssist 0.1.3
+=====================
+(2017-Nov-12)
+
+* bug fixed
+
+* now support labelling geom_bar() or geom_col() 
+
 # ggplotAssist 0.1.2
 ====================
 (2017-Nov-5)

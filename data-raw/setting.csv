@@ -282,3 +282,4 @@
 "label_bquote","rows","text","",FALSE,"NULL"
 "label_bquote","cols","text","",FALSE,"NULL"
 "label_bquote","default","text","label_value",FALSE,""
+"geom_text,geom_label","vjust,hjust","text","",FALSE,""

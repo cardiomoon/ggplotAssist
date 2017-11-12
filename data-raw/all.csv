@@ -672,6 +672,10 @@
 "label_bquote","rows","text","",FALSE,"NULL",NA
 "label_bquote","cols","text","",FALSE,"NULL",NA
 "label_bquote","default","text","label_value",FALSE,"",NA
+"geom_text","vjust","text","",FALSE,"",NA
+"geom_label","vjust","text","",FALSE,"",NA
+"geom_text","hjust","text","",FALSE,"",NA
+"geom_label","hjust","text","",FALSE,"",NA
 "line","line","select","element_line(),element_blank()",FALSE,"","all"
 "rect","rect","select","element_rect(),element_blank()",FALSE,"","all"
 "text","text","select","element_text(),element_blank()",FALSE,"","all"
