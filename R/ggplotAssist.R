@@ -1509,7 +1509,15 @@ ggplotAssist=function(df=NULL,viewer="browser"){
            
            output$addLabelUI=renderUI({
                if(!is.null(input$geoms)){
-               if(input$geoms=="geom_text"){
+                   if(input$geoms %in% c("geom_bar","geom_col")){
+                       
+                       tagList(
+                           hr(),
+                           actionButton("makeRose","Make a Rose Plot")
+                       )
+                       
+                   }
+               else if(input$geoms=="geom_text"){
                    if(layer2barposition()!=""){
                    tagList(
                        hr(),
@@ -1517,14 +1525,7 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                    )
                    }
                }
-                   if(input$geoms %in% c("geom_bar","geom_col")){
-                       
-                           tagList(
-                               hr(),
-                               actionButton("makeRose","Make a Rose Plot")
-                           )
-                       
-                   }
+                  
                    
                }
                

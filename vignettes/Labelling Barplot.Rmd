@@ -1,0 +1,24 @@
+---
+title: "Labelling Barplot"
+author: "Keon-Woong Moon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Labelling Barplot}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,comment = NA,fig.align='center',out.width="90%")
+```
+
+In this vignette, you will learn how to add labels to bar plots representing counts and values. You can add labels using geom_text() function. If you want to add labels to the proportional bar plots, you have to make some manipulation of your data.
+
+```{r}
+require(tidyverse)
+percentData<-mtcars %>% group_by(cyl) %>% count(gear) %>% mutate(ratio=scales::percent(n/sum(n)))
+ggplot(mtcars,aes(x=factor(cyl),fill=factor(gear)))+
+    geom_bar(position="fill")+
+    geom_text(data=percentData,aes(y=n,label=ratio),position=position_fill(vjust=0.5))
+```
