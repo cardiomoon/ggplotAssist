@@ -215,4 +215,4 @@ After mapping the x-axis and fill variables, select `geom_bar` among geoms(1). S
 
 Select `geom_text`(5) among geoms. Press `Add Bar Label` button(6). A new data summarizing columnwise ratio is made automatically and inserted as preprocessing(7). With this data, the R code for this layer is made(8). Set the vjust argument of position_fill() 0.5(9). Press `Add Layer` button and you can get the plot.
 
-<img src="https://raw.githubusercontent.com/cardiomoon/ggplotAssistFigures/master/Labelling/7.jpg" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="90%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/cardiomoon/ggplotAssistFigures/master/Labelling/8.jpg" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" width="90%" style="display: block; margin: auto;" />
