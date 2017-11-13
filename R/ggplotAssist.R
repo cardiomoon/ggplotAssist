@@ -517,6 +517,23 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                 updateMaterialSwitch(session,"doPreprocessing",value=TRUE)
             }
            
+           observeEvent(input$makeRose,{
+               
+                   temp=input$layer
+                   temp=substring(temp,1,nchar(temp)-1)
+                   if(substring(temp,nchar(temp),nchar(temp))!="(") temp=paste0(temp,",")
+                   temp=paste0(temp,"color='black',size=0.1,width=1)")
+                   
+                   layers$layer=c(layers$layer,
+                                  temp,
+                                  "scale_fill_brewer(palette='Reds',direction=-1)",
+                                  "coord_polar()")
+                   
+                   updateNumericInput(session,"layerno",value=input$layerno+2)
+                   updateSelectInput(session,"layers",choices=layers$layer)
+                   resetLayer()
+           })
+           
             output$text=renderPrint({
                 if(input$doPreprocessing) eval(parse(text=input$preprocessing))
                 df=eval(parse(text=input$mydata))
@@ -1500,6 +1517,15 @@ ggplotAssist=function(df=NULL,viewer="browser"){
                    )
                    }
                }
+                   if(input$geoms %in% c("geom_bar","geom_col")){
+                       
+                           tagList(
+                               hr(),
+                               actionButton("makeRose","Make a Rose Plot")
+                           )
+                       
+                   }
+                   
                }
                
            })

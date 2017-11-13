@@ -1,7 +1,7 @@
 Package: ggplotAssist
 Type: Package
 Title: 'RStudio' Addin for Teaching and Learning 'ggplot2'
-Version: 0.1.3
+Version: 0.1.4
 Imports:
     shiny (>= 0.13),
     miniUI (>= 0.1.1),

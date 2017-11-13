@@ -1,3 +1,10 @@
+# ggplotAssist 0.1.4
+=====================
+(2017-Nov-13)
+
+* now support making rose plot from barplot
+
+
 # ggplotAssist 0.1.3
 =====================
 (2017-Nov-12)
